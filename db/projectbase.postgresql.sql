@@ -1,0 +1,76 @@
+-- Khởi tạo dữ liệu bảng ADM_GROUP
+
+Insert into sframe.ADM_GROUP (ID,GROUP_NAME,STATUS,AUTHORITY,DESCRIPTION,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','Quản trị hệ thống','1','ROLE_SYSTEM_USER','Quản trị viên','admin','admin',now(),now());
+Insert into sframe.ADM_GROUP (ID,GROUP_NAME,STATUS,AUTHORITY,DESCRIPTION,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('2','CSDL Khách  hàng','1','ROLE_ CUSTOMER_USER','Quản lý CSDL Khách  hàng','admin','admin',now(),now());
+
+-- Khởi tạo dữ liệu bảng ADM_AUTHORITIES với quyền cho admin
+
+-- Quyền 
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','ROLE_SYSTEM_USER','0','Quản trị người dùng','1','ROLE_SYSTEM_USER','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('2','ROLE_SYSTEM_USER_ADD','1','Thêm người dùng','1','ROLE_SYSTEM_USER_ADD','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('3','ROLE_SYSTEM_USER_VIEW','1','Xem người dùng','1','ROLE_SYSTEM_USER_VIEW','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('4','ROLE_SYSTEM_USER_EDIT','1','Sửa người dùng','1','ROLE_SYSTEM_USER_EDIT','admin','admin',now(),now());
+
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('5','ROLE_SYSTEM_LOG','0','Quản trị log hệ thống','4','ROLE_SYSTEM_LOG','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('6','ROLE_SYSTEM_LOG_VIEW','5','Xem log hệ thống','4','ROLE_SYSTEM_LOG_VIEW','admin','admin',now(),now());
+
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('7','ROLE_SYSTEM_GROUP','0','Quản trị nhóm quyền','3','ROLE_SYSTEM_GROUP','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('8','ROLE_SYSTEM_GROUP_VIEW','7','Xem danh sách nhóm quyền','3','ROLE_SYSTEM_GROUP_VIEW','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('9','ROLE_SYSTEM_GROUP_ADD','7','Thêm nhóm quyền','3','ROLE_SYSTEM_GROUP_ADD','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('10','ROLE_SYSTEM_GROUP_EDIT','7','Sửa nhóm quyền','3','ROLE_SYSTEM_GROUP_EDIT','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('11','ROLE_SYSTEM_GROUP_DELETE','7','Xóa nhóm quyền','3','ROLE_SYSTEM_GROUP_DELETE','admin','admin',now(),now());
+
+
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('12','ROLE_SYSTEM_USER_AUTHORITY','1','Phân quyền người dùng','1','ROLE_SYSTEM_USER_AUTHORITY','admin','admin',now(),now());
+
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('34','ROLE_REPORT','0','Báo cáo thống kê','6','ROLE_REPORT','admin','admin',now(),now());
+
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('40','ROLE_SYSTEM_PARAMETER','0','Tham số hệ thống','0','ROLE_SYSTEM_PARAMETER','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('41','ROLE_SYSTEM_PARAMETER_VIEW','40','Xem danh sách tham số','1','ROLE_SYSTEM_PARAMETER_VIEW','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('43','ROLE_SYSTEM_PARAMETER_UPDATE','40','Sửa tham số','2','ROLE_SYSTEM_PARAMETER_UPDATE','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('50','ROLE_CATEGORY','0','Quản lý nội dung','0','ROLE_CATEGORY','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('51','ROLE_CATEGORY_CONTENT','50','Chi tiết nội dung','1','ROLE_CATEGORY_CONTENT','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('64','ROLE_SYSTEM_ACTION','0','Quản lý chức năng','0','ROLE_SYSTEM_ACTION','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('65','ROLE_SYSTEM_ACTION_VIEW','64','Xem danh sách chức năng','1','ROLE_SYSTEM_ACTION_VIEW','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('66','ROLE_SYSTEM_ACTION_ADD','64','Thêm mới chức năng','2','1','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('67','ROLE_SYSTEM_ACTION_EDIT','64','Update chức năng    âsa','3','ROLE_SYSTEM_ACTION_ADD','admin','admin',now(),now());
+Insert into sframe.ADM_AUTHORITIES (ID,AUTHORITY,FID,DESCRIPTION,ORDER_ID,AUTH_KEY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('68','ROLE_SYSTEM_ACTION_DELETE','64','Xóa chức năng','4','ROLE_SYSTEM_ACTION_DELETE','admin','admin',now(),now());
+
+
+
+
+-- Khởi tạo dữ liệu bảng quan  hệ giữa GROUP và AUTHORITIES
+
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','1','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','2','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','3','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','4','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','5','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','6','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','7','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','8','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','9','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','10','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','11','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','12','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','34','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','40','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','41','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','43','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','64','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','65','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','66','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','67','admin',null,now(),now());
+Insert into sframe.ADM_GROUP_AUTHORITIES (GROUP_ID,AUTHORITY,CREATE_BY,UPDATE_BY,GEN_DATE,LAST_UPDATED) values ('1','68','admin',null,now(),now());
+
+
+-- Khởi tạo dữ liệu bảng USER
+
+Insert into sframe.ADM_USERS (ID,USER_NAME,PASSWORD,FULL_NAME,DESCRIPTION,LAST_ACCESS_TIME,STATUS,GEN_DATE,LAST_UPDATED) values ('1','admin','$2a$10$DGAZCNqFCO81s2517.WVUO2L7jvY/Omcc1zkgKF4Gk0WnfBELIes6','Admin','Không xóa acc này',now(),'1',now(),now());
+Insert into sframe.ADM_USERS (ID,USER_NAME,PASSWORD,FULL_NAME,DESCRIPTION,LAST_ACCESS_TIME,STATUS,GEN_DATE,LAST_UPDATED) values ('2','thangdt','$2a$10$7aqwMUcpHNCE3swYESy6NumOFszWlNJNoYvPKO.A9kwwuAgAGrmz.','Đặng Trường Thăng',null,null,'1',now(),now());
+
+-- Khởi tạo dữ liệu bảng quan hệ  GROUP - USER
+
+Insert into sframe.ADM_GROUP_USER (GROUP_ID,USER_ID,CREATE_BY,GEN_DATE) values ('1','1','admin',now());
+Insert into sframe.ADM_GROUP_USER (GROUP_ID,USER_ID,CREATE_BY,GEN_DATE) values ('1','2','admin',now());
+

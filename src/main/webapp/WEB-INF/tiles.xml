@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+
+    <definition name="default" template="/WEB-INF/views/layout/layout.jsp">
+        <put-attribute name="title" value="Home" />
+        <put-attribute name="header" value="/WEB-INF/views/layout/header.jsp" />
+        <put-attribute name="leftpanel" value="/WEB-INF/views/layout/leftpanel.jsp" />
+        <put-attribute name="page" value="/WEB-INF/views/layout/blank.jsp" />
+    </definition>
+
+    <definition name="index" extends="default">
+        <put-attribute name="title" value="Home"/>
+        <put-attribute name="page" value="/WEB-INF/views/index.jsp" />
+    </definition>
+
+    <definition name="login" template="/WEB-INF/views/login.jsp">
+    </definition>
+
+    <definition name="404" template="/WEB-INF/views/404.jsp">
+    </definition>
+
+    <definition name="user.list" extends="default">
+        <put-attribute name="title" value="Danh sách người dùng"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/user/list.jsp" />
+    </definition>
+    <definition name="user.add" extends="default">
+        <put-attribute name="title" value="Thêm mới người dùng"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/user/add.jsp" />
+    </definition>
+    <definition name="user.edit" extends="default">
+        <put-attribute name="title" value="Sửa người dùng"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/user/edit.jsp" />
+    </definition>
+    <definition name="user.group" extends="default">
+        <put-attribute name="title" value="Sửa người dùng"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/user/user.group.jsp" />
+    </definition>
+    <definition name="user.change.pass" extends="default">
+        <put-attribute name="title" value="Đổi mật khẩu"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/user/change.my.pass.jsp" />
+    </definition>
+
+    <!--Authority-->
+    <definition name="group.list" extends="default">
+        <put-attribute name="title" value="Nhóm quyền"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/group/list.jsp" />
+    </definition>
+    <definition name="group.add" extends="default">
+        <put-attribute name="title" value="Thêm nhóm quyền"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/group/add.jsp" />
+    </definition>
+    <definition name="group.edit" extends="default">
+        <put-attribute name="title" value="Sửa nhóm quyền"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/group/edit.jsp" />
+    </definition>
+    <!--log-->
+    <definition name="log.list" extends="default">
+        <put-attribute name="title" value="Lịch sử hệ thống"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/log/list.jsp" />
+    </definition>
+    
+    <definition name="log.user" extends="default">
+        <put-attribute name="title" value="Lịch sử chi tiết người dùng"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/log/log.user.jsp" />
+    </definition>
+    <definition name="my.history" extends="default">
+        <put-attribute name="title" value="Lịch sử chi tiết người dùng"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/log/my.history.jsp" />
+    </definition>
+    
+    <!--system parameter-->
+    <definition name="parameter.list" extends="default">
+        <put-attribute name="title" value="Tham số hệ thống"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/parameter/list.jsp" />
+    </definition>
+    
+    <!--authority-->
+    <definition name="authority.list" extends="default">
+        <put-attribute name="title" value="Chức năng hệ thống"/>
+        <put-attribute name="page" value="/WEB-INF/views/system/authority/list.jsp" />
+    </definition>
+
+</tiles-definitions>

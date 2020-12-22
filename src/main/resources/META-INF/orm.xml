@@ -1,0 +1,45 @@
+<entity-mappings version="2.1"
+                 xmlns="http://www.eclipse.org/eclipselink/xsds/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	
+    
+    
+  <!--MySQL, MarriaDB, PostgreSQL sử dụng tự tăng của DB. -->  
+  
+<!--    <entity class="com.osp.model.User" name="User">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="identity"/>
+            </id>
+        </attributes>
+    </entity>
+    <entity class="com.osp.model.Group" name="Group">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="identity"/>
+            </id>
+        </attributes>
+    </entity>
+    <entity class="com.osp.model.Authority" name="Authority">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="identity"/>
+            </id>
+        </attributes>
+    </entity>
+    <entity class="com.osp.model.LogAccess" name="LogAccess">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="identity"/>
+            </id>
+        </attributes>
+    </entity>
+    <entity class="com.osp.model.Parameter" name="Parameter">
+        <attributes>
+            <id name="id">
+                <generated-value strategy="identity"/>
+            </id>
+        </attributes>
+    </entity>-->
+    
+</entity-mappings>

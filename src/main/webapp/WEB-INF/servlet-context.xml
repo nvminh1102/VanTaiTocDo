@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    	http://www.springframework.org/schema/beans/spring-beans.xsd
+    	http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+    	http://www.springframework.org/schema/context
+    	http://www.springframework.org/schema/context/spring-context.xsd
+    	http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task.xsd">
+
+	<!-- Step 3: Add support for component scanning -->
+	<context:component-scan base-package="com.osp" />
+
+	<!-- Step 4: Add support for conversion, formatting and validation support -->
+	<mvc:annotation-driven/>
+	<!-- transaction management-->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	<!--<tx:annotation-driven transaction-manager="transactionManagerMaria"/>-->
+	<context:annotation-config/>
+	<mvc:resources mapping="/assets/**" location="/assets/" />
+        
+        <!-- Resolves views selected for rendering by @Controllers to .jsp resources 
+        in the /WEB-INF/views directory -->
+        <bean
+            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="prefix" value="/WEB-INF/views/" />
+            <property name="suffix" value=".jsp" />
+        </bean>
+
+
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" p:order="0"/>
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<property name="definitions" value="/WEB-INF/tiles.xml"/>
+	</bean>
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="20000000" />
+	</bean>
+
+<!-- CONFIG FOR DB ORACLE
+	This produces a container-managed EntityManagerFactory;
+        rather than application-managed EntityManagerFactory as in case of LocalEntityManagerFactoryBean-->
+	<bean id="entityManagerFactoryBean" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+<!--		This makes /META-INF/persistence.xml is no longer necessary--> 
+		<property name="packagesToScan" value="com.osp.model" />
+		<property name="persistenceUnitName" value="appAdmin" />
+<!--		JpaVendorAdapter implementation for Hibernate EntityManager.
+                Exposes Hibernate's persistence provider and EntityManager extension interface -->
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
+				<prop key="hibernate.dialect">${mysql.hibernate.dialect}</prop>
+				<prop key="hibernate.query.substitutions">true 'T', false 'F'</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.jdbc.batch_size">50</prop>
+				<prop key="hibernate.connection.useUnicode">true</prop>
+				<prop key="hibernate.connection.charSet">utf8</prop>
+				<prop key="hibernate.connection.autocommit">true</prop>
+				<prop key="hibernate.connection.characterEncoding">utf8</prop>
+				<!--after_transaction or on_close-->
+				<prop key="hibernate.connection.release_mode">on_close</prop>
+				<prop key="hibernate.generate_statistics">false</prop>
+				<prop key="hibernate.cache.use_second_level_cache">false</prop>
+				<prop key="hibernate.cache.use_query_cache">false</prop>
+				<prop key="hibernate.current_session_context_class">thread</prop>
+				<prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+				<prop key="cache.provider_class">org.hibernate.cache.NoCacheProvider</prop>
+				<prop key="cache.use_minimal_puts">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactoryBean" />
+	</bean>
+	<!--DATA SOURCE MariaDB-->
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${mysql.driverClass}"></property>
+		<property name="url" value="${mysql.url}"/>
+		<property name="username" value="${mysql.username}"/>
+		<property name="password" value="${mysql.password}"/>
+
+		<property name="initialSize" value="100"/>
+		<property name="maxIdle" value="30"/>
+		<property name="minIdle" value="1"/>
+		<property name="maxWaitMillis" value="500000"/>
+		<property name="maxTotal" value="8"/>
+		<property name="validationQuery" value="SELECT 1"/>
+		<property name="minEvictableIdleTimeMillis" value="34000"/>
+		<property name="timeBetweenEvictionRunsMillis" value="30000"/>
+		<property name="testOnBorrow" value="true"/>
+		<property name="cacheState" value="true"/>
+	</bean>
+        
+        
+        <!--DATA SOURCE PostgreSQL--> 
+        
+<!--        <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+            <property name="driverClassName" value="${postgresql.driverClass}"></property>
+            <property name="url" value="${postgresql.url}" />
+            <property name="username" value="${postgresql.username}" />
+            <property name="password" value="${postgresql.password}" />
+            <property name="connectionInitSqls">
+                <list>
+                    <value>${postgresql.connectionInitSqls}</value>
+                </list>
+            </property>
+        </bean>-->
+        
+        <!-- END CONFIG DB CONFIG -->
+        
+	<context:property-placeholder location="classpath:config.properties,classpath:languages_vi.properties,classpath:languages_key_vi.properties,classpath:system.properties" trim-values="true" />
+        
+	<!--config validator message-->
+	<bean name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"> 
+            <property name="basenames">
+				<list>
+					<value>languages</value>
+					<value>languages_key</value>
+				</list>
+            </property>
+        </bean>
+        <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">  
+            <property name="paramName" value="lang" />  
+        </bean>
+        <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" p:defaultLocale="vi" />
+        <mvc:interceptors>  
+             <bean parent="localeChangeInterceptor"/>  
+        </mvc:interceptors> 
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="validationMessageSource" ref="messageSource"/>
+	</bean>
+ 
+    <task:annotation-driven/>
+</beans>
+
+
+
+
+
