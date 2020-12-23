@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-<!--  <persistence-unit name="com.osp_giaoSim_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+  <!--  <persistence-unit name="com.osp_giaoSim_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.osp.model.DsMsisdnOrder</class>
     <class>com.osp.model.TransStore_1</class>
@@ -12,4 +12,27 @@
       <property name="javax.persistence.jdbc.password" value="sim123456"/>
     </properties>
   </persistence-unit>-->
+  <persistence-unit name="com.osp_baseProject_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.osp.model.VtReceipt</class>
+    <class>com.osp.model.VtGoodsReceipt</class>
+    <class>com.osp.model.VtToaHang</class>
+    <class>com.osp.model.VtToaHangDetail</class>
+    <class>com.osp.model.VtPhieuThu</class>
+    <class>com.osp.model.VtGoodsDelivery</class>
+    <class>com.osp.model.VtPartner</class>
+    <class>com.osp.model.VtPhieuThuDetail</class>
+    <class>com.osp.model.VtGoodsDeliveryDetail</class>
+    <class>com.osp.model.VtCongNoDetail</class>
+    <class>com.osp.model.VtGoodsReceiptDetail</class>
+    <class>com.osp.model.VtCongNo</class>
+    <class>com.osp.model.VtReceiptDetail</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/vantaitocdo?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="thanhLoiMariadb2020"/>
+    </properties>
+  </persistence-unit>
 </persistence>
