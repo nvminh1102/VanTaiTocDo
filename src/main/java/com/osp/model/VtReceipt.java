@@ -29,90 +29,56 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "vt_receipt")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VtReceipt.findAll", query = "SELECT v FROM VtReceipt v")
-    , @NamedQuery(name = "VtReceipt.findById", query = "SELECT v FROM VtReceipt v WHERE v.id = :id")
-    , @NamedQuery(name = "VtReceipt.findByReceiptCode", query = "SELECT v FROM VtReceipt v WHERE v.receiptCode = :receiptCode")
-    , @NamedQuery(name = "VtReceipt.findByDeliveryPartnerId", query = "SELECT v FROM VtReceipt v WHERE v.deliveryPartnerId = :deliveryPartnerId")
-    , @NamedQuery(name = "VtReceipt.findByReceivePartnerId", query = "SELECT v FROM VtReceipt v WHERE v.receivePartnerId = :receivePartnerId")
-    , @NamedQuery(name = "VtReceipt.findByNameStock", query = "SELECT v FROM VtReceipt v WHERE v.nameStock = :nameStock")
-    , @NamedQuery(name = "VtReceipt.findByDateReceipt", query = "SELECT v FROM VtReceipt v WHERE v.dateReceipt = :dateReceipt")
-    , @NamedQuery(name = "VtReceipt.findByDatepushStock", query = "SELECT v FROM VtReceipt v WHERE v.datepushStock = :datepushStock")
-    , @NamedQuery(name = "VtReceipt.findByPaymentType", query = "SELECT v FROM VtReceipt v WHERE v.paymentType = :paymentType")
-    , @NamedQuery(name = "VtReceipt.findByPayer", query = "SELECT v FROM VtReceipt v WHERE v.payer = :payer")
-    , @NamedQuery(name = "VtReceipt.findByTaxCode", query = "SELECT v FROM VtReceipt v WHERE v.taxCode = :taxCode")
-    , @NamedQuery(name = "VtReceipt.findByNhaXe", query = "SELECT v FROM VtReceipt v WHERE v.nhaXe = :nhaXe")
-    , @NamedQuery(name = "VtReceipt.findByBienSo", query = "SELECT v FROM VtReceipt v WHERE v.bienSo = :bienSo")
-    , @NamedQuery(name = "VtReceipt.findByEmployee", query = "SELECT v FROM VtReceipt v WHERE v.employee = :employee")
-    , @NamedQuery(name = "VtReceipt.findByStatus", query = "SELECT v FROM VtReceipt v WHERE v.status = :status")
-    , @NamedQuery(name = "VtReceipt.findByFileAttach", query = "SELECT v FROM VtReceipt v WHERE v.fileAttach = :fileAttach")
-    , @NamedQuery(name = "VtReceipt.findByGenDate", query = "SELECT v FROM VtReceipt v WHERE v.genDate = :genDate")
-    , @NamedQuery(name = "VtReceipt.findByCreatedBy", query = "SELECT v FROM VtReceipt v WHERE v.createdBy = :createdBy")
-    , @NamedQuery(name = "VtReceipt.findByLastUpdate", query = "SELECT v FROM VtReceipt v WHERE v.lastUpdate = :lastUpdate")
-    , @NamedQuery(name = "VtReceipt.findByUpdatedBy", query = "SELECT v FROM VtReceipt v WHERE v.updatedBy = :updatedBy")})
 public class VtReceipt implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID")
+    @Column(name = "id")
     private Integer id;
-    @Size(max = 200)
-    @Column(name = "receipt_code")
+    @Column(name = "receipt_code", length = 200)
     private String receiptCode;
     @Column(name = "delivery_partner_id")
     private Integer deliveryPartnerId;
     @Column(name = "receive_partner_id")
     private Integer receivePartnerId;
-    @Size(max = 200)
-    @Column(name = "name_Stock")
+    @Column(name = "name_Stock", length = 200)
     private String nameStock;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "date_receipt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateReceipt;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "date_push_Stock")
     @Temporal(TemporalType.TIMESTAMP)
     private Date datepushStock;
     @Column(name = "payment_type")
     private Integer paymentType;
-    @Size(max = 200)
-    @Column(name = "payer")
+    @Column(name = "payer", length = 200)
     private String payer;
-    @Size(max = 200)
-    @Column(name = "tax_code")
+    @Column(name = "tax_code", length = 200)
     private String taxCode;
-    @Size(max = 200)
-    @Column(name = "nha_xe")
+    @Column(name = "nha_xe", length = 200)
     private String nhaXe;
-    @Size(max = 50)
-    @Column(name = "bien_so")
+    @Column(name = "bien_so", length = 50)
     private String bienSo;
-    @Size(max = 200)
-    @Column(name = "employee")
+    @Column(name = "employee", length = 200)
     private String employee;
     @Column(name = "status")
     private Integer status;
-    @Size(max = 200)
-    @Column(name = "file_attach")
+    @Column(name = "file_attach", length = 200)
     private String fileAttach;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
-    @Size(max = 200)
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 200)
     private String createdBy;
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-    @Size(max = 200)
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
     public VtReceipt() {

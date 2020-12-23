@@ -51,22 +51,18 @@ public class VtGoodsDeliveryDetail implements Serializable {
     private Integer goodsdeliveryid;
     @Column(name = "receipt_id")
     private Integer receiptId;
-    @Size(max = 200)
-    @Column(name = "file_attach")
+    @Column(name = "file_attach", length = 200)
     private String fileAttach;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
-    @Size(max = 200)
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 200)
     private String createdBy;
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-    @Size(max = 200)
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
     public VtGoodsDeliveryDetail() {

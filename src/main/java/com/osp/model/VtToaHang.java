@@ -51,39 +51,30 @@ public class VtToaHang implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 200)
-    @Column(name = "toa_hang_code")
+    @Column(name = "toa_hang_code", length = 200)
     private String toaHangCode;
-    @Size(max = 500)
-    @Column(name = "from_where")
+    @Column(name = "from_where", length = 500)
     private String fromWhere;
-    @Size(max = 500)
-    @Column(name = "to_where")
+    @Column(name = "to_where" , length = 500)
     private String toWhere;
-    @Size(max = 50)
-    @Column(name = "bien_so")
+    @Column(name = "bien_so", length = 50)
     private String bienSo;
     @Column(name = "partner_id")
     private Integer partnerId;
-    @Size(max = 200)
-    @Column(name = "nguoi_nhan")
+    @Column(name = "nguoi_nhan", length = 200)
     private String nguoiNhan;
-    @Size(max = 500)
-    @Column(name = "noi_nhan")
+    @Column(name = "noi_nhan", length = 500)
     private String noiNhan;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
-    @Size(max = 200)
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 200)
     private String createdBy;
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-    @Size(max = 200)
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
     public VtToaHang() {

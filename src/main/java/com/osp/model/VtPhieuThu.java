@@ -54,50 +54,40 @@ public class VtPhieuThu implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 200)
-    @Column(name = "receipt_code")
+    @Column(name = "receipt_code", length = 200)
     private String receiptCode;
     @Column(name = "delivery_partner_id")
     private Integer deliveryPartnerId;
     @Column(name = "receive_partner_id")
     private Integer receivePartnerId;
-    @Size(max = 200)
-    @Column(name = "name_Stock")
+    @Column(name = "name_Stock", length = 200)
     private String nameStock;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "date_receipt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateReceipt;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "date_push_Stock")
     @Temporal(TemporalType.TIMESTAMP)
     private Date datepushStock;
-    @Size(max = 200)
-    @Column(name = "payer")
+    @Column(name = "payer", length = 200)
     private String payer;
-    @Size(max = 200)
     @Column(name = "employee")
     private String employee;
     @Column(name = "status")
     private Integer status;
-    @Size(max = 200)
-    @Column(name = "file_attach")
+    @Column(name = "file_attach", length = 200)
     private String fileAttach;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
-    @Size(max = 200)
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 200)
     private String createdBy;
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-    @Size(max = 200)
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
     public VtPhieuThu() {

@@ -51,40 +51,31 @@ public class VtPartner implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 200)
-    @Column(name = "USER_NAME")
+    @Column(name = "USER_NAME", length = 200)
     private String userName;
-    @Size(max = 200)
-    @Column(name = "FULL_NAME")
+    @Column(name = "FULL_NAME", length = 200)
     private String fullName;
-    @Size(max = 500)
-    @Column(name = "address")
+    @Column(name = "address", length = 500)
     private String address;
-    @Size(max = 200)
-    @Column(name = "tax_code")
+    @Column(name = "tax_code", length = 200)
     private String taxCode;
-    @Size(max = 20)
-    @Column(name = "MOBILE")
+    @Column(name = "MOBILE", length = 50)
     private String mobile;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 50)
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", length = 50)
     private String email;
     @Column(name = "type_partner")
     private Integer typePartner;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
-    @Size(max = 200)
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 200)
     private String createdBy;
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-    @Size(max = 200)
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
     public VtPartner() {

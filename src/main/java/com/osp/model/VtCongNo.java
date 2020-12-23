@@ -47,11 +47,9 @@ public class VtCongNo implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Size(max = 200)
-    @Column(name = "cong_no_code")
+    @Column(name = "cong_no_code", length = 200)
     private String congNoCode;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "date_cong_no")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCongNo;
@@ -65,14 +63,12 @@ public class VtCongNo implements Serializable {
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
-    @Size(max = 200)
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 200)
     private String createdBy;
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-    @Size(max = 200)
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
     public VtCongNo() {

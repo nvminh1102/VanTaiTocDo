@@ -57,11 +57,9 @@ public class VtReceiptDetail implements Serializable {
     private Integer id;
     @Column(name = "receipt_id")
     private Integer receiptId;
-    @Size(max = 200)
-    @Column(name = "name")
+    @Column(name = "name", length = 200)
     private String name;
-    @Size(max = 50)
-    @Column(name = "unit")
+    @Column(name = "unit", length = 50)
     private String unit;
     @Column(name = "numbers")
     private Integer numbers;
@@ -73,27 +71,22 @@ public class VtReceiptDetail implements Serializable {
     private Integer cost;
     @Column(name = "debt")
     private Integer debt;
-    @Size(max = 500)
-    @Column(name = "document")
+    @Column(name = "document", length = 500)
     private String document;
-    @Size(max = 500)
-    @Column(name = "note")
+    @Column(name = "note", length = 500)
     private String note;
     @Column(name = "status")
     private Integer status;
     @Basic(optional = false)
-    @NotNull
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
-    @Size(max = 200)
-    @Column(name = "created_by")
+    @Column(name = "created_by", length = 200)
     private String createdBy;
     @Column(name = "last_update")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdate;
-    @Size(max = 200)
-    @Column(name = "updated_by")
+    @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
     public VtReceiptDetail() {
