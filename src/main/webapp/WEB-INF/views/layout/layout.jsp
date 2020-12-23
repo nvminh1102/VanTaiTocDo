@@ -81,6 +81,7 @@
     <script src="<%=request.getContextPath()%>/assets/js/ladda-bootstrap/js/prism.js"></script>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/note/js/toastr/toastr.min.css" type="text/css" />
     <script src="<%= request.getContextPath() %>/assets/note/js/toastr/toastr.min.js"></script>
+    <script src="<%= request.getContextPath() %>/assets/js/function.util.js"></script>
 
     <script>
         var preUrl='<%=request.getContextPath()%>';

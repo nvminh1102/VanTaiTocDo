@@ -84,4 +84,9 @@
         <put-attribute name="page" value="/WEB-INF/views/system/authority/list.jsp" />
     </definition>
 
+    <definition name="bienNhan.add" extends="default">
+        <put-attribute name="title" value="Thêm mới biên nhận"/>
+        <put-attribute name="page" value="/WEB-INF/views/bien-nhan/add.jsp" />
+    </definition>
+
 </tiles-definitions>

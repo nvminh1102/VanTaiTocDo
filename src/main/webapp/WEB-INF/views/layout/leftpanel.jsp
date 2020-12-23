@@ -115,6 +115,17 @@
                             </li>
                         </sec:authorize>
 
+                        <li class="<%= isActive(request.getContextPath() + "/bienNhan", request) ? "active" : ""%>">
+                            <a href="#" class=""> <i class="fa fa-credit-card icon"> <b class="bg-warning"></b> </i> <span
+                                    class="pull-right"> <i class="fa fa-angle-down text"></i> <i
+                                    class="fa fa-angle-up text-active"></i> </span> <span>Biên nhận</span> </a>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/preAdd", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/bienNhan/preAdd" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Thêm mới biên nhận</span> </a></li>
+                            </ul>
+                        </li>
+
                         <li>
                             <a href="<%=request.getContextPath()%>/history">
                                 <i class="fa fa-clock-o icon">

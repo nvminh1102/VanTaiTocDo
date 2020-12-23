@@ -233,3 +233,37 @@ angular.module('FrameworkBase').filter('filter', function() {
         return convertedDate
     };
 });
+
+app.service('fileUpload', ['$http', function ($http) {
+  this.uploadFileToUrl = function (file, uploadUrl) {
+    var fd = new FormData();
+    fd.append('file', file);
+    return $http.post(uploadUrl, fd, {
+      transformRequest: angular.identity,
+      headers: {'Content-Type': undefined}
+    })
+  }
+}]);
+
+function validateFileUpload(_file) {
+  var text = _file.name;
+  var idxDot = text.lastIndexOf(".") + 1;
+  var extFile = text.substr(idxDot, text.length).toLowerCase();
+  if (text.lastIndexOf(".") <= 0) {
+    toastr.error("File không hợp lệ!");
+    return false;
+  }
+  if (extFile == "jpg" || extFile == "jpeg" || extFile == "png" || extFile == "pdf" || extFile == "doc" || extFile == "docx" || extFile == "xls" || extFile == "xlsx" || extFile == "txt" || extFile == "rar" || extFile == "zip") {
+    //TO DO
+    //check file size max 5mb
+    if (_file.size / 1024 / 1024 > 5) {
+      toastr.error("Chỉ cho phép upload file có dung lượng nhỏ hơn 5mb!");
+      return false;
+    }
+  } else {
+    toastr.error("Chỉ cho phép upload file định dạng ảnh và tài liệu văn bản!");
+    return false;
+  }
+  return true;
+}
+;
