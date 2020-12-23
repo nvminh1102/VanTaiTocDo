@@ -361,16 +361,46 @@
             <version>2.8.6</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>com.sample</groupId>-->
-            <!--<artifactId>sample</artifactId>-->
-            <!--<version>1.0</version>-->
-            <!--<scope>system</scope>-->
-            <!--<systemPath>${project.basedir}/src/main/resources/splus.mytel.base-1.0.jar</systemPath>-->
+        <!--<groupId>com.sample</groupId>-->
+        <!--<artifactId>sample</artifactId>-->
+        <!--<version>1.0</version>-->
+        <!--<scope>system</scope>-->
+        <!--<systemPath>${project.basedir}/src/main/resources/splus.mytel.base-1.0.jar</systemPath>-->
         <!--</dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
+            <scope>system</scope>
+            <version>8.0.21</version>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/mysql-connector-java-8.0.21.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>12.2.0.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/ojdbc8.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>nl.captcha</groupId>
+            <artifactId>simplecaptcha</artifactId>
+            <version>1.2.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/simplecaptcha-1.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>nl.captcha</groupId>
+            <artifactId>simplecaptcha</artifactId>
+            <version>1.2.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/simplecaptcha-1.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>tdtUtil</groupId>
+            <artifactId>tdtUtil</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/tdtUtil.jar</systemPath>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
         <dependency>
@@ -379,11 +409,11 @@
             <version>1.4</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
-        <dependency>
+        <!--        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.5</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -402,5 +432,5 @@
 
 
     </dependencies>
-
+    <name>VanTaiTocDo</name>
 </project>
