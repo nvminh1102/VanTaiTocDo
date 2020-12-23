@@ -204,7 +204,7 @@
                                     <label>Nhà xe</label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input ng-model="info.nhaXe.nhaXe" name="nhaXe.nhaXe" id="nhaXe.nhaXe" maxlength="250"
+                                    <input ng-model="info.bienNhan.nhaXe" name="bienNhan.nhaXe" id="bienNhan.nhaXe" maxlength="250"
                                            class="input-sm form-control"/>
                                 </div>
 
@@ -212,7 +212,7 @@
                                     <label>Biển số</label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input ng-model="info.nhaXe.bienSo" name="nhaXe.bienSo" id="nhaXe.bienSo" maxlength="20"
+                                    <input ng-model="info.bienNhan.bienSo" name="bienNhan.bienSo" id="bienNhan.bienSo" maxlength="20"
                                            class="input-sm form-control"/>
                                 </div>
                             </div>

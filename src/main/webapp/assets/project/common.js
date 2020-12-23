@@ -267,3 +267,32 @@ function validateFileUpload(_file) {
   return true;
 }
 ;
+
+//convert string sang date
+function stringToDate(_date, _format, _delimiter) {
+  var formatLowerCase = _format.toLowerCase();
+  var formatItems = formatLowerCase.split(_delimiter);
+  var dateItems = _date.split(_delimiter);
+  var monthIndex = formatItems.indexOf("mm");
+  var dayIndex = formatItems.indexOf("dd");
+  var yearIndex = formatItems.indexOf("yyyy");
+  var month = parseInt(dateItems[monthIndex]);
+  month -= 1;
+  var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+  return formatedDate;
+}
+
+function stringToDateTime(_date) {
+  var dateTimeParts = _date.split(' '),
+      timeParts = dateTimeParts[1].split(':'),
+      dateParts = dateTimeParts[0].split('/'),
+      date;
+  date = new Date(dateParts[2], parseInt(dateParts[1], 10) - 1, dateParts[0], timeParts[0], timeParts[1]);
+  return date;
+}
+function Date2String(date)
+{
+  let dateStr = new Date(date);
+  return moment(dateStr).format('DD/MM/YYYY');
+}
+;

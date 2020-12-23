@@ -114,11 +114,12 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       document.getElementById("nguoiNhan.fullName").focus();
       return false;
     }
-    $scope.info.bienNhan.dateReceipt = stringToDateTime($("#dateReceipt").val());
+    $scope.info.bienNhan.dateReceipt = stringToDate($("#dateReceipt").val(), "dd/mm/yyyy", "/");
     var info = {
       bienNhan: $scope.info.bienNhan,
       nguoiGui: $scope.info.nguoiGui,
       nguoiNhan: $scope.info.nguoiNhan,
+      matHang: $scope.info.property,
       fileUploads: $scope.myFile.listFileDocument
     };
 
