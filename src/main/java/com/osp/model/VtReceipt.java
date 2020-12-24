@@ -13,13 +13,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -61,6 +58,8 @@ public class VtReceipt implements Serializable {
     private String taxCode;
     @Column(name = "nha_xe", length = 200)
     private String nhaXe;
+    @Column(name = "loai_xe", length = 200)
+    private String loaiXe;
     @Column(name = "bien_so", length = 50)
     private String bienSo;
     @Column(name = "employee", length = 200)
@@ -81,6 +80,13 @@ public class VtReceipt implements Serializable {
     @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
+    
+    @Transient
+    private Date fromDeceipt;
+    @Transient
+    private Date toDeceipt;
+    
+    
     public VtReceipt() {
     }
 
@@ -183,6 +189,15 @@ public class VtReceipt implements Serializable {
         this.nhaXe = nhaXe;
     }
 
+    public String getLoaiXe() {
+        return loaiXe;
+    }
+
+    public void setLoaiXe(String loaiXe) {
+        this.loaiXe = loaiXe;
+    }
+
+    
     public String getBienSo() {
         return bienSo;
     }
@@ -271,5 +286,22 @@ public class VtReceipt implements Serializable {
     public String toString() {
         return "com.osp.model.VtReceipt[ id=" + id + " ]";
     }
+
+    public Date getFromDeceipt() {
+        return fromDeceipt;
+    }
+
+    public void setFromDeceipt(Date fromDeceipt) {
+        this.fromDeceipt = fromDeceipt;
+    }
+
+    public Date getToDeceipt() {
+        return toDeceipt;
+    }
+
+    public void setToDeceipt(Date toDeceipt) {
+        this.toDeceipt = toDeceipt;
+    }
+    
     
 }

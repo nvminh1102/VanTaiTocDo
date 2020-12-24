@@ -124,6 +124,11 @@
                                     <a href="<%=request.getContextPath()%>/bienNhan/preAdd" class=""> <i
                                             class="fa fa-angle-right"></i> <span>Thêm mới biên nhận</span> </a></li>
                             </ul>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Phiếu nhận hàng</span> </a></li>
+                            </ul>
                         </li>
 
                         <li>
