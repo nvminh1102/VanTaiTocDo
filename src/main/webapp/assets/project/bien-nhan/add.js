@@ -89,6 +89,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   }
 
   $scope.saveAuctionInfo = function () {
+    document.getElementById("btnSaveAuctionInfo").disabled = true;
     if ($('#receiptCode').val() == '') {
       toastr.error("Số biên nhận không được để trống!");
       document.getElementById("receiptCode").focus();
@@ -130,15 +131,15 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
           toastr.error("Có lỗi trong quá trình xử lý, vui lòng thử lại!");
         return false;
       });
-
     var infoAuction = JSON.parse(JSON.stringify(info));
     $http.post(preUrl + "/bienNhan/them-moi-bien-nhan", infoAuction, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
       $scope.info.bienNhan.dateReceipt = moment($scope.info.bienNhan.dateReceipt).format('DD/MM/YYYY');
       switch (Number(response.data)) {
         case 1:
-          document.getElementById("btnSaveAuctionInfo").disabled = true;
+          document.getElementById("btnSaveAuctionInfo").disabled = false;
           toastr.success("Thêm mới phiếu biên nhận thành công!");
+          $scope.info ={};
           break;
         case 0:
           toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");
@@ -226,34 +227,37 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     $("#custumFormUrl").remove();
   };
   var arr = [];
-  $scope.propertyChange = function(property){
-    var valueProperty = JSON.parse(JSON.stringify(property));
-    // var multiSelect = $('#selectProperty').data("kendoMultiSelect");
-    // multiSelect.open();
-    // $('.k-animation-container').css("display","none");
-    // multiSelect.toggle();
-    if(property != "" && property != "undefined"){
-      $http.post(preUrl + "/system/choice-result/getInfoPropertyAuction", valueProperty, {headers: {'Content-Type': 'application/json'}})
-      .then(function (response) {
-        $scope.property = response.data;
-        $scope.property.propertyStartPrice = formatNumber($scope.property.propertyStartPrice.toString());
-        $scope.property.fileCost = '';
-        // if ($scope.property.propertyType.toString().includes(",")) {
-        //     arr = $scope.mySplit($scope.property.propertyType.toString());
-        // } else {
-        //     $scope.property.propertyType = [$scope.property.propertyType];
-        //     arr = [Number($scope.property.propertyType)];
-        // }
-        // multiSelect.value(arr);
-        // $scope.property.propertyType = arr;
-      });
-    } else {
-      $scope.onAddProperty();
-    }
-  }
 
   $scope.mySplit = function(string) {
     var array = string.split(',');
     return array;
   }
+
+  $(document).on('click', function(e) {
+    if ( e.target.id != 'nguoiGui.taxCode' ) {
+      $http.get(preUrl + "/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiGui.taxCode, typePartner: 2}})
+      .then(function (response) {
+        // $scope.info.nguoiGui = response.data;
+        if (response.data.fullName != null && response.data.fullName != "") {
+          $scope.info.nguoiGui.fullName = response.data.fullName;
+          $scope.info.nguoiGui.mobile = response.data.mobile;
+          $scope.info.nguoiGui.address = response.data.address;
+        }
+      });
+    }
+  });
+
+  $(document).on('click', function(e) {
+    if ( e.target.id != 'nguoiNhan.taxCode' ) {
+      $http.get(preUrl + "/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiNhan.taxCode, typePartner: 3}})
+      .then(function (response) {
+        // $scope.info.nguoiGui = response.data;
+        if (response.data.fullName != null && response.data.fullName != "") {
+          $scope.info.nguoiNhan.fullName = response.data.fullName;
+          $scope.info.nguoiNhan.mobile = response.data.mobile;
+          $scope.info.nguoiNhan.address = response.data.address;
+        }
+      });
+    }
+  });
 }]);
