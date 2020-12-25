@@ -4,20 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<script src="<%=request.getContextPath()%>/assets/project/manageNotary/manageAppoint/add.js${urlCache}"></script>
-<%--
-    Quyết định bổ nhiệm CCV - Thêm mới bổ nhiệm CCV
---%>
-<label class="hidden" id="notaryEmpty">Bạn chưa chọn công chứng viên</label>
-<label class="hidden" id="errMsg2">Vui lòng nhập đầy đủ thông tin</label>
-<label class="hidden" id="errMsg1">Số quyết định không được để trống</label>
-<label class="hidden" id="errMsg3">Người ban hành không được để trống</label>
-<label class="hidden" id="fileEmpty">File đính kèm không được để trống</label>
-<label class="hidden" id="error_1">Ngày có hiệu lực không được để trống</label>
-<label class="hidden" id="error_2">Lý do từ chối bổ nhiệm không được bỏ trống</label>
-<label class="hidden" id="error_3">Ngày ban hành không được để trống</label>
-
-<section id="content" ng-app="code"  ng-controller="vantai">
+<script src="<%=request.getContextPath()%>/assets/project/phieu-nhan/add.js${urlCache}"></script>
+<section id="content" ng-app="FrameworkBase"  ng-controller="vantai">
     <section class="vbox background-white">
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
@@ -80,85 +68,80 @@
                                         <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal" data-target="#chooseBienNhan"><i class="fa fa-plus"></i> Chọn biên nhận</button>
                                     </div>
                                 </div>
-                                <div ng-show="checkLoadData">
-                                    <div class="row" style="margin: 0px;">
-                                        <div class="p-r-0 p-l-0">
-                                            <label class="input-sm">Số bản ghi: </label>
-                                            <label style="color: red;">{{listData.rowCount|number}}</label>
-                                            <label class="input-sm">Số bản ghi hiển thị: </label>
-                                            <select class="input-sm form-control input-s-sm inline" style="width: 60px;" ng-model="numberPerPage" ng-change="setNumberPerPage(numberPerPage);" ng-init="numberPerPage = '5'">
-                                                <option value="5">5</option>
-                                                <option value="10">10</option>
-                                                <option value="20">20</option>
-                                                <option value="25">25</option>
-                                            </select>
-                                        </div>
+                                <div class="row" style="margin: 0px;">
+                                    <div class="p-r-0 p-l-0">
+                                        <label class="input-sm">Số bản ghi: </label>
+                                        <label style="color: red;">{{listBienNhanDaChon.rowCount|number}}</label>
+                                        <label class="input-sm">Số bản ghi hiển thị: </label>
+                                        <select class="input-sm form-control input-s-sm inline" style="width: 60px;" ng-model="numberPerPage" ng-change="setNumberPerPage(numberPerPage);" ng-init="numberPerPage = '5'">
+                                            <option value="5">5</option>
+                                            <option value="10">10</option>
+                                            <option value="20">20</option>
+                                            <option value="25">25</option>
+                                        </select>
                                     </div>
-                                    <div class="table-responsive bg-white">
-                                        <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listData.rowCount">
-                                            <thead class="bg-gray">
-                                                <tr>
-                                                    <th class="text-center v-inherit text-dark">STT</th>
-                                                    <th class="text-center v-inherit text-dark">Số biên nhận</th>
-                                                    <th class="text-center v-inherit text-dark">Người gửi</th>
-                                                    <th class="text-center v-inherit text-dark">Người nhận</th>
-                                                    <th class="text-center v-inherit text-dark">Điện thoại</th>
-                                                    <th class="text-center v-inherit text-dark">Địa chỉ</th>
-                                                    <th class="text-center v-inherit text-dark">Số thùng</th>
-                                                    <th class="text-center v-inherit text-dark">Số HD</th>
-                                                    <th class="text-center v-inherit text-dark">GTN</th>
-                                                    <th class="text-center v-inherit text-dark">Ghi chú</th>
-                                                    <th class="text-center v-inherit text-dark">Tool</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-switch-when="0">
-                                                    <td colspan="8" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
-                                                        Không có dữ liệu
-                                                    </td>
-                                                </tr>
-                                                <tr ng-switch-default ng-repeat="item in listData.items track by $index">
-                                                    <td class="text-center v-inherit" >{{(listData.pageNumber - 1) * listData.numberPerPage + $index + 1}}</td>
-                                                    <td class="text-center v-inherit">{{item.receiptCode}}</td>
-                                                    <td class="text-center v-inherit">{{item.deliveryPartnerName}}</td>
-                                                    <td class="text-center v-inherit">{{item.receivePartnerName}}</td>
-                                                    <td class="text-center v-inherit">{{item.receivePartnerMobile}}</td>
-                                                    <td class="text-center v-inherit">{{item.receivePartnerAddress}}</td>
-                                                    <td class="text-center v-inherit">{{item.numbers}}</td>
-                                                    <td class="text-center v-inherit">{{item.numbers}}</td>
-                                                    <td class="text-center v-inherit">{{item.numbers}}</td>
-                                                    <td class="text-center v-inherit">{{item.note}}</td>
-                                                    <td class="text-center v-inherit">
-                                                        <input type="radio" name="notarySelect" ng-click="changeIdSelected(item.idNotaryInfo);">
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <footer class="panel-footer">
-                                        <div class="row">
-                                            <div class="p-r-0 col-sm-12 text-right text-center-xs">
-                                                <ul class="pagination pagination-sm m-t-none m-b-none">
-                                                    <li ng-if="listData.pageNumber > 1"><a href="javascript:void(0)" ng-click="loadPageData(1)">«</a></li>
-                                                    <li ng-repeat="item in listData.pageList">
-                                                        <a href="javascript:void(0)" ng-if="item == listData.pageNumber" style="color:mediumvioletred;"> {{item}}</a>
-                                                        <a href="javascript:void(0)" ng-if="item != listData.pageNumber" ng-click="loadPageData(item)"> {{item}}</a>
-                                                    </li>
-                                                    <li ng-if="listData.pageNumber < listData.pageCount"><a href="javascript:void(0)" ng-click="loadPageData(listData.pageCount)">»</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </footer>
                                 </div>
+                                <div class="table-responsive bg-white">
+                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.rowCount">
+                                        <thead class="bg-gray">
+                                            <tr>
+                                                <th class="text-center v-inherit text-dark">STT</th>
+                                                <th class="text-center v-inherit text-dark">Số biên nhận</th>
+                                                <th class="text-center v-inherit text-dark">Người gửi</th>
+                                                <th class="text-center v-inherit text-dark">Người nhận</th>
+                                                <th class="text-center v-inherit text-dark">Điện thoại</th>
+                                                <th class="text-center v-inherit text-dark">Địa chỉ</th>
+                                                <th class="text-center v-inherit text-dark">Số thùng</th>
+                                                <th class="text-center v-inherit text-dark">Số HD</th>
+                                                <th class="text-center v-inherit text-dark">GTN</th>
+                                                <th class="text-center v-inherit text-dark">Ghi chú</th>
+                                                <th class="text-center v-inherit text-dark">Tool</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-switch-when="0">
+                                                <td colspan="11" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                                    Không có dữ liệu
+                                                </td>
+                                            </tr>
+                                            <tr ng-switch-default ng-repeat="item in listBienNhanDaChon.items track by $index">
+                                                <td class="text-center v-inherit" >{{(listBienNhanDaChon.pageNumber - 1) * listBienNhanDaChon.numberPerPage + $index + 1}}</td>
+                                                <td class="text-center v-inherit">{{item.receiptCode}}</td>
+                                                <td class="text-center v-inherit">{{item.deliveryPartnerName}}</td>
+                                                <td class="text-center v-inherit">{{item.receivePartnerName}}</td>
+                                                <td class="text-center v-inherit">{{item.receivePartnerMobile}}</td>
+                                                <td class="text-center v-inherit">{{item.receivePartnerAddress}}</td>
+                                                <td class="text-center v-inherit">{{item.numbers}}</td>
+                                                <td class="text-center v-inherit">{{item.numbers}}</td>
+                                                <td class="text-center v-inherit">{{item.numbers}}</td>
+                                                <td class="text-center v-inherit">{{item.note}}</td>
+                                                <td class="text-center v-inherit">
+                                                    <input type="radio" name="notarySelect" ng-click="changeIdSelected(item.idNotaryInfo);">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <footer class="panel-footer">
+                                    <div class="row">
+                                        <div class="p-r-0 col-sm-12 text-right text-center-xs">
+                                            <ul class="pagination pagination-sm m-t-none m-b-none">
+                                                <li ng-if="listBienNhanDaChon.pageNumber > 1"><a href="javascript:void(0)" ng-click="loadPageData(1)">«</a></li>
+                                                <li ng-repeat="item in listBienNhanDaChon.pageList">
+                                                    <a href="javascript:void(0)" ng-if="item == listBienNhanDaChon.pageNumber" style="color:mediumvioletred;"> {{item}}</a>
+                                                    <a href="javascript:void(0)" ng-if="item != listBienNhanDaChon.pageNumber" ng-click="loadPageData(item)"> {{item}}</a>
+                                                </li>
+                                                <li ng-if="listBienNhanDaChon.pageNumber < listBienNhanDaChon.pageCount"><a href="javascript:void(0)" ng-click="loadPageData(listBienNhanDaChon.pageCount)">»</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </footer>
                             </div>
                         </form>                      
                     </div>
                 </div>
-
-                
-
-                </section>
-            <%@include file="../popup.jsp"%>
+            </section>
+            <%@include file="../popupChooseBienNhan.jsp"%>
         </section>
     </section>
 </section>

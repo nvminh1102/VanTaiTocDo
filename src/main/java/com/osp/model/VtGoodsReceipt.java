@@ -18,6 +18,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -55,6 +56,8 @@ public class VtGoodsReceipt implements Serializable {
     private Integer truckPartnerId;
     @Column(name = "bien_so", length = 50)
     private String bienSo;
+    @Column(name = "loai_xe", length = 200)
+    private String loaiXe;
     @Basic(optional = false)
     @Column(name = "date_delivery")
     @Temporal(TemporalType.TIMESTAMP)
@@ -74,6 +77,19 @@ public class VtGoodsReceipt implements Serializable {
     private Date lastUpdate;
     @Column(name = "updated_by", length = 200)
     private String updatedBy;
+
+    @Transient
+    private String truckPartnerName;
+    @Transient
+    private String partName;
+    @Transient
+    private Date fromDelivery;
+    @Transient
+    private Date toDelivery;
+    @Transient
+    private Date fromReceive;
+    @Transient
+    private Date toReceive;
 
     public VtGoodsReceipt() {
     }
@@ -121,6 +137,15 @@ public class VtGoodsReceipt implements Serializable {
         this.bienSo = bienSo;
     }
 
+    public String getLoaiXe() {
+        return loaiXe;
+    }
+
+    public void setLoaiXe(String loaiXe) {
+        this.loaiXe = loaiXe;
+    }
+
+    
     public Date getDateDelivery() {
         return dateDelivery;
     }
@@ -193,5 +218,56 @@ public class VtGoodsReceipt implements Serializable {
     public String toString() {
         return "com.osp.model.VtGoodsReceipt[ id=" + id + " ]";
     }
+
+    public String getPartName() {
+        return partName;
+    }
+
+    public void setPartName(String partName) {
+        this.partName = partName;
+    }
+
+    public Date getFromDelivery() {
+        return fromDelivery;
+    }
+
+    public void setFromDelivery(Date fromDelivery) {
+        this.fromDelivery = fromDelivery;
+    }
+
+    public Date getToDelivery() {
+        return toDelivery;
+    }
+
+    public void setToDelivery(Date toDelivery) {
+        this.toDelivery = toDelivery;
+    }
+
+
+    public Date getFromReceive() {
+        return fromReceive;
+    }
+
+    public void setFromReceive(Date fromReceive) {
+        this.fromReceive = fromReceive;
+    }
+
+    public Date getToReceive() {
+        return toReceive;
+    }
+
+    public void setToReceive(Date toReceive) {
+        this.toReceive = toReceive;
+    }
+
+    public String getTruckPartnerName() {
+        return truckPartnerName;
+    }
+
+    public void setTruckPartnerName(String truckPartnerName) {
+        this.truckPartnerName = truckPartnerName;
+    }
+
+    
     
 }

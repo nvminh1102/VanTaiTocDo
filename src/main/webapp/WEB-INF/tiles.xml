@@ -92,5 +92,9 @@
         <put-attribute name="title" value="Phiếu nhận hàng"/>
         <put-attribute name="page" value="/WEB-INF/views/phieu-nhan/list.jsp" />
     </definition>
+    <definition name="phieuNhan.add" extends="default">
+        <put-attribute name="title" value="Phiếu nhận hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/phieu-nhan/add.jsp" />
+    </definition>
 
 </tiles-definitions>
