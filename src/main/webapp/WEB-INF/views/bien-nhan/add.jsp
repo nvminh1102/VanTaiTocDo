@@ -65,7 +65,7 @@
         <section class="scrollable padder" style="background: white;padding-bottom: 200px;">
             <ul class="bg-primary breadcrumb no-border no-radius b-b b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/system/auction-info/list">Biên nhận</a></li>
+                <li><a href="<%=request.getContextPath()%>/bienNhan/list">Biên nhận</a></li>
                 <li><a href="#" id="title">Thêm mới biên nhận</a></li>
             </ul>
             <%--<div class="m-b-md">--%>
@@ -271,7 +271,7 @@
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12" style="text-align: center; padding-bottom: 30px; padding-top: 30px">
                                 <button id="btnSaveAuctionInfo" class="btn btn-primary" style="width: 115px" ng-click="saveAuctionInfo()">Lưu biên nhận</button>
-                                <a href="<%=request.getContextPath()%>/system/auction-info/list" class="btn btn-default" style="width: 115px">Hủy bỏ</a>
+                                <a href="<%=request.getContextPath()%>/bienNhan/list" class="btn btn-default" style="width: 115px">Hủy bỏ</a>
                             </div>
                         </div>
                     </form>

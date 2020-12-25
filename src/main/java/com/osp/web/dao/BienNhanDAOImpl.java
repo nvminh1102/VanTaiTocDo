@@ -2,7 +2,12 @@ package com.osp.web.dao;
 
 import com.osp.common.PagingResult;
 import com.osp.model.VtReceipt;
+import com.osp.model.view.VtReceiptView;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -101,5 +106,102 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public Optional<PagingResult> page(PagingResult page, String receiptCode, String nameStock,
+        Date fromGenDate, Date toGenDate) {
+        try {
+            int offset = 0;
+            if (page.getPageNumber() > 0) {
+                offset = (page.getPageNumber() - 1) * page.getNumberPerPage();
+            }
+
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan "
+                + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
+                + " where 1=1 ");
+            if (receiptCode != null && !"".equals(receiptCode)) {
+                sqlBuffer.append(" and UPPER(t.receipt_code) = :receiptCode");
+            }
+            if (nameStock != null && !"".equals(nameStock)) {
+                sqlBuffer.append(" and t.name_Stock = :nameStock");
+            }
+            if (fromGenDate != null) {
+                sqlBuffer.append(" and t.date_receipt >= :fromGenDate");
+            }
+            if (toGenDate != null) {
+                sqlBuffer.append(" and t.date_receipt <= :toGenDate");
+            }
+
+            sqlBuffer.append(" order by t.GEN_DATE DESC");
+
+            StringBuffer sqlBufferCount = new StringBuffer("SELECT count(t.id) "
+                + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID"
+                + " where 1=1 ");
+            if (receiptCode != null && !"".equals(receiptCode)) {
+                sqlBufferCount.append(" and UPPER(t.receipt_code) = :receiptCode");
+            }
+            if (nameStock != null && !"".equals(nameStock)) {
+                sqlBufferCount.append(" and t.name_Stock = :nameStock");
+            }
+            if (fromGenDate != null) {
+                sqlBufferCount.append(" and t.date_receipt >= :fromGenDate");
+            }
+            if (toGenDate != null) {
+                sqlBufferCount.append(" and t.date_receipt <= :toGenDate");
+            }
+            Query query = entityManager.createNativeQuery(sqlBuffer.toString(), VtReceiptView.class);
+            if (receiptCode != null && !"".equals(receiptCode)) {
+                query.setParameter("receiptCode", receiptCode.trim().toUpperCase());
+            }
+            if (nameStock != null && !"".equals(nameStock)) {
+                query.setParameter("nameStock", nameStock.trim().toUpperCase());
+            }
+            if (fromGenDate != null) {
+                query.setParameter("fromGenDate", fromGenDate);
+            }
+            if (toGenDate != null) {
+                query.setParameter("toGenDate", toGenDate);
+            }
+
+            List<VtReceiptView> list = query.setFirstResult(offset).setMaxResults(page.getNumberPerPage()).getResultList();
+            if (list != null && list.size() > 0) {
+                page.setItems(list);
+            }
+            Query queryCount = entityManager.createNativeQuery(sqlBufferCount.toString());
+            if (receiptCode != null && !"".equals(receiptCode)) {
+                queryCount.setParameter("receiptCode", receiptCode.trim().toUpperCase());
+            }
+            if (nameStock != null && !"".equals(nameStock)) {
+                queryCount.setParameter("nameStock", nameStock.trim().toUpperCase());
+            }
+            if (fromGenDate != null) {
+                queryCount.setParameter("fromGenDate", fromGenDate);
+            }
+            if (toGenDate != null) {
+                queryCount.setParameter("toGenDate", toGenDate);
+            }
+            List resultList = queryCount.getResultList();
+            if (resultList.size() > 0) {
+                BigInteger count = (BigInteger) resultList.get(0);
+                page.setRowCount(count.longValue());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(page);
+    }
+
+    @Override
+    public boolean delete(int id) {
+        try {
+            String sql = "delete from vt_receipt where ID = :id";
+            Query query = entityManager.createNativeQuery(sql).setParameter("id", id);
+            query.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

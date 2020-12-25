@@ -1,6 +1,7 @@
 package com.osp.web.controller;
 
 import com.osp.common.PagingResult;
+import com.osp.common.Utils;
 import com.osp.model.User;
 import com.osp.model.VtPartner;
 import com.osp.model.VtReceipt;
@@ -9,6 +10,7 @@ import com.osp.model.view.BienNhanForm;
 import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.KhachHangDAO;
 import com.osp.web.dao.MatHangDAO;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/bienNhan")
 public class BienNhanController {
-
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     @Autowired
     BienNhanDAO bienNhanDAO;
     @Autowired
@@ -188,4 +190,58 @@ public class BienNhanController {
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
 
+    @GetMapping("/list")
+    public String listBn() {
+        return "bienNhan.list";
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<PagingResult> parameterList(@RequestParam(value = "p", required = false, defaultValue = "1") int pageNumber,
+        @RequestParam(value = "numberPerPage", required = false, defaultValue = "25") int numberPerPage,
+        @RequestParam(value = "receiptCode", required = false, defaultValue = "") String receiptCode,
+        @RequestParam(value = "nameStock", required = false, defaultValue = "") String nameStock,
+        @RequestParam(value = "fromDateReceipt", required = false, defaultValue = "") String fromDateReceipt,
+        @RequestParam(value = "toDateReceipt", required = false, defaultValue = "") String toDateReceipt) {
+        PagingResult page = new PagingResult();
+        page.setPageNumber(pageNumber);
+        page.setNumberPerPage(numberPerPage);
+        Date fromDate = null;
+        Date toDate = null;
+
+        try {
+            if (fromDateReceipt != null && !"".equals(fromDateReceipt)) {
+                String strFdate = fromDateReceipt + " 00:00:00";
+                fromDate  = new Timestamp(sdf.parse(strFdate).getTime());
+            }
+            if (toDateReceipt != null && !"".equals(toDateReceipt)) {
+                String strTdate = toDateReceipt + " 23:59:59";
+                toDate = sdf.parse(strTdate);
+            }
+            page = bienNhanDAO.page(page, Utils.trim(receiptCode), Utils.trim(nameStock), fromDate, toDate).orElse(new PagingResult());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/delete")
+//    @Secured(ConstantAuthor.Parameter.update)
+    public ResponseEntity<String> delete(@RequestBody VtReceipt vtReceipt, HttpServletRequest request) {
+        try {
+            if (vtReceipt.getId() == null) {
+                return new ResponseEntity<String>("1", HttpStatus.OK);
+            }
+            boolean isDelete = bienNhanDAO.delete(vtReceipt.getId());
+            if (isDelete) {
+                return new ResponseEntity<String>("0", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<String>("1", HttpStatus.OK);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("1", HttpStatus.OK);
+        }
+    }
 }
