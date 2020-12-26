@@ -1,16 +1,3 @@
-app.factory('popupBienNhan', function(){
-     var listDataBN = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
-    return {
-        getListDataBN: function () {
-            return listDataBN;
-        },
-        setListDataBN: function (items) {
-            listDataBN.items = items;
-        }
-    };
-});
-
-
 app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope , $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
         $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: ""};
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);

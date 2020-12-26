@@ -7,6 +7,8 @@ package com.osp.web.dao;
 
 import com.osp.common.PagingResult;
 import com.osp.model.Parameter;
+import com.osp.model.VtPartner;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -26,5 +28,7 @@ public interface ParameterDAO {
     public Parameter getParamById(Long id);
 
     public boolean deleteParam(Parameter parameterDel);
+    
+    public List<VtPartner>  getListByType(Integer typePartner);
     
 }

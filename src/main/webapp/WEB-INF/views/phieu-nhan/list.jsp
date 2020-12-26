@@ -52,7 +52,7 @@
                                         <label class="control-label text-dark">Loại xe</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="" ng-model="search.loaiXe" class="form-control input-sm" placeholder="Xe tải 1 tấn"/>
+                                        <input id="loaiXe" ng-model="search.loaiXe" class="form-control input-sm" placeholder="Xe tải 1 tấn"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -60,7 +60,7 @@
                                         <label class="control-label text-dark">Biển số xe</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="" ng-model="search.bienSo" class="form-control input-sm" placeholder="29C - 012 34"/>
+                                        <input id="bienSo" ng-model="search.bienSo" class="form-control input-sm" placeholder="29C - 012 34"/>
                                     </div>
                                 </div>
                             </div>
@@ -174,7 +174,7 @@
                                         <td class="text-left v-inherit">{{item.partnerNameDelivery}}</td>
                                         <td class="text-left v-inherit">{{item.partnerNameReceive}}</td>
                                         <td class="text-left v-inherit">{{item.totalDebt}}</td>
-                                        <td class="text-center v-inherit"><a target="_blank" href="<%=request.getContextPath()%>/quan-ly-chi-tiet-ho-so-ccv/{{item.idNotaryInfo}}"><i class="fa-hover fa fa-eye" style="color: blue;font-size: 15px"></i></a></td>
+                                        <td class="text-center v-inherit"><a href="<%=request.getContextPath()%>/phieu-nhan-hang/preEdit/{{item.id}}"><i class="fa-hover fa fa-eye" style="color: blue;font-size: 15px"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -9,6 +9,22 @@ var digitsAndSemicolon = /[1234567890;]/g;
 var digitsAndAsterisk = /[1234567890\\*]/g;
 var digitsAndSlash =/[1234567890/]/g;
 
+
+app.factory('popupBienNhan', function(){
+     var listDataBN = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
+    return {
+        getListDataBN: function () {
+            console.log(listDataBN.rowCount)
+            return listDataBN;
+        },
+        setListDataBN: function (items) {
+            listDataBN.items = items;
+            listDataBN.rowCount = items.length;
+        }
+    };
+});
+
+
 function restrictCharacters(myfield, e, restrictionType) {
     if (!e) var e = window.event
     if (e.keyCode) code = e.keyCode;

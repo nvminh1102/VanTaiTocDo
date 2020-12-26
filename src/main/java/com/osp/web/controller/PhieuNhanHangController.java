@@ -1,7 +1,10 @@
 package com.osp.web.controller;
 
+import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
+import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
+import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.web.dao.PhieuNhanHangDAO;
 import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpServletRequest;
@@ -11,11 +14,15 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/phieu-nhan-hang")
@@ -29,11 +36,6 @@ public class PhieuNhanHangController {
     @GetMapping("/list")
     public String list() {
         return "phieunhanhang.list";
-    }
-
-    @GetMapping("/preAdd")
-    public String preAdd() {
-        return "phieuNhan.add";
     }
 
     @RequestMapping(value = "/load-list", method = RequestMethod.GET)
@@ -74,6 +76,38 @@ public class PhieuNhanHangController {
         page.setPageNumber(offset);
         page = phieuNhanHangDAO.search(item, page).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
+    }
+
+    @GetMapping("/preAdd")
+    public String preAdd(){
+        return "phieuNhan.add";
+    }
+    
+    @GetMapping("/preEdit/{id}")
+    public String preEdit(@PathVariable("id") Integer id, HttpServletRequest request) {
+        request.setAttribute("id", id);
+        return "phieuNhan.add";
+    }
+
+    @RequestMapping(value = "/loadDataEdit", method = RequestMethod.GET)
+    public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
+        VTGoodsReceiptForm vTGoodsReceiptForm = phieuNhanHangDAO.getVTGoodsReceiptFormById(id);
+        return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        MessReponse reponse = new MessReponse();
+        if (reponse.getSuccess()) {
+            boolean check = phieuNhanHangDAO.add(vTGoodsReceiptForm, user);
+            if (check) {
+                reponse = new MessReponse(true, 200);
+            } else {
+                reponse = new MessReponse(false, 500);
+            }
+        }
+        return new ResponseEntity<MessReponse>(reponse, HttpStatus.OK);
     }
 
 }

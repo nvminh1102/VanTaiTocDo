@@ -4,24 +4,20 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<script src="<%=request.getContextPath()%>/assets/project/phieu-nhan/add.js${urlCache}"></script>
+
+<script src="<%=request.getContextPath()%>/assets/project/phieu-nhan/add.js${urlCache}" type="text/javascript"></script>
+<script>
+    var id = '${id}';
+    console.log("ID:"+ id);
+</script>
 <section id="content" ng-app="FrameworkBase"  ng-controller="vantai">
     <section class="vbox background-white">
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/quan-ly-bo-nhiem-ccv">Phiếu biên nhận </a></li>
+                <li><a href="<%=request.getContextPath()%>/phieu-nhan-hang/list">Phiếu biên nhận </a></li>
                 <li><a href="javascript:void(0)">Thêm mới phiếu nhận hàng</a></li>
             </ul>
-            <div id="msgId" class="m-b-md" style="display: none;">
-                <script>
-                            $(document).ready(function () {
-                                /*$("#msgId").addClass("alert-success");*/
-                            });
-                </script>
-                <span class="closebtn" onclick="this.parentElement.style.display = 'none';">&times;</span>
-                <div class="title-message">{{logger}}</div>
-            </div>
             <section class="panel panel-default" style="margin-bottom: 5px;">
                 <header class="panel-heading">
                     <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">
@@ -39,17 +35,19 @@
                                     </div>
                                     <label class="col-md-2 control-label text-dark">Ngày lập phiếu</label>
                                     <div class="col-md-4">
-                                        <input ng-model="phieuNhan.dateReceipt" class="form-control input-sm"/>
+                                        <input ng-model="phieuNhan.dateReceive" class="form-control input-sm" id="dateReceive"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label text-dark">MST nhà xe</label>
+                                    <label class="col-md-2 control-label text-dark">Nhà xe</label>
                                     <div class="col-md-4">
-                                        <input ng-model="phieuNhan.taxCode" class="form-control input-sm"/>
+                                        <select id="search_orgNotaryInfoId" class="select2" ng-model="phieuNhan.truckPartnerId" style="width: 100% !important;">
+                                            <option value="">Tất cả</option>
+                                            <option ng-repeat="item in vtPartners" value="{{item.id}}">{{item.name}}</option>
+                                        </select>
                                     </div>
-                                    <label class="col-md-2 control-label text-dark">Tên nhà xe</label>
+                                    <label class="col-md-2 control-label text-dark"></label>
                                     <div class="col-md-4">
-                                        <input ng-model="phieuNhan.partnerName" class="form-control input-sm"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -71,14 +69,7 @@
                                 <div class="row" style="margin: 0px;">
                                     <div class="p-r-0 p-l-0">
                                         <label class="input-sm">Số bản ghi: </label>
-                                        <label style="color: red;">{{listBienNhanDaChon.rowCount|number}}</label>
-                                        <label class="input-sm">Số bản ghi hiển thị: </label>
-                                        <select class="input-sm form-control input-s-sm inline" style="width: 60px;" ng-model="numberPerPage" ng-change="setNumberPerPage(numberPerPage);" ng-init="numberPerPage = '5'">
-                                            <option value="5">5</option>
-                                            <option value="10">10</option>
-                                            <option value="20">20</option>
-                                            <option value="25">25</option>
-                                        </select>
+                                        <label style="color: red;">{{listBienNhanDaChon.rowCount}}</label>
                                     </div>
                                 </div>
                                 <div class="table-responsive bg-white">
@@ -116,35 +107,26 @@
                                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                                 <td class="text-center v-inherit">{{item.note}}</td>
                                                 <td class="text-center v-inherit">
-                                                    <input type="radio" name="notarySelect" ng-click="changeIdSelected(item.idNotaryInfo);">
+                                                    <!--<input type="radio" name="notarySelect" ng-click="changeIdSelected(item.idNotaryInfo);">-->
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                                <footer class="panel-footer">
-                                    <div class="row">
-                                        <div class="p-r-0 col-sm-12 text-right text-center-xs">
-                                            <ul class="pagination pagination-sm m-t-none m-b-none">
-                                                <li ng-if="listBienNhanDaChon.pageNumber > 1"><a href="javascript:void(0)" ng-click="loadPageData(1)">«</a></li>
-                                                <li ng-repeat="item in listBienNhanDaChon.pageList">
-                                                    <a href="javascript:void(0)" ng-if="item == listBienNhanDaChon.pageNumber" style="color:mediumvioletred;"> {{item}}</a>
-                                                    <a href="javascript:void(0)" ng-if="item != listBienNhanDaChon.pageNumber" ng-click="loadPageData(item)"> {{item}}</a>
-                                                </li>
-                                                <li ng-if="listBienNhanDaChon.pageNumber < listBienNhanDaChon.pageCount"><a href="javascript:void(0)" ng-click="loadPageData(listBienNhanDaChon.pageCount)">»</a></li>
-                                            </ul>
-                                        </div>
+                                <div class="form-group">
+                                    <div class="col-md-12 text-center">
+                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieuNhan()" ><i class="fa fa-plus"></i> Chọn biên nhận</button>
                                     </div>
-                                </footer>
+                                </div>
                             </div>
                         </form>                      
                     </div>
                 </div>
             </section>
-            <%@include file="../popupChooseBienNhan.jsp"%>
         </section>
     </section>
 </section>
+            <%@include file="../popupChooseBienNhan.jsp"%>
 
 <script>
     $("#quan-ly-bo-nhiem-ccv").addClass("active");

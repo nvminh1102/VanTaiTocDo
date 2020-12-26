@@ -1,8 +1,11 @@
 package com.osp.web.dao;
 
 import com.osp.common.PagingResult;
+import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
+import com.osp.model.VtGoodsReceiptDetail;
 import com.osp.model.VtReceipt;
+import com.osp.model.view.VTGoodsReceiptForm;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -122,4 +125,50 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
             return null;
         }
     }
+
+    @Override
+    public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user) {
+        try {
+            VtGoodsReceipt vtGoodsReceipt = vTGoodsReceiptForm.getVtGoodsReceipt();
+            List<VtGoodsReceiptDetail> vtGoodsReceiptDetail = vTGoodsReceiptForm.getVtGoodsReceiptDetail();
+            vtGoodsReceipt.setUpdatedBy(user.getUsername());
+            vtGoodsReceipt.setCreatedBy(user.getUsername());
+            entityManager.persist(vtGoodsReceipt);
+            for (VtGoodsReceiptDetail bo : vtGoodsReceiptDetail) {
+                bo.setGoodsreceiptid(vtGoodsReceipt.getId());
+                bo.setCreatedBy(vtGoodsReceipt.getCreatedBy());
+                bo.setUpdatedBy(vtGoodsReceipt.getUpdatedBy());
+                entityManager.persist(bo);
+            }
+            entityManager.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+            entityManager.getTransaction().rollback();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public VTGoodsReceiptForm getVTGoodsReceiptFormById(Integer id) {
+        VTGoodsReceiptForm vTGoodsReceiptForm = new VTGoodsReceiptForm();
+        try {
+            Query queryAll = entityManager.createQuery("select r from VtGoodsReceipt r where r.id = :id ");
+            queryAll.setParameter("id", id);
+
+            VtGoodsReceipt vtGoodsReceipt = (VtGoodsReceipt) queryAll.getSingleResult();
+            vTGoodsReceiptForm.setVtGoodsReceipt(vtGoodsReceipt);
+
+            Query queryDetail = entityManager.createQuery("select r from VtGoodsReceiptDetail r where r.goodsreceiptid = :goodsreceiptid ");
+            queryDetail.setParameter("goodsreceiptid", id);
+            List<VtGoodsReceiptDetail> vtGoodsReceiptDetail = queryDetail.getResultList();
+            vTGoodsReceiptForm.setVtGoodsReceiptDetail(vtGoodsReceiptDetail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entityManager.getTransaction().rollback();
+            return vTGoodsReceiptForm;
+        }
+        return null;
+    }
+
 }

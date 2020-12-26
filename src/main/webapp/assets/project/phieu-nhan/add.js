@@ -1,17 +1,66 @@
-app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q, Fact) {
-        $scope.search = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: ""};
-        
-        $scope.listBienNhanDaChon = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
-        $scope.listBienNhanDaChon = dataShare.listBienNhanDaChon;
+app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
+console.log("1121212121");
+        $scope.listBienNhanDaChon = {items: "", rowCount: 0, numberPerPage: 5, pageNumber: 1, pageList: [], pageCount: 0};
         $scope.numberPerPage = "5";
         $scope.listBienNhanDaChon.numberPerPage = $scope.numberPerPage;
-        $scope.changeIdSelected = function (id) {
-            $scope.idSelected = id;
-            $http.get(preUrl + "/them-moi-thong-tin-bo-nhiem-ccv/searchById", {params: {idNotary: $scope.idSelected}})
-                    .then(function (reponse) {
-                        $scope.phieuNhan = reponse.data;
-                    });
+        $scope.listBienNhanDaChon = popupBienNhan.getListDataBN();
+        // load DL nhà xe
+        $http.get(preUrl + "/getListPartner", {params: {typePartner: 4}})
+                .then(function (response) {
+                    $scope.vtPartners = response.data;
+                });
+
+
+        $http.get(preUrl + "/phieu-nhan-hang/loadDataEdit", {params: {id: id}})
+                .then(function (response) {
+                    $scope.phieuNhan = response.vtGoodsReceipt;
+                    $scope.listBienNhanDaChon = response.vtGoodsReceiptDetail;
+
+                });
+
+        $scope.savePhieuNhan = function () {
+            
+            console.log("id1:" + id);
+            if ($("#formAdd").parsley().validate()) {
+                if (typeof $scope.phieuNhan != "undefined" && typeof $scope.phieuNhan.receiptCode != 'undefined') {
+                    if (typeof $scope.listBienNhanDaChon != "undefined") {
+                        $scope.call = {
+                            VtGoodsReceipt: angular.copy($scope.phieuNhan),
+                            vtGoodsReceiptDetail: angular.copy($scope.listBienNhanDaChon)
+                        };
+                        var call_ = JSON.stringify($scope.call);
+                        $http.post(preUrl + "/phieu-nhan-hang/add", call_, {headers: {'Content-Type': 'application/json'}})
+                                .then(function (response) {
+                                    if (response.data.reponseCode == 200 && response.data.success == true) {
+                                        window.location.href = preUrl + "/quan-ly-bo-nhiem-ccv?status=1";
+                                    } else {
+                                        toastr.success(response.data.messageError);
+                                    }
+                                }, function (response) {
+                                    $("#confirm-error").modal("show");
+                                }
+                                );
+                    } else {
+                        toastr.success('Chưa chọn danh sách biên nhận!');
+                    }
+                } else {
+                    toastr.success('Chưa nhập mã phiếu nhận hàng!');
+                }
+            }
         };
+        $(document).ready(function () {
+            console.log("vào")
+            $("#dateReceive").datetimepicker({
+                locale: 'vi-VN',
+                format: 'DD-MM-YYYY'
+            }).on('dp.change', function (e) {
+                if (e != null) {
+                    $scope.phieuNhan.dateReceive = $(this).val();
+                }
+            });
+        });
+
+
         /*load tooltip*/
         $scope.tooltip = function () {
             var defer = $q.defer();
@@ -21,80 +70,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
             }, 1000);
         };
 
-        $scope.save = function () {
-            
-            if ($("#formAdd").parsley().validate()) {
-                if (typeof $scope.phieuNhan != "undefined" && typeof $scope.phieuNhan.receiptCode != 'undefined') {
-                    $scope.call = {
-                        vtGoodsReceipt: angular.copy($scope.phieuNhan),
-                    };
-                    var call_ = JSON.stringify($scope.call);
-                    $http.post(preUrl + "/them-moi-thong-tin-bo-nhiem-ccv", call_, {headers: {'Content-Type': 'application/json'}})
-                            .then(function (response) {
-                                if (response.data.reponseCode == 200 && response.data.success == true) {
-                                    window.location.href = preUrl + "/quan-ly-bo-nhiem-ccv?status=1";
-                                } else {
-                                    switch (response.data.reponseCode){
-                                        case 1: 
-                                            $scope.thongBao = $("#notaryEmpty").html();
-                                            break;
-                                        case 2: 
-                                            $scope.thongBao = $("#errMsg2").html();
-                                            break;
-                                        case 3: 
-                                            $scope.thongBao = $("#errMsg1").html();
-                                            break;
-                                        case 4: 
-                                            $scope.thongBao = $("#errMsg3").html();
-                                            break;
-                                        case 5: 
-                                            $scope.thongBao = $("#error_2").html();
-                                            break;
-                                        case 6: 
-                                            $scope.thongBao = $("#error_3").html();
-                                            break;
-                                        case 7: 
-                                            $scope.thongBao = $("#error_1").html();
-                                            break;
-                                        case 500:
-                                            $scope.thongBao = "Lỗi trong quá trình xử lý, Vui lòng thử lại sau.";
-                                            break;
-                                    }
-                                }
-                            }, function (response) {
-                                $("#confirm-error").modal("show");
-                            }
-                            );
-                } else {
-                    $scope.thongBao = $("#notaryEmpty").html();
-                    $("#popup-message").modal("show");
-                }
-            }
-        };
-        $(document).ready(function () {
-            $("#dateSign_").datetimepicker({
-                locale: 'vi-VN',
-                format: 'DD-MM-YYYY'
-            }).on('dp.change', function (e) {
-                if (e != null) {
-                    $scope.document.dateSign = $(this).val();
-                    $scope.dateSign_ = stringToDate($scope.document.dateSign, "dd-MM-yyyy", "-");
-                    if($('#dateSign_').val() != "")
-                        $('#effectiveDate_').data("DateTimePicker").minDate(moment($('#dateSign_').val(), "DD-MM-YYYY").toDate());
-                }
-            });
-            $("#effectiveDate_").datetimepicker({
-                locale: 'vi-VN',
-                format: 'DD-MM-YYYY'
-            }).on('dp.change', function (e) {
-                if (e != null) {
-                    $scope.document.effectiveDate = $(this).val();
-                    $scope.effectiveDate_ = stringToDate($scope.document.effectiveDate, "dd-MM-yyyy", "-");
-                    if($('#effectiveDate_').val() != "")
-                        $('#dateSign_').data("DateTimePicker").maxDate(moment($('#effectiveDate_').val(), "DD-MM-YYYY").toDate());
-                }
-            });
-        });
+
 
         $scope.removeIndexList = function (index, list) {
             var list_ = [];

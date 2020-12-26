@@ -8,6 +8,8 @@ package com.osp.web.dao;
 import com.osp.common.PagingResult;
 import com.osp.common.QueryBuilder;
 import com.osp.model.Parameter;
+import com.osp.model.VtPartner;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -133,6 +135,19 @@ public class ParameterDAOImpl implements ParameterDAO {
         } catch (Exception e) {
         }
         return false;
+    }
+
+    @Override
+    public List<VtPartner> getListByType(Integer typePartner) {
+        List<VtPartner> vtPartners = new ArrayList<>();
+        try {
+            Query queryAll = entityManager.createQuery("select p from VtPartner p where typePartner = :typePartner ");
+            queryAll.setParameter("typePartner", typePartner);
+            vtPartners = queryAll.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vtPartners;
     }
 
 }
