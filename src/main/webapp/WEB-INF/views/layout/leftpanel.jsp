@@ -118,19 +118,36 @@
                         <li class="<%= isActive(request.getContextPath() + "/bienNhan", request) ? "active" : ""%>">
                             <a href="#" class=""> <i class="fa fa-credit-card icon"> <b class="bg-warning"></b> </i> <span
                                     class="pull-right"> <i class="fa fa-angle-down text"></i> <i
-                                    class="fa fa-angle-up text-active"></i> </span> <span>Biên nhận</span> </a>
+                                    class="fa fa-angle-up text-active"></i> </span> <span>Quản lý vận chuyển</span> </a>
                             <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/preAdd", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/bienNhan/preAdd" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Thêm mới biên nhận</span> </a></li>
                                 <li class="<%= isActive(request.getContextPath() + "/bienNhan/danh-sach", request) ? "active" : ""%>">
                                     <a href="<%=request.getContextPath()%>/bienNhan/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Danh sách biên nhận</span> </a></li>
+                                            class="fa fa-angle-right"></i> <span>Biên nhận</span> </a></li>
                             </ul>
                             <ul class="nav lt">
                                 <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
                                     <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
                                             class="fa fa-angle-right"></i> <span>Phiếu nhận hàng</span> </a></li>
+                            </ul>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Phiếu thu tiền</span> </a></li>
+                            </ul>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Công nợ</span> </a></li>
+                            </ul>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Toa hàng</span> </a></li>
+                            </ul>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Phiêu giao hàng</span> </a></li>
                             </ul>
                         </li>
 

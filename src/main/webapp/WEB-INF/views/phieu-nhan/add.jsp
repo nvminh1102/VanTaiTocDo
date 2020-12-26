@@ -46,7 +46,7 @@
                                     <div class="col-md-4">
                                         <select id="search_orgNotaryInfoId" class="select2" ng-model="phieuNhan.truckPartnerId" style="width: 100% !important;">
                                             <option value="">Tất cả</option>
-                                            <option ng-repeat="item in vtPartners" value="{{item.id}}">{{item.name}}</option>
+                                            <option ng-repeat="item in vtPartners" value="{{item.id}}">{{item.fullName}}</option>
                                         </select>
                                     </div>
                                     <label class="col-md-2 control-label text-dark"></label>
@@ -104,10 +104,10 @@
                                             <tr ng-switch-default ng-repeat="item in listBienNhanDaChon.items track by $index">
                                                 <td class="text-center v-inherit" >{{(listBienNhanDaChon.pageNumber - 1) * listBienNhanDaChon.numberPerPage + $index + 1}}</td>
                                                 <td class="text-center v-inherit">{{item.receiptCode}}</td>
-                                                <td class="text-center v-inherit">{{item.deliveryPartnerName}}</td>
-                                                <td class="text-center v-inherit">{{item.receivePartnerName}}</td>
-                                                <td class="text-center v-inherit">{{item.receivePartnerMobile}}</td>
-                                                <td class="text-center v-inherit">{{item.receivePartnerAddress}}</td>
+                                                <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
+                                                <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>
+                                                <td class="text-center v-inherit">{{item.mobileNguoiNhan}}</td>
+                                                <td class="text-center v-inherit">{{item.diaChiNguoiNhan}}</td>
                                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                                 <td class="text-center v-inherit">{{item.numbers}}</td>

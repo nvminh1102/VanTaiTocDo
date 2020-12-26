@@ -19,9 +19,9 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                     .then(function (response) {
                         $scope.phieuNhan = response.data.vtGoodsReceiptBO;
                         $scope.phieuNhan.dateReceive = response.data.vtGoodsReceiptBO.strDateReceive;
-                        if (response.data.vtReceipts != "[]" && response.data.vtReceipts.length > 0) {
-                            $scope.listBienNhanDaChon.items = response.data.vtReceipts;
-                            $scope.listBienNhanDaChon.rowCount = response.data.vtReceipts.length;
+                        if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
+                            $scope.listBienNhanDaChon.items = response.data.vtReceiptViews;
+                            $scope.listBienNhanDaChon.rowCount = response.data.vtReceiptViews.length;
                         }
                     });
         }
@@ -36,7 +36,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                         }
                         $scope.call = {
                             vtGoodsReceiptBO: angular.copy($scope.phieuNhan),
-                            vtReceipts: angular.copy($scope.listBienNhanDaChon.items)
+                            vtReceiptViews: angular.copy($scope.listBienNhanDaChon.items)
                         };
                         var vTGoodsReceiptForm = JSON.stringify($scope.call);
                         console.log(vTGoodsReceiptForm);

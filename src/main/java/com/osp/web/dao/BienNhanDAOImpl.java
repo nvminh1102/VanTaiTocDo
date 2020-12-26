@@ -111,46 +111,44 @@ public class BienNhanDAOImpl implements BienNhanDAO {
 
     @Override
     public Optional<PagingResult> page(PagingResult page, String receiptCode, String nameStock,
-        Date fromGenDate, Date toGenDate) {
+        Date fromGenDate, Date toGenDate, String loaiXe, String bienSo) {
         try {
             int offset = 0;
             if (page.getPageNumber() > 0) {
                 offset = (page.getPageNumber() - 1) * page.getNumberPerPage();
             }
-
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan "
-                + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
-                + " where 1=1 ");
+            StringBuffer strWhere = new StringBuffer();
             if (receiptCode != null && !"".equals(receiptCode)) {
-                sqlBuffer.append(" and UPPER(t.receipt_code) = :receiptCode");
+                strWhere.append(" and UPPER(t.receipt_code) = :receiptCode");
             }
             if (nameStock != null && !"".equals(nameStock)) {
-                sqlBuffer.append(" and t.name_Stock = :nameStock");
+                strWhere.append(" and t.name_Stock = :nameStock");
             }
             if (fromGenDate != null) {
-                sqlBuffer.append(" and t.date_receipt >= :fromGenDate");
+                strWhere.append(" and t.date_receipt >= :fromGenDate");
             }
             if (toGenDate != null) {
-                sqlBuffer.append(" and t.date_receipt <= :toGenDate");
+                strWhere.append(" and t.date_receipt <= :toGenDate");
             }
-
+            if (loaiXe != null && !loaiXe.trim().equals("")) {
+                strWhere.append(" and upper(t.loai_xe) = :loaiXe");
+            }
+            if (bienSo != null && !bienSo.trim().equals("")) {
+                strWhere.append(" and upper(t.bien_so) = :bienSo");
+            }
+            
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+                    + " c.MOBILE as mobile_nguoi_nhan  "
+                + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
+                + " where 1=1 ");
+            sqlBuffer.append(strWhere.toString());
             sqlBuffer.append(" order by t.GEN_DATE DESC");
 
             StringBuffer sqlBufferCount = new StringBuffer("SELECT count(t.id) "
                 + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID"
                 + " where 1=1 ");
-            if (receiptCode != null && !"".equals(receiptCode)) {
-                sqlBufferCount.append(" and UPPER(t.receipt_code) = :receiptCode");
-            }
-            if (nameStock != null && !"".equals(nameStock)) {
-                sqlBufferCount.append(" and t.name_Stock = :nameStock");
-            }
-            if (fromGenDate != null) {
-                sqlBufferCount.append(" and t.date_receipt >= :fromGenDate");
-            }
-            if (toGenDate != null) {
-                sqlBufferCount.append(" and t.date_receipt <= :toGenDate");
-            }
+            sqlBufferCount.append(strWhere.toString());
+            
             Query query = entityManager.createNativeQuery(sqlBuffer.toString(), VtReceiptView.class);
             if (receiptCode != null && !"".equals(receiptCode)) {
                 query.setParameter("receiptCode", receiptCode.trim().toUpperCase());
@@ -162,9 +160,16 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 query.setParameter("fromGenDate", fromGenDate);
             }
             if (toGenDate != null) {
-                query.setParameter("toGenDate", toGenDate);
+                query.setParameter("toGenDate", DateUtils.addDays(toGenDate, 1));
             }
-
+            
+            if (loaiXe != null && !loaiXe.trim().equals("")) {
+                query.setParameter("loaiXe", loaiXe.trim().toUpperCase());
+            }
+            if (bienSo != null && !bienSo.trim().equals("")) {
+                query.setParameter("bienSo", bienSo.trim().toUpperCase());
+            }
+            
             List<VtReceiptView> list = query.setFirstResult(offset).setMaxResults(page.getNumberPerPage()).getResultList();
             if (list != null && list.size() > 0) {
                 page.setItems(list);
@@ -180,7 +185,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 queryCount.setParameter("fromGenDate", fromGenDate);
             }
             if (toGenDate != null) {
-                queryCount.setParameter("toGenDate", toGenDate);
+                queryCount.setParameter("toGenDate", DateUtils.addDays(toGenDate, 1));
             }
             List resultList = queryCount.getResultList();
             if (resultList.size() > 0) {

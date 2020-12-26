@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class VTGoodsReceiptForm {
     private VtGoodsReceiptBO vtGoodsReceiptBO;
-    private List<VtReceipt> vtReceipts;
+    private List<VtReceiptView> vtReceiptViews;
 
     public VtGoodsReceiptBO getVtGoodsReceiptBO() {
         return vtGoodsReceiptBO;
@@ -20,12 +20,13 @@ public class VTGoodsReceiptForm {
         this.vtGoodsReceiptBO = vtGoodsReceiptBO;
     }
 
-    public List<VtReceipt> getVtReceipts() {
-        return vtReceipts;
+    public List<VtReceiptView> getVtReceiptViews() {
+        return vtReceiptViews;
     }
 
-    public void setVtReceipts(List<VtReceipt> vtReceipts) {
-        this.vtReceipts = vtReceipts;
+    public void setVtReceiptViews(List<VtReceiptView> vtReceiptViews) {
+        this.vtReceiptViews = vtReceiptViews;
     }
+
 
 }

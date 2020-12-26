@@ -11,7 +11,7 @@ public interface BienNhanDAO {
 
     Optional<PagingResult> search(VtReceipt item, PagingResult page);
 
-    Optional<PagingResult> page(PagingResult page, String receiptCode, String nameStock, Date fromGenDate, Date toGenDate);
+    Optional<PagingResult> page(PagingResult page, String receiptCode, String nameStock, Date fromGenDate, Date toGenDate, String loaiXe, String bienSo);
 
     boolean delete(int id);
 

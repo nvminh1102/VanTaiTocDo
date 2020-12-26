@@ -30,6 +30,8 @@ public class VtReceiptView {
   private String tenNguoiNhan;
   @Column(name = "dia_chi_nguoi_nhan")
   private String diaChiNguoiNhan;
+  @Column(name = "mobile_nguoi_nhan")
+  private String mobileNguoiNhan;
 
   public Long getId() {
     return id;
@@ -118,4 +120,13 @@ public class VtReceiptView {
   public void setDiaChiNguoiNhan(String diaChiNguoiNhan) {
     this.diaChiNguoiNhan = diaChiNguoiNhan;
   }
+
+    public String getMobileNguoiNhan() {
+        return mobileNguoiNhan;
+    }
+
+    public void setMobileNguoiNhan(String mobileNguoiNhan) {
+        this.mobileNguoiNhan = mobileNguoiNhan;
+    }
+  
 }

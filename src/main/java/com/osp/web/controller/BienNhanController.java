@@ -189,7 +189,7 @@ public class BienNhanController {
         }
         page.setNumberPerPage(number);
         page.setPageNumber(offset);
-        page = bienNhanDAO.search(item, page).orElse(new PagingResult());
+        page = bienNhanDAO.page(page, item.getReceiptCode(), item.getNameStock(), item.getFromDeceipt(), item.getToDeceipt(), item.getLoaiXe(), item.getBienSo()).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
 
@@ -220,7 +220,7 @@ public class BienNhanController {
                 String strTdate = toDateReceipt + " 23:59:59";
                 toDate = sdf.parse(strTdate);
             }
-            page = bienNhanDAO.page(page, Utils.trim(receiptCode), Utils.trim(nameStock), fromDate, toDate).orElse(new PagingResult());
+            page = bienNhanDAO.page(page, Utils.trim(receiptCode), Utils.trim(nameStock), fromDate, toDate, null, null).orElse(new PagingResult());
         } catch (Exception e) {
             e.printStackTrace();
         }

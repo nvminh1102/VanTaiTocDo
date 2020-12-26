@@ -99,10 +99,10 @@
                             <tr ng-switch-default ng-repeat="item in listBienNhan.items track by $index">
                                 <td class="text-center v-inherit">{{(listBienNhan.pageNumber>0 ? (listBienNhan.pageNumber - 1):0) * listBienNhan.numberPerPage + $index + 1}}</td>
                                 <td class="text-left v-inherit">{{item.receiptCode}}</td>
-                                <td class="text-center v-inherit">{{item.deliveryPartnerName}}</td>
-                                <td class="text-center v-inherit">{{item.receivePartnerName}}</td>
-                                <td class="text-center v-inherit">{{item.receivePartnerMobile}}</td>
-                                <td class="text-center v-inherit">{{item.receivePartnerAddress}}</td>
+                                <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
+                                <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>
+                                <td class="text-center v-inherit">{{item.mobileNguoiNhan}}</td>
+                                <td class="text-center v-inherit">{{item.diaChiNguoiNhan}}</td>
                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                 <td class="text-center v-inherit">{{item.note}}</td>

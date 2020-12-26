@@ -83,7 +83,7 @@ public class PhieuNhanHangController {
 
     @GetMapping("/preAdd")
     public String preAdd(HttpServletRequest request) {
-        String receiptCode = "GH-" + formatteryyyy.format(new Date()) + (phieuNhanHangDAO.getMaxId()+1);
+        String receiptCode = "GH-" + formatteryyyy.format(new Date()) +"-"+ (phieuNhanHangDAO.getMaxId()+1);
         request.setAttribute("receiptCode", receiptCode);
         return "phieuNhan.add";
     }
