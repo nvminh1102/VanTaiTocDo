@@ -6,6 +6,8 @@ import com.osp.model.VtGoodsReceipt;
 import com.osp.model.VtGoodsReceiptDetail;
 import com.osp.model.VtReceipt;
 import com.osp.model.view.VTGoodsReceiptForm;
+import com.osp.model.view.VtGoodsReceiptBO;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,7 +48,7 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
         try {
             String strWhere = "";
             if (item.getReceiptCode() != null && !item.getReceiptCode().trim().equals("")) {
-                strWhere = strWhere + " and upper(r.receiptCode) = :receiptCode ";
+                strWhere = strWhere + " and upper(r.receiptCode) like :receiptCode ";
             }
             if (item.getFromDelivery() != null) {
                 strWhere = strWhere + " and r.dateDelivery >= :fromDelivery ";
@@ -69,7 +71,7 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
             Long count = 0L;
             Query query = entityManager.createQuery(" select count(r.id) from VtGoodsReceipt r where 1=1 " + strWhere);
             if (item.getReceiptCode() != null && !item.getReceiptCode().trim().equals("")) {
-                query.setParameter("receiptCode", "%" + item.getReceiptCode().trim() + "%");
+                query.setParameter("receiptCode", "%" + item.getReceiptCode().trim().toUpperCase() + "%");
             }
             if (item.getFromDelivery() != null) {
                 query.setParameter("fromDelivery", item.getFromDelivery());
@@ -94,7 +96,7 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
                 List<VtGoodsReceipt> list = new ArrayList<>();
                 Query queryAll = entityManager.createQuery("select r from VtGoodsReceipt r where 1=1 " + strWhere);
                 if (item.getReceiptCode() != null && !item.getReceiptCode().trim().equals("")) {
-                    queryAll.setParameter("receiptCode", "%" + item.getReceiptCode().trim() + "%");
+                    queryAll.setParameter("receiptCode", "%" + item.getReceiptCode().trim().toUpperCase() + "%");
                 }
                 if (item.getFromDelivery() != null) {
                     queryAll.setParameter("fromDelivery", item.getFromDelivery());
@@ -129,18 +131,38 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
     @Override
     public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user) {
         try {
-            VtGoodsReceipt vtGoodsReceipt = vTGoodsReceiptForm.getVtGoodsReceipt();
-            List<VtGoodsReceiptDetail> vtGoodsReceiptDetail = vTGoodsReceiptForm.getVtGoodsReceiptDetail();
-            vtGoodsReceipt.setUpdatedBy(user.getUsername());
-            vtGoodsReceipt.setCreatedBy(user.getUsername());
-            entityManager.persist(vtGoodsReceipt);
-            for (VtGoodsReceiptDetail bo : vtGoodsReceiptDetail) {
-                bo.setGoodsreceiptid(vtGoodsReceipt.getId());
-                bo.setCreatedBy(vtGoodsReceipt.getCreatedBy());
-                bo.setUpdatedBy(vtGoodsReceipt.getUpdatedBy());
-                entityManager.persist(bo);
+            VtGoodsReceiptBO vtGoodsReceiptBO = vTGoodsReceiptForm.getVtGoodsReceiptBO();
+            VtGoodsReceipt vtGoodsReceipt = new VtGoodsReceipt(vtGoodsReceiptBO);
+            if (vtGoodsReceipt != null && vtGoodsReceipt.getId() != null) {
+                Query query = entityManager.createQuery("delete from VtGoodsReceiptDetail a WHERE a.goodsreceiptid=:goodsreceiptid").setParameter("goodsreceiptid", vtGoodsReceipt.getId());
+                query.executeUpdate();
+                vtGoodsReceipt.setUpdatedBy(user.getUsername());
+                entityManager.merge(vtGoodsReceipt);
+                List<VtReceipt> vtReceipts = vTGoodsReceiptForm.getVtReceipts();
+                for (VtReceipt bo : vtReceipts) {
+                    VtGoodsReceiptDetail vtGoodsReceiptDetail = new VtGoodsReceiptDetail();
+                    vtGoodsReceiptDetail.setGoodsreceiptid(vtGoodsReceipt.getId());
+                    vtGoodsReceiptDetail.setCreatedBy(vtGoodsReceipt.getCreatedBy());
+                    vtGoodsReceiptDetail.setUpdatedBy(vtGoodsReceipt.getUpdatedBy());
+                    vtGoodsReceiptDetail.setReceiptId(bo.getId());
+                    entityManager.persist(vtGoodsReceiptDetail);
+                }
+                entityManager.flush();
+            } else {
+                vtGoodsReceipt.setCreatedBy(user.getUsername());
+                vtGoodsReceipt.setUpdatedBy(user.getUsername());
+                List<VtReceipt> vtReceipts = vTGoodsReceiptForm.getVtReceipts();
+                entityManager.persist(vtGoodsReceipt);
+                for (VtReceipt bo : vtReceipts) {
+                    VtGoodsReceiptDetail vtGoodsReceiptDetail = new VtGoodsReceiptDetail();
+                    vtGoodsReceiptDetail.setGoodsreceiptid(vtGoodsReceipt.getId());
+                    vtGoodsReceiptDetail.setCreatedBy(vtGoodsReceipt.getCreatedBy());
+                    vtGoodsReceiptDetail.setUpdatedBy(vtGoodsReceipt.getUpdatedBy());
+                    vtGoodsReceiptDetail.setReceiptId(bo.getId());
+                    entityManager.persist(vtGoodsReceiptDetail);
+                }
+                entityManager.flush();
             }
-            entityManager.flush();
         } catch (Exception e) {
             e.printStackTrace();
             entityManager.getTransaction().rollback();
@@ -157,18 +179,30 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
             queryAll.setParameter("id", id);
 
             VtGoodsReceipt vtGoodsReceipt = (VtGoodsReceipt) queryAll.getSingleResult();
-            vTGoodsReceiptForm.setVtGoodsReceipt(vtGoodsReceipt);
-
-            Query queryDetail = entityManager.createQuery("select r from VtGoodsReceiptDetail r where r.goodsreceiptid = :goodsreceiptid ");
+            VtGoodsReceiptBO vtGoodsReceiptBO = new VtGoodsReceiptBO(vtGoodsReceipt);
+            vTGoodsReceiptForm.setVtGoodsReceiptBO(vtGoodsReceiptBO);
+            Query queryDetail = entityManager.createQuery("select r from VtGoodsReceiptDetail grd, VtReceipt r where grd.receiptId = r.id and  grd.goodsreceiptid = :goodsreceiptid ");
             queryDetail.setParameter("goodsreceiptid", id);
-            List<VtGoodsReceiptDetail> vtGoodsReceiptDetail = queryDetail.getResultList();
-            vTGoodsReceiptForm.setVtGoodsReceiptDetail(vtGoodsReceiptDetail);
+            List<VtReceipt> vtReceipts = queryDetail.getResultList();
+            vTGoodsReceiptForm.setVtReceipts(vtReceipts);
+            return vTGoodsReceiptForm;
         } catch (Exception e) {
             e.printStackTrace();
             entityManager.getTransaction().rollback();
-            return vTGoodsReceiptForm;
+            return null;
         }
-        return null;
+    }
+
+    @Override
+    public Integer getMaxId() {
+        Integer maxId = 0;
+        try {
+            Query query = entityManager.createQuery(" select max(r.id) from VtGoodsReceipt r ");
+            maxId = (Integer) query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return maxId;
     }
 
 }

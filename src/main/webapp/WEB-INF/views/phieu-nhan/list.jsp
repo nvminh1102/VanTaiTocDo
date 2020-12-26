@@ -33,7 +33,7 @@
                                         <label class="control-label text-dark" style="padding: 0px">Số phiếu nhận</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input ng-model="search.receiptCode" class="form-control input-sm" placeholder="GH­2012­0036"/>
+                                        <input ng-model="search.receiptCode" class="form-control input-sm" placeholder=""/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -41,7 +41,7 @@
                                         <label class="control-label text-dark">Nhà xe</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input ng-model="search.truckPartner" class="form-control input-sm" placeholder="Nhà xe Minh Anh"/>
+                                        <input ng-model="search.truckPartner" class="form-control input-sm" placeholder=""/>
                                     </div>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                         <label class="control-label text-dark">Loại xe</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="loaiXe" ng-model="search.loaiXe" class="form-control input-sm" placeholder="Xe tải 1 tấn"/>
+                                        <input id="loaiXe" ng-model="search.loaiXe" class="form-control input-sm" placeholder=""/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -60,7 +60,7 @@
                                         <label class="control-label text-dark">Biển số xe</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="bienSo" ng-model="search.bienSo" class="form-control input-sm" placeholder="29C - 012 34"/>
+                                        <input id="bienSo" ng-model="search.bienSo" class="form-control input-sm" placeholder=""/>
                                     </div>
                                 </div>
                             </div>
@@ -71,7 +71,12 @@
                                         <label class="control-label text-dark">Ngày gửi hàng</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="fromDelivery" ng-model="search.fromDelivery" class="form-control input-sm" placeholder="Từ ngày"/>
+                                        <div class='input-group date' id="startDate1">
+                                            <input ng-model="search.fromDelivery" type='text' class="form-control datepickerEnter" id="fromDelivery" name="fromDelivery" placeholder="dd-MM-yyyy"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -79,7 +84,12 @@
 
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="toDelivery" ng-model="search.toDelivery" class="form-control input-sm" placeholder="đến ngày"/>
+                                        <div class='input-group date' id="startDate1">
+                                            <input ng-model="search.toDelivery" type='text' class="form-control datepickerEnter" id="toDelivery" name="toDelivery" placeholder="dd-MM-yyyy"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +99,12 @@
                                         <label class="control-label text-dark">Ngày lập phiếu nhận</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="fromReceive" ng-model="search.fromReceive" class="form-control input-sm" placeholder="Từ ngày"/>
+                                        <div class='input-group date' id="startDate1">
+                                            <input ng-model="search.fromReceive" type='text' class="form-control datepickerEnter" id="fromReceive" name="fromReceive" placeholder="dd-MM-yyyy"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -97,7 +112,12 @@
 
                                     </div>
                                     <div class="col-md-8">
-                                        <input id="toReceive" ng-model="search.toReceive" class="form-control input-sm" placeholder="đến ngày"/>
+                                        <div class='input-group date' id="startDate1">
+                                            <input ng-model="search.toReceive" type='text' class="form-control datepickerEnter" id="toReceive" name="toReceive" placeholder="dd-MM-yyyy"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +184,7 @@
                                         </td>
                                     </tr>
                                     <tr ng-switch-default ng-repeat="item in listData.items track by $index">
-                                        <td class="text-center v-inherit" >{{(listData.pageNumber>0 ? (listData.pageNumber - 1): 0) * listData.numberPerPage + $index + 1}}</td>
+                                        <td class="text-center v-inherit" >{{(listData.pageNumber > 0 ? (listData.pageNumber - 1): 0) * listData.numberPerPage + $index + 1}}</td>
                                         <td class="text-left v-inherit">{{item.receiptCode}}</td>
                                         <td class="text-center v-inherit">{{item.dateReceive|date:'dd/MM/yyyy'}}</td>
                                         <td class="text-left v-inherit">{{item.truckPartnerName}}</td>

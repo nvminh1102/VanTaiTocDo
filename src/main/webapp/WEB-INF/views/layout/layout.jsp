@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8"/>
     <title><tiles:insertAttribute name="title"/></title>
-    <link rel="shortcut icon" type="image/x-icon" href="<%=request.getContextPath()%>/assets/images/osp.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="<%=request.getContextPath()%>/assets/images/icon.png" />
     <meta name="description" content="san sim"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

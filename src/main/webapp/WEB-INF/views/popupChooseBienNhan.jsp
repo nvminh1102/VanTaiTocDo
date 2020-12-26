@@ -26,7 +26,7 @@
                 <div class="row form-group text-dark">
                     <label class="col-md-2" style="padding: 5px">Ngày nhận</label>
                     <div class="col-md-4">
-                        <div class='input-group date' id="startDate1">
+                        <div class='input-group date'>
                             <input ng-model="searchBienNhan.fromDeceipt" type='text' class="form-control datepickerEnter" id="fromDeceipt" name="fromDeceipt"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -35,7 +35,7 @@
                     </div>
                     <label class="col-md-2" style="padding: 5px"></label>
                     <div class="col-md-4">
-                        <div class='input-group date' id="startDate1">
+                        <div class='input-group date'>
                             <input ng-model="searchBienNhan.toDeceipt" type='text' class="form-control datepickerEnter" id="toDeceipt" name="toDeceipt"/>
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>

@@ -53,7 +53,6 @@ public class VtPhieuThuDetail implements Serializable {
     private Integer receiptId;
     @Column(name = "file_attach", length = 200)
     private String fileAttach;
-    @Basic(optional = false)
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;

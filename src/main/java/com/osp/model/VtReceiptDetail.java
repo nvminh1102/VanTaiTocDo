@@ -77,7 +77,6 @@ public class VtReceiptDetail implements Serializable {
     private String note;
     @Column(name = "status")
     private Integer status;
-    @Basic(optional = false)
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;

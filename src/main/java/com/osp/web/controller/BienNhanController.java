@@ -169,11 +169,11 @@ public class BienNhanController {
             if (searchObject.has("receiptCode") && !StringUtils.isBlank(searchObject.get("receiptCode").toString())) {
                 item.setReceiptCode(searchObject.get("receiptCode").toString().trim());
             }
-            if (searchObject.has("fromReceipt") && !StringUtils.isBlank(searchObject.get("fromReceipt").toString())) {
-                item.setFromDeceipt(formatterddMMyyyy.parse(searchObject.get("fromReceipt").toString().trim()));
+            if (searchObject.has("fromDeceipt") && !StringUtils.isBlank(searchObject.get("fromDeceipt").toString())) {
+                item.setFromDeceipt(formatterddMMyyyy.parse(searchObject.get("fromDeceipt").toString().trim()));
             }
-            if (searchObject.has("receiptCode") && !StringUtils.isBlank(searchObject.get("receiptCode").toString())) {
-                item.setToDeceipt(formatterddMMyyyy.parse(searchObject.get("receiptCode").toString().trim()));
+            if (searchObject.has("toDeceipt") && !StringUtils.isBlank(searchObject.get("toDeceipt").toString())) {
+                item.setToDeceipt(formatterddMMyyyy.parse(searchObject.get("toDeceipt").toString().trim()));
             }
             if (searchObject.has("nhaXe") && !StringUtils.isBlank(searchObject.get("nhaXe").toString())) {
                 item.setNhaXe(searchObject.get("nhaXe").toString().trim());

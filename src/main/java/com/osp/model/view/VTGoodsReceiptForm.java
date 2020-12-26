@@ -1,7 +1,7 @@
 package com.osp.model.view;
 
-import com.osp.model.VtGoodsReceipt;
 import com.osp.model.VtGoodsReceiptDetail;
+import com.osp.model.VtReceipt;
 
 import java.util.List;
 
@@ -9,24 +9,23 @@ import java.util.List;
  * Created by Admin on 12/27/2017.
  */
 public class VTGoodsReceiptForm {
-    private VtGoodsReceipt vtGoodsReceipt;
-    private List<VtGoodsReceiptDetail> vtGoodsReceiptDetail;
+    private VtGoodsReceiptBO vtGoodsReceiptBO;
+    private List<VtReceipt> vtReceipts;
 
-    public VtGoodsReceipt getVtGoodsReceipt() {
-        return vtGoodsReceipt;
+    public VtGoodsReceiptBO getVtGoodsReceiptBO() {
+        return vtGoodsReceiptBO;
     }
 
-    public void setVtGoodsReceipt(VtGoodsReceipt vtGoodsReceipt) {
-        this.vtGoodsReceipt = vtGoodsReceipt;
+    public void setVtGoodsReceiptBO(VtGoodsReceiptBO vtGoodsReceiptBO) {
+        this.vtGoodsReceiptBO = vtGoodsReceiptBO;
     }
 
-    public List<VtGoodsReceiptDetail> getVtGoodsReceiptDetail() {
-        return vtGoodsReceiptDetail;
+    public List<VtReceipt> getVtReceipts() {
+        return vtReceipts;
     }
 
-    public void setVtGoodsReceiptDetail(List<VtGoodsReceiptDetail> vtGoodsReceiptDetail) {
-        this.vtGoodsReceiptDetail = vtGoodsReceiptDetail;
+    public void setVtReceipts(List<VtReceipt> vtReceipts) {
+        this.vtReceipts = vtReceipts;
     }
 
-    
 }

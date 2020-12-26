@@ -1,5 +1,6 @@
 package com.osp.web.dao;
 
+import com.osp.common.DateUtils;
 import com.osp.common.PagingResult;
 import com.osp.model.VtReceipt;
 import com.osp.model.view.VtReceiptView;
@@ -47,7 +48,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
         try {
             String strWhere = "";
             if (item.getReceiptCode() != null && !item.getReceiptCode().trim().equals("")) {
-                strWhere = strWhere + " and upper(r.receiptCode) = :receiptCode ";
+                strWhere = strWhere + " and upper(r.receiptCode) like :receiptCode ";
             }
             if (item.getFromDeceipt() != null) {
                 strWhere = strWhere + " and r.dateReceipt >= :fromReceipt ";
@@ -64,13 +65,13 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             Long count = 0L;
             Query query = entityManager.createQuery(" select count(r.id) from VtReceipt r where 1=1 " + strWhere);
             if (item.getReceiptCode() != null && !item.getReceiptCode().trim().equals("")) {
-                query.setParameter("receiptCode", "%" + item.getReceiptCode().trim() + "%");
+                query.setParameter("receiptCode", "%" + item.getReceiptCode().trim().toUpperCase() + "%");
             }
             if (item.getFromDeceipt() != null) {
                 query.setParameter("fromReceipt", item.getFromDeceipt());
             }
             if (item.getToDeceipt() != null) {
-                query.setParameter("toReceipt", item.getToDeceipt());
+                query.setParameter("toReceipt", DateUtils.addDays(item.getToDeceipt(), 1));
             }
             if (item.getLoaiXe() != null && !item.getLoaiXe().trim().equals("")) {
                 query.setParameter("loaiXe", item.getLoaiXe());
@@ -83,13 +84,13 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 List<VtReceipt> list = new ArrayList<>();
                 Query queryAll = entityManager.createQuery("select r from VtReceipt r where 1=1 " + strWhere);
                 if (item.getReceiptCode() != null && !item.getReceiptCode().trim().equals("")) {
-                    queryAll.setParameter("receiptCode", "%" + item.getReceiptCode().trim() + "%");
+                    queryAll.setParameter("receiptCode", "%" + item.getReceiptCode().trim().toUpperCase() + "%");
                 }
                 if (item.getFromDeceipt() != null) {
                     queryAll.setParameter("fromReceipt", item.getFromDeceipt());
                 }
                 if (item.getToDeceipt() != null) {
-                    queryAll.setParameter("toReceipt", item.getToDeceipt());
+                    queryAll.setParameter("toReceipt", DateUtils.addDays(item.getToDeceipt(), 1));
                 }
                 if (item.getLoaiXe() != null && !item.getLoaiXe().trim().equals("")) {
                     queryAll.setParameter("loaiXe", item.getLoaiXe());

@@ -11,7 +11,7 @@
     <title><spring:message code="label.login.header"></spring:message></title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-    <link rel="shortcut icon" type="image/x-icon" href="<%=request.getContextPath()%>/assets/images/osp.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="<%=request.getContextPath()%>/assets/images/icon.png"/>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/note/css/bootstrap.css" type="text/css"/>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/note/css/animate.css" type="text/css"/>
     <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/note/css/font-awesome.min.css" type="text/css"/>
@@ -58,8 +58,8 @@
                        </div>
 <section id="content" class="m-t-lg wrapper-md animated fadeInUp" >
     <div class="container aside-xxl">
-        <img src="/assets/images/logo-osp.png" class="m-r-sm" style="display: block;margin-left: auto;margin-right: auto;width: 39%;">
-        <a class="navbar-brand block" style="color:white">CMS S-PACK</a>
+        <img src="<%=request.getContextPath()%>/assets/images/VanTai-VN.png" class="m-r-sm" style="display: block;margin-left: auto;margin-right: auto;width: 39%;">
+        <a class="navbar-brand block" style="color:white">VẬN TẢI TỐC ĐỘ VIỆT NAM</a>
         <%--<a class="navbar-brand block" href="index.html"><img src="#" class="img-rounded"></a>--%>
         <section class="panel panel-default bg-white m-t-lg">
             <header class="panel-heading text-center" style="font-size: 24px;">
@@ -114,7 +114,7 @@
 <footer id="footer">
     <div class="text-center padder">
         <p>
-            <small>OSP &copy; 2019</small>
+            <small>VTTD VN &copy; 2019</small>
         </p>
     </div>
 </footer>

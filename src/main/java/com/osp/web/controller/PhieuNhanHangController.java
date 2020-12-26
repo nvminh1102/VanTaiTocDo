@@ -7,6 +7,7 @@ import com.osp.model.VtGoodsReceipt;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.web.dao.PhieuNhanHangDAO;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/phieu-nhan-hang")
 public class PhieuNhanHangController {
 
+    SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
+    
     @Autowired
     PhieuNhanHangDAO phieuNhanHangDAO;
 //    @Autowired
@@ -79,10 +82,12 @@ public class PhieuNhanHangController {
     }
 
     @GetMapping("/preAdd")
-    public String preAdd(){
+    public String preAdd(HttpServletRequest request) {
+        String receiptCode = "GH-" + formatteryyyy.format(new Date()) + (phieuNhanHangDAO.getMaxId()+1);
+        request.setAttribute("receiptCode", receiptCode);
         return "phieuNhan.add";
     }
-    
+
     @GetMapping("/preEdit/{id}")
     public String preEdit(@PathVariable("id") Integer id, HttpServletRequest request) {
         request.setAttribute("id", id);
@@ -99,13 +104,11 @@ public class PhieuNhanHangController {
     public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
-        if (reponse.getSuccess()) {
-            boolean check = phieuNhanHangDAO.add(vTGoodsReceiptForm, user);
-            if (check) {
-                reponse = new MessReponse(true, 200);
-            } else {
-                reponse = new MessReponse(false, 500);
-            }
+        boolean check = phieuNhanHangDAO.add(vTGoodsReceiptForm, user);
+        if (check) {
+            reponse = new MessReponse(true, 200);
+        } else {
+            reponse = new MessReponse(false, 500);
         }
         return new ResponseEntity<MessReponse>(reponse, HttpStatus.OK);
     }

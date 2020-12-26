@@ -10,7 +10,31 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'file
         $scope.checked = [];
         $scope.checkAll = false;
         $scope.selectedItems = [];
+        var searchBienNhan = JSON.stringify($scope.searchBienNhan);
+        $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0, number: $scope.listBienNhan.numberPerPage}})
+                .then(function (response) {
+                    $scope.listBienNhan = response.data;
+                    $scope.listBienNhan.numberPerPage = $scope.numberPerPage;
+                    $scope.listBienNhan.pageCount = getPageCount($scope.listBienNhan);
+                    $scope.listBienNhan.pageList = getPageList($scope.listBienNhan);
+                    $scope.tooltip();
+                });
 
+
+
+        $scope.clear = function () {
+            $scope.searchBienNhan.receiptCode = "";
+            $scope.searchBienNhan.fromDeceipt = "";
+            $scope.searchBienNhan.toDeceipt = "";
+            $scope.searchBienNhan.nhaXe = "";
+            $scope.searchBienNhan.nameStock = "";
+            $("#fromDeceipt").data("DateTimePicker").date(null);
+            $("#toDeceipt").data("DateTimePicker").date(null);
+            $timeout(function () {
+                $('#fromDeceipt').data("DateTimePicker").maxDate(moment("01/01/9999999999", "DD-MM-YYYY").toDate());
+                $('#toDeceipt').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
+            }, 0);
+        };
 
 
 
@@ -64,7 +88,6 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'file
 
 
         $scope.addListBienNhan = function () {
-            alert($scope.selectedItems.length);
             popupBienNhan.setListDataBN($scope.selectedItems);
         };
 
@@ -163,7 +186,7 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'file
                     $scope.searchBienNhan.toDeceipt = $(this).val();
                     $scope.searchBienNhan.toDeceiptStr = stringToDate($scope.searchBienNhan.toDeceipt, "dd-MM-yyyy", "-");
                     if ($('#toDeceipt').val() != "")
-                        $('#fromDeceipt').data("DateTimePicker").maxDate()(moment($('#toDeceipt').val(), "DD-MM-YYYY").toDate());
+                        $('#fromDeceipt').data("DateTimePicker").maxDate(moment($('#toDeceipt').val(), "DD-MM-YYYY").toDate());
                 }
             });
         });

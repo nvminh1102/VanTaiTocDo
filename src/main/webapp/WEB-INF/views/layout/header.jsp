@@ -59,7 +59,7 @@
         <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
             <i class="fa fa-bars"></i>
         </a>
-        <a href="<%=request.getContextPath()%>/" class="navbar-brand" data-toggle="fullscreen"><img src="<%=request.getContextPath()%>/assets/images/logo-osp.png" class="m-r-sm" style="max-height: 45px;"></a>
+        <a href="<%=request.getContextPath()%>/" class="navbar-brand" data-toggle="fullscreen"><img src="<%=request.getContextPath()%>/assets/images/VanTai-VN.png" class="m-r-sm" style="max-height: 45px;"></a>
         <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-customer">
             <i class="fa fa-cog"></i>
         </a>
@@ -99,7 +99,6 @@
                 <li><a href="<%=request.getContextPath()%>/j_spring_security_logout"><spring:message code="label.button.logout" ></spring:message></a></li>
             </ul>
         </li>
-
     </ul>
 </header>
 

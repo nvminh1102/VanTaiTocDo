@@ -1,6 +1,7 @@
 app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
         console.log("1121212121");
         $scope.listBienNhanDaChon = {items: "", rowCount: 0, numberPerPage: 5, pageNumber: 1, pageList: [], pageCount: 0};
+        $scope.phieuNhan = {receiptCode: "", dateReceive: "", strDateDelivery: "", strDateReceive: "", truckPartnerId: "", loaiXe: "", bienSo: ""};
         $scope.numberPerPage = "5";
         $scope.listBienNhanDaChon.numberPerPage = $scope.numberPerPage;
         $scope.listBienNhanDaChon = popupBienNhan.getListDataBN();
@@ -9,30 +10,40 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                 .then(function (response) {
                     $scope.vtPartners = response.data;
                 });
+        if (receiptCode != null && receiptCode != '') {
+            $scope.phieuNhan.receiptCode = receiptCode;
+        }
 
         if (id != null && id != '') {
             $http.get(preUrl + "/phieu-nhan-hang/loadDataEdit", {params: {id: id}})
                     .then(function (response) {
-                        $scope.phieuNhan = response.vtGoodsReceipt;
-                        $scope.listBienNhanDaChon = response.vtGoodsReceiptDetail;
+                        $scope.phieuNhan = response.data.vtGoodsReceiptBO;
+                        $scope.phieuNhan.dateReceive = response.data.vtGoodsReceiptBO.strDateReceive;
+                        if (response.data.vtReceipts != "[]" && response.data.vtReceipts.length > 0) {
+                            $scope.listBienNhanDaChon.items = response.data.vtReceipts;
+                            $scope.listBienNhanDaChon.rowCount = response.data.vtReceipts.length;
+                        }
                     });
         }
 
         $scope.savePhieuNhan = function () {
-
             console.log("id1:" + id);
             if ($("#formAdd").parsley().validate()) {
                 if (typeof $scope.phieuNhan != "undefined" && typeof $scope.phieuNhan.receiptCode != 'undefined') {
                     if (typeof $scope.listBienNhanDaChon != "undefined") {
+                        if (id != null && id != '') {
+                            $scope.phieuNhan.id = id;
+                        }
                         $scope.call = {
-                            VtGoodsReceipt: angular.copy($scope.phieuNhan),
-                            vtGoodsReceiptDetail: angular.copy($scope.listBienNhanDaChon)
+                            vtGoodsReceiptBO: angular.copy($scope.phieuNhan),
+                            vtReceipts: angular.copy($scope.listBienNhanDaChon.items)
                         };
-                        var call_ = JSON.stringify($scope.call);
-                        $http.post(preUrl + "/phieu-nhan-hang/add", call_, {headers: {'Content-Type': 'application/json'}})
+                        var vTGoodsReceiptForm = JSON.stringify($scope.call);
+                        console.log(vTGoodsReceiptForm);
+                        $http.post(preUrl + "/phieu-nhan-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
                                 .then(function (response) {
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
-                                        window.location.href = preUrl + "/quan-ly-bo-nhiem-ccv?status=1";
+                                        window.location.href = preUrl + "/phieu-nhan-hang/list";
                                     } else {
                                         toastr.success(response.data.messageError);
                                     }
@@ -55,7 +66,8 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                 format: 'DD-MM-YYYY'
             }).on('dp.change', function (e) {
                 if (e != null) {
-                    $scope.phieuNhan.dateReceive = $(this).val();
+                    $scope.phieuNhan.strDateDelivery = $(this).val();
+                    $scope.phieuNhan.strDateReceive = $(this).val();
                 }
             });
         });

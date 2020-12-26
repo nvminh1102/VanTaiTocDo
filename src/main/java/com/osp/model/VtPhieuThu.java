@@ -62,11 +62,9 @@ public class VtPhieuThu implements Serializable {
     private Integer receivePartnerId;
     @Column(name = "name_Stock", length = 200)
     private String nameStock;
-    @Basic(optional = false)
     @Column(name = "date_receipt")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateReceipt;
-    @Basic(optional = false)
     @Column(name = "date_push_Stock")
     @Temporal(TemporalType.TIMESTAMP)
     private Date datepushStock;
@@ -78,7 +76,6 @@ public class VtPhieuThu implements Serializable {
     private Integer status;
     @Column(name = "file_attach", length = 200)
     private String fileAttach;
-    @Basic(optional = false)
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;

@@ -66,7 +66,6 @@ public class VtPartner implements Serializable {
     private String email;
     @Column(name = "type_partner")
     private Integer typePartner;
-    @Basic(optional = false)
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;

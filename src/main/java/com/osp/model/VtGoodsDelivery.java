@@ -55,15 +55,12 @@ public class VtGoodsDelivery implements Serializable {
     private Integer truckPartnerId;
     @Column(name = "bien_so", length = 50)
     private String bienSo;
-    @Basic(optional = false)
     @Column(name = "date_delivery")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateDelivery;
-    @Basic(optional = false)
     @Column(name = "date_receive")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateReceive;
-    @Basic(optional = false)
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;

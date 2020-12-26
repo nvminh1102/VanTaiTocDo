@@ -49,17 +49,12 @@ public class VtCongNo implements Serializable {
     private Integer id;
     @Column(name = "cong_no_code", length = 200)
     private String congNoCode;
-    @Basic(optional = false)
     @Column(name = "date_cong_no")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCongNo;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "date_exp")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateExp;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;

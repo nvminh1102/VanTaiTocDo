@@ -5,7 +5,9 @@
  */
 package com.osp.model;
 
+import com.osp.model.view.VtGoodsReceiptBO;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -58,15 +60,12 @@ public class VtGoodsReceipt implements Serializable {
     private String bienSo;
     @Column(name = "loai_xe", length = 200)
     private String loaiXe;
-    @Basic(optional = false)
     @Column(name = "date_delivery")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateDelivery;
-    @Basic(optional = false)
     @Column(name = "date_receive")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateReceive;
-    @Basic(optional = false)
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
@@ -96,6 +95,25 @@ public class VtGoodsReceipt implements Serializable {
 
     public VtGoodsReceipt(Integer id) {
         this.id = id;
+    }
+
+    public VtGoodsReceipt(VtGoodsReceiptBO vtGoodsReceiptBO) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            this.id = vtGoodsReceiptBO.getId();
+            this.receiptCode = vtGoodsReceiptBO.getReceiptCode();
+            this.truckPartnerId = vtGoodsReceiptBO.getTruckPartnerId();
+            this.bienSo = vtGoodsReceiptBO.getBienSo();
+            this.loaiXe = vtGoodsReceiptBO.getLoaiXe();
+            if(vtGoodsReceiptBO.getStrDateDelivery()!=null && !vtGoodsReceiptBO.getStrDateDelivery().trim().equals("")){
+                this.dateDelivery = simpleDateFormat.parse(vtGoodsReceiptBO.getStrDateDelivery());
+            }
+            if(vtGoodsReceiptBO.getStrDateReceive()!=null && !vtGoodsReceiptBO.getStrDateReceive().trim().equals("")){
+                this.dateReceive = simpleDateFormat.parse(vtGoodsReceiptBO.getStrDateReceive());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public VtGoodsReceipt(Integer id, Date dateDelivery, Date dateReceive, Date genDate) {
@@ -145,7 +163,6 @@ public class VtGoodsReceipt implements Serializable {
         this.loaiXe = loaiXe;
     }
 
-    
     public Date getDateDelivery() {
         return dateDelivery;
     }
@@ -243,7 +260,6 @@ public class VtGoodsReceipt implements Serializable {
         this.toDelivery = toDelivery;
     }
 
-
     public Date getFromReceive() {
         return fromReceive;
     }
@@ -268,6 +284,4 @@ public class VtGoodsReceipt implements Serializable {
         this.truckPartnerName = truckPartnerName;
     }
 
-    
-    
 }

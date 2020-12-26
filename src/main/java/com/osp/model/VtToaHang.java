@@ -65,7 +65,6 @@ public class VtToaHang implements Serializable {
     private String nguoiNhan;
     @Column(name = "noi_nhan", length = 500)
     private String noiNhan;
-    @Basic(optional = false)
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;

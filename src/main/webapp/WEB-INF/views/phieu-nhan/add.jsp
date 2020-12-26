@@ -8,7 +8,7 @@
 <script src="<%=request.getContextPath()%>/assets/project/phieu-nhan/add.js${urlCache}" type="text/javascript"></script>
 <script>
     var id = '${id}';
-    console.log("ID:"+ id);
+    var receiptCode = '${receiptCode}';
 </script>
 <section id="content" ng-app="FrameworkBase"  >
     <section class="vbox background-white">
@@ -16,13 +16,11 @@
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
                 <li><a href="<%=request.getContextPath()%>/phieu-nhan-hang/list">Phiếu biên nhận </a></li>
-                <li><a href="javascript:void(0)">Thêm mới phiếu nhận hàng</a></li>
+                <li><a href="javascript:void(0)">Thông tin phiếu nhận hàng</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;"  ng-controller="vantai">
                 <header class="panel-heading">
-                    <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">
-                            THÊM MỚI PHIẾU NHẬN HÀNG
-                        </h4></a>
+                    <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">PHIẾU NHẬN HÀNG</h4></a>
                 </header>
                 <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true">
                     <div class="panel-body background-xam">
@@ -31,11 +29,16 @@
                                 <div class="form-group">
                                     <label class="col-md-2 control-label text-dark">Số phiếu nhận<span style="color: red;">(*)</span></label>
                                     <div class="col-md-4">
-                                        <input ng-model="phieuNhan.receiptCode"  data-parsley-required="true" maxlength="200" class="form-control input-sm"/>
+                                        <input ng-model="phieuNhan.receiptCode"  data-parsley-required="true"  data-parsley-error-message="Số phiều bắt buộc nhập!!" maxlength="200" class="form-control input-sm"/>
                                     </div>
                                     <label class="col-md-2 control-label text-dark">Ngày lập phiếu</label>
                                     <div class="col-md-4">
-                                        <input ng-model="phieuNhan.dateReceive" class="form-control input-sm" id="dateReceive"/>
+                                        <div class='input-group date' id="startDate1">
+                                            <input ng-model="phieuNhan.dateReceive" type='text' class="form-control datepickerEnter" id="dateReceive" name="dateReceive"/>
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -61,18 +64,21 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <div class="col-md-12 text-center">
+<!--                                <div class="form-group">
+                                    <div class="col-md-12 text-right">
                                         <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal" data-target="#chooseBienNhan"><i class="fa fa-plus"></i> Chọn biên nhận</button>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="row" style="margin: 0px;">
-                                    <div class="p-r-0 p-l-0">
+                                    <div class="p-r-0 p-l-0 col-md-6">
                                         <label class="input-sm">Số bản ghi: </label>
                                         <label style="color: red;">{{listBienNhanDaChon.rowCount}}</label>
                                     </div>
+                                    <div class="p-r-0 p-l-0 col-md-6">
+                                    <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chooseBienNhan"><i class="fa fa-plus"></i> Chọn biên nhận</button>
                                 </div>
-                                <div class="table-responsive bg-white">
+                                </div>
+                                <div class="table-responsive bg-white" style="margin-bottom: 10px;">
                                     <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.rowCount">
                                         <thead class="bg-gray">
                                             <tr>
@@ -115,7 +121,8 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieuNhan()" ><i class="fa fa-plus"></i> Chọn biên nhận</button>
+                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieuNhan()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
+                                        <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>
                             </div>
