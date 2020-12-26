@@ -1,5 +1,6 @@
 package com.osp.web.controller;
 
+import com.osp.common.Constants;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
@@ -12,10 +13,11 @@ import com.osp.web.dao.KhachHangDAO;
 import com.osp.web.dao.MatHangDAO;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import org.apache.commons.fileupload.FileUpload;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -242,6 +245,177 @@ public class BienNhanController {
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<String>("1", HttpStatus.OK);
+        }
+    }
+
+    @PostMapping("/preEdit")
+    //    @Secured(ConstantAuthor.Parameter.update)
+    public String preEdit(Model model, @RequestParam(value = "editId", required = false) Long editId) {
+        model.addAttribute("receiptId", editId);
+        return "bienNhan.edit";
+    }
+
+    @GetMapping("/ThongTinBienNhan")
+    public ResponseEntity<BienNhanForm> getInfoEditAuction(@RequestParam(value = "id", required = true) Integer bienNhanId,
+                                                                    HttpServletRequest request) {
+        BienNhanForm item = new BienNhanForm();
+        try {
+            item.setBienNhan(bienNhanDAO.getById(bienNhanId));
+            if (item.getBienNhan() != null) {
+                VtPartner nguoiGuiFull = khachHangDAO.getById(item.getBienNhan().getDeliveryPartnerId());
+                VtPartner nguoiGuiShort = new VtPartner();
+                nguoiGuiShort.setTaxCode(nguoiGuiFull.getTaxCode());
+                nguoiGuiShort.setFullName(nguoiGuiFull.getFullName());
+                nguoiGuiShort.setMobile(nguoiGuiFull.getMobile());
+                nguoiGuiShort.setAddress(nguoiGuiFull.getAddress());
+                item.setNguoiGui(nguoiGuiShort);
+                VtPartner nguoiNhanFull = khachHangDAO.getById(item.getBienNhan().getReceivePartnerId());
+                VtPartner nguoiNhanShort = new VtPartner();
+                nguoiNhanShort.setTaxCode(nguoiNhanFull.getTaxCode());
+                nguoiNhanShort.setFullName(nguoiNhanFull.getFullName());
+                nguoiNhanShort.setMobile(nguoiNhanFull.getMobile());
+                nguoiNhanShort.setAddress(nguoiNhanFull.getAddress());
+                item.setNguoiNhan(nguoiNhanShort);
+                List<VtReceiptDetail> listProperty = matHangDAO.getDsMatHang(item.getBienNhan().getId());
+                item.setMatHang(listProperty);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<BienNhanForm>(item, HttpStatus.OK);
+    }
+
+    @GetMapping("/deleteProperty")
+    public ResponseEntity<String> deleteProperty(
+            @RequestParam(value = "arrIdDelete", required = true) int[] arrIdDelete,
+            HttpServletRequest request) {
+        try {
+            for (int propertyID : arrIdDelete) {
+                matHangDAO.delete(propertyID);
+            }
+            return new ResponseEntity<String>("1", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("0", HttpStatus.OK);
+        }
+    }
+
+    @PostMapping(value = "/chinh-sua-bien-nhan")
+    public ResponseEntity<String> editAuctionInfo(@RequestBody BienNhanForm item, HttpServletRequest request) {
+        VtReceipt bienNhanCu = bienNhanDAO.getById(item.getBienNhan().getId());
+        List<VtReceiptDetail> propertyList = item.getMatHang();
+        try {
+            VtPartner nguoiGui = new VtPartner();
+            VtPartner nguoiNhan = new VtPartner();
+            if (item.getNguoiGui().getTaxCode() != null && !"".equals(item.getNguoiGui().getTaxCode())) {
+                nguoiGui.setTaxCode(item.getNguoiGui().getTaxCode().trim());
+            }
+            if (item.getNguoiGui().getFullName() != null && !"".equals(item.getNguoiGui().getFullName())) {
+                nguoiGui.setFullName(item.getNguoiGui().getFullName().trim());
+            }
+            if (item.getNguoiGui().getMobile() != null && !"".equals(item.getNguoiGui().getMobile())) {
+                nguoiGui.setMobile(item.getNguoiGui().getMobile().trim());
+            }
+            if (item.getNguoiGui().getAddress() != null && !"".equals(item.getNguoiGui().getAddress())) {
+                nguoiGui.setAddress(item.getNguoiGui().getAddress().trim());
+            }
+            // update người gửi
+            VtPartner nguoiGuiCu = khachHangDAO.getById(bienNhanCu.getDeliveryPartnerId());
+            if (nguoiGuiCu != null) {
+                nguoiGui.setId(nguoiGuiCu.getId());
+                if (!Objects.equals(nguoiGui.getFullName(), nguoiGuiCu.getFullName()) || !Objects.equals(nguoiGui.getTaxCode(), nguoiGuiCu.getTaxCode())
+                        || !Objects.equals(nguoiGui.getMobile(), nguoiGuiCu.getMobile()) || !Objects.equals(nguoiGui.getAddress(), nguoiGuiCu.getAddress())) {
+                    nguoiGuiCu.setTaxCode(nguoiGui.getTaxCode());
+                    nguoiGuiCu.setFullName(nguoiGui.getFullName());
+                    nguoiGuiCu.setMobile(nguoiGui.getMobile());
+                    nguoiGuiCu.setAddress(nguoiGui.getAddress());
+                   boolean blUpdate = khachHangDAO.edit(nguoiGuiCu);
+
+                }
+            }
+
+            if (item.getNguoiNhan().getTaxCode() != null && !"".equals(item.getNguoiNhan().getTaxCode())) {
+                nguoiNhan.setTaxCode(item.getNguoiNhan().getTaxCode().trim());
+            }
+            if (item.getNguoiNhan().getFullName() != null && !"".equals(item.getNguoiNhan().getFullName())) {
+                nguoiNhan.setFullName(item.getNguoiNhan().getFullName().trim());
+            }
+            if (item.getNguoiNhan().getMobile() != null && !"".equals(item.getNguoiNhan().getMobile())) {
+                nguoiNhan.setMobile(item.getNguoiNhan().getMobile().trim());
+            }
+            if (item.getNguoiNhan().getAddress() != null && !"".equals(item.getNguoiNhan().getAddress())) {
+                nguoiNhan.setAddress(item.getNguoiNhan().getAddress().trim());
+            }
+
+            // update người nhận
+            VtPartner nguoiNhanCu = khachHangDAO.getById(bienNhanCu.getReceivePartnerId());
+            if (nguoiNhanCu != null) {
+                nguoiNhanCu.setId(nguoiNhanCu.getId());
+                if (!Objects.equals(nguoiNhanCu.getFullName(), nguoiNhan.getFullName()) || !Objects.equals(nguoiNhanCu.getTaxCode(), nguoiNhan.getTaxCode())
+                        || !Objects.equals(nguoiNhanCu.getMobile(), nguoiNhan.getMobile()) || !Objects.equals(nguoiNhanCu.getAddress(), nguoiNhan.getAddress())) {
+                    nguoiNhanCu.setTaxCode(nguoiNhan.getTaxCode());
+                    nguoiNhanCu.setFullName(nguoiNhan.getFullName());
+                    nguoiNhanCu.setMobile(nguoiNhan.getMobile());
+                    nguoiNhanCu.setAddress(nguoiNhan.getAddress());
+                    boolean blUpdate = khachHangDAO.edit(nguoiNhanCu);
+
+                }
+            }
+
+            bienNhanCu.setLastUpdate(new Date());
+            bienNhanCu.setReceiptCode(item.getBienNhan().getReceiptCode().trim());
+            bienNhanCu.setNameStock(item.getBienNhan().getNameStock().trim());
+            bienNhanCu.setDateReceipt(item.getBienNhan().getDateReceipt());
+            bienNhanCu.setDeliveryPartnerId(item.getBienNhan().getDeliveryPartnerId());
+            bienNhanCu.setReceivePartnerId(item.getBienNhan().getReceivePartnerId());
+            bienNhanCu.setNhaXe(item.getBienNhan().getNhaXe());
+            bienNhanCu.setBienSo(item.getBienNhan().getBienSo());
+            boolean blUpdate = bienNhanDAO.edit(bienNhanCu);
+
+            if (blUpdate) {
+                for (VtReceiptDetail property : propertyList) {
+                    handleProperty(property, bienNhanCu.getId());
+                }
+            }
+            return new ResponseEntity<String>("1", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>("0", HttpStatus.OK);
+        }
+    }
+
+    private void handleProperty(VtReceiptDetail item, Integer bienNhanId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (item.getId() != null) {
+            VtReceiptDetail info = matHangDAO.getById(item.getId());
+            info.setLastUpdate(new Date());
+            info.setUpdatedBy(user.getUsername());
+            info.setName(item.getName().trim());
+            info.setUnit(item.getUnit().trim());
+            info.setNumbers(item.getNumbers());
+            info.setWeight(item.getWeight());
+            info.setSizes(item.getSizes());
+            info.setCost(item.getCost());
+            info.setNote(item.getNote());
+            matHangDAO.edit(info);
+        } else {
+            VtReceiptDetail info = new VtReceiptDetail();
+            info.setName(item.getName().trim());
+            info.setUnit(item.getUnit().trim());
+            info.setNumbers(item.getNumbers());
+            info.setWeight(item.getWeight());
+            info.setSizes(item.getSizes());
+            info.setCost(item.getCost());
+            info.setNote(item.getNote());
+            info.setGenDate(new Date());
+            info.setLastUpdate(new Date());
+            info.setCreatedBy(user.getUsername());
+            info.setUpdatedBy(user.getUsername());
+            info.setReceiptId(bienNhanId);
+            //1 nhận hàng, 2 nhập kho, 3 đang giao, 4 đã giao
+            info.setStatus(1);
+            matHangDAO.add(info);
         }
     }
 }

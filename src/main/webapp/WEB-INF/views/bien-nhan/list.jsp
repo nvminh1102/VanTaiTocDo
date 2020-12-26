@@ -137,13 +137,13 @@
                                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                     class="glyphicon glyphicon-cog"></i></button>
                                             <ul class="dropdown-menu pull-left" style="width: 230px;">
-                                                <li>
-                                                    <a href="javascript:void(0)" ng-click="onViewAuctionInfo(item)" >Xem chi tiết</a>
-                                                </li>
+                                                <%--<li>--%>
+                                                    <%--<a href="javascript:void(0)" ng-click="onViewAuctionInfo(item)" >Xem chi tiết</a>--%>
+                                                <%--</li>--%>
 
                                                 <li>
                                                     <div class="line line-dashed m-b-none m-t-none"></div>
-                                                    <a href="#" ng-click="onEditAuctionInfo(item.id, 'edit')">
+                                                    <a href="#" ng-click="preEdit(item.id)">
                                                         Chỉnh sửa
                                                     </a>
                                                 </li>
@@ -217,6 +217,9 @@
             </div>
         </div>
     </div>
+    <form id="frmEdit" action="<%=request.getContextPath()%>/bienNhan/preEdit" method='POST'>
+        <input type="hidden" name='editId' id='editId' value="">
+    </form>
 </section>
 
 <script>

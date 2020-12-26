@@ -100,5 +100,9 @@
         <put-attribute name="title" value="Danh sách biên nhận"/>
         <put-attribute name="page" value="/WEB-INF/views/bien-nhan/list.jsp" />
     </definition>
+    <definition name="bienNhan.edit" extends="default">
+        <put-attribute name="title" value="Chỉnh sửa biên nhận"/>
+        <put-attribute name="page" value="/WEB-INF/views/bien-nhan/edit.jsp" />
+    </definition>
 
 </tiles-definitions>

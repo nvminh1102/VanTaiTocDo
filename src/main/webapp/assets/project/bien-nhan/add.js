@@ -74,20 +74,6 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     return true;
   };
 
-  function parsePropertyType() {
-    var multi = $("#selectProperty").getKendoMultiSelect(),
-        multiDataItems = multi.dataItems();
-    var name = '';
-    for (var i = 0; i < multiDataItems.length; i += 1) {
-      var current = multiDataItems[i];
-      if (i < multiDataItems.length - 1)
-        name += current.name + ", ";
-      else
-        name += current.name;
-    }
-    return name;
-  }
-
   $scope.saveAuctionInfo = function () {
     document.getElementById("btnSaveAuctionInfo").disabled = true;
     if ($('#receiptCode').val() == '') {
@@ -147,7 +133,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
           break;
       }
     });
-  }
+  };
 
   $scope.document = {idFile: '', linkFile: '', fileName: ''};
   $scope.myFile = {fileDocument: "", listFileDocument: []};
@@ -231,13 +217,12 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   $scope.mySplit = function(string) {
     var array = string.split(',');
     return array;
-  }
+  };
 
   $(document).on('click', function(e) {
-    if ( e.target.id != 'nguoiGui.taxCode' ) {
+    if ( e.target.id != 'nguoiGui.taxCode' &&  e.target.id != 'btnThemMatHang' && e.target.id != 'btnSaveAuctionInfo') {
       $http.get(preUrl + "/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiGui.taxCode, typePartner: 2}})
       .then(function (response) {
-        // $scope.info.nguoiGui = response.data;
         if (response.data.fullName != null && response.data.fullName != "") {
           $scope.info.nguoiGui.fullName = response.data.fullName;
           $scope.info.nguoiGui.mobile = response.data.mobile;
@@ -248,10 +233,9 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   });
 
   $(document).on('click', function(e) {
-    if ( e.target.id != 'nguoiNhan.taxCode' ) {
+    if ( e.target.id != 'nguoiNhan.taxCode' &&  e.target.id != 'btnThemMatHang' && e.target.id != 'btnSaveAuctionInfo') {
       $http.get(preUrl + "/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiNhan.taxCode, typePartner: 3}})
       .then(function (response) {
-        // $scope.info.nguoiGui = response.data;
         if (response.data.fullName != null && response.data.fullName != "") {
           $scope.info.nguoiNhan.fullName = response.data.fullName;
           $scope.info.nguoiNhan.mobile = response.data.mobile;

@@ -205,4 +205,28 @@ public class BienNhanDAOImpl implements BienNhanDAO {
         }
         return false;
     }
+
+    @Override
+    public VtReceipt getById(Integer id) {
+        VtReceipt info = new VtReceipt();
+        try {
+            info = entityManager.find(VtReceipt.class, id);
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return info;
+        }
+    }
+
+    @Override
+    public boolean edit(VtReceipt item) {
+        try {
+            entityManager.merge(item);
+            entityManager.flush();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

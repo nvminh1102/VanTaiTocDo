@@ -3,6 +3,7 @@ package com.osp.web.dao;
 import com.osp.model.VtPartner;
 import com.osp.model.VtReceipt;
 import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -44,6 +45,30 @@ public class KhachHangDAOImpl implements KhachHangDAO {
     } catch (Exception e) {
       e.printStackTrace();
       return null;
+    }
+  }
+
+  @Override
+  public VtPartner getById(Integer id) {
+    VtPartner info = new VtPartner();
+    try {
+      info = entityManager.find(VtPartner.class, id);
+      return info;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return info;
+    }
+  }
+
+  @Override
+  public boolean edit(VtPartner item) {
+    try {
+      entityManager.merge(item);
+      entityManager.flush();
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
     }
   }
 }
