@@ -76,7 +76,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     $scope.delId = item.id;
     $scope.delReceiptCode = item.receiptCode;
     $("#xoaBienNhan").modal("show");
-  }
+  };
 
   $scope.xoaBienNhan = function () {
     var call = {id: $scope.delId};
@@ -96,5 +96,11 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       }
     });
   };
+
+    $scope.preEdit = function (id) {
+        $('#editId').val(id);
+        $('#frmEdit').submit();
+    }
+
 
     }]);

@@ -14,4 +14,8 @@ public interface BienNhanDAO {
     Optional<PagingResult> page(PagingResult page, String receiptCode, String nameStock, Date fromGenDate, Date toGenDate);
 
     boolean delete(int id);
+
+    VtReceipt getById(Integer id);
+
+    boolean edit(VtReceipt item);
 }
