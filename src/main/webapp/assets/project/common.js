@@ -47,7 +47,6 @@ function restrictCharacters(myfield, e, restrictionType) {
     }
 }
 function updatePage($scope, response) {
-debugger;
     if (response != null && response != 'undefined' && response.status == 200) {
         $scope.page = response.data;
         $scope.page.pageList = getPageList($scope.page);
@@ -312,3 +311,13 @@ function Date2String(date)
   return moment(dateStr).format('DD/MM/YYYY');
 }
 ;
+
+function showDropDownOnTable() {
+  $('.table-responsive').on('show.bs.dropdown', function () {
+    $('.table-responsive').css("overflow", "inherit");
+  });
+
+  $('.table-responsive').on('hide.bs.dropdown', function () {
+    $('.table-responsive').css("overflow", "auto");
+  })
+}
