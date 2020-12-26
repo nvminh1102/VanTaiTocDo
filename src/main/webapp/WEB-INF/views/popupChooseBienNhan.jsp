@@ -6,7 +6,7 @@
 
 <script src="<%=request.getContextPath()%>/assets/project/chooseBienNhan.js${urlCache}"></script>
 
-<div class="modal fade" id="chooseBienNhan" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" style="overflow: auto;">
+<div class="modal fade" id="chooseBienNhan" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true" style="overflow: auto;" ng-controller="popupPhieuNhan">
     <div class="modal-dialog" style="width: 90%;max-width: 1500px;">
         <div class="modal-content">
             <div class="bg-info modal-header">

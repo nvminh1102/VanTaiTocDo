@@ -1,5 +1,5 @@
 app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
-console.log("1121212121");
+        console.log("1121212121");
         $scope.listBienNhanDaChon = {items: "", rowCount: 0, numberPerPage: 5, pageNumber: 1, pageList: [], pageCount: 0};
         $scope.numberPerPage = "5";
         $scope.listBienNhanDaChon.numberPerPage = $scope.numberPerPage;
@@ -10,16 +10,16 @@ console.log("1121212121");
                     $scope.vtPartners = response.data;
                 });
 
-
-        $http.get(preUrl + "/phieu-nhan-hang/loadDataEdit", {params: {id: id}})
-                .then(function (response) {
-                    $scope.phieuNhan = response.vtGoodsReceipt;
-                    $scope.listBienNhanDaChon = response.vtGoodsReceiptDetail;
-
-                });
+        if (id != null && id != '') {
+            $http.get(preUrl + "/phieu-nhan-hang/loadDataEdit", {params: {id: id}})
+                    .then(function (response) {
+                        $scope.phieuNhan = response.vtGoodsReceipt;
+                        $scope.listBienNhanDaChon = response.vtGoodsReceiptDetail;
+                    });
+        }
 
         $scope.savePhieuNhan = function () {
-            
+
             console.log("id1:" + id);
             if ($("#formAdd").parsley().validate()) {
                 if (typeof $scope.phieuNhan != "undefined" && typeof $scope.phieuNhan.receiptCode != 'undefined') {

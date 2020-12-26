@@ -10,7 +10,7 @@
     var id = '${id}';
     console.log("ID:"+ id);
 </script>
-<section id="content" ng-app="FrameworkBase"  ng-controller="vantai">
+<section id="content" ng-app="FrameworkBase"  >
     <section class="vbox background-white">
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
@@ -18,7 +18,7 @@
                 <li><a href="<%=request.getContextPath()%>/phieu-nhan-hang/list">Phiếu biên nhận </a></li>
                 <li><a href="javascript:void(0)">Thêm mới phiếu nhận hàng</a></li>
             </ul>
-            <section class="panel panel-default" style="margin-bottom: 5px;">
+            <section class="panel panel-default" style="margin-bottom: 5px;"  ng-controller="vantai">
                 <header class="panel-heading">
                     <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">
                             THÊM MỚI PHIẾU NHẬN HÀNG
@@ -123,10 +123,10 @@
                     </div>
                 </div>
             </section>
+            <%@include file="../popupChooseBienNhan.jsp"%>
         </section>
     </section>
 </section>
-            <%@include file="../popupChooseBienNhan.jsp"%>
 
 <script>
     $("#quan-ly-bo-nhiem-ccv").addClass("active");

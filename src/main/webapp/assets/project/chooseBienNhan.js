@@ -1,6 +1,5 @@
-app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope , $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
+app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
         $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: ""};
-        var searchBienNhan = JSON.stringify($scope.searchBienNhan);
         $scope.listBienNhan = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
 
         $scope.idSelected = "";
@@ -62,17 +61,17 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
             $scope.listBienNhan.numberPerPage = numberPerPage;
             $scope.searchData();
         };
-        
-        
+
+
         $scope.addListBienNhan = function () {
             alert($scope.selectedItems.length);
             popupBienNhan.setListDataBN($scope.selectedItems);
         };
-        
-        
-       
-        
-        
+
+
+
+
+
 
         $scope.chooseBienNhan = function (objectBienNhan, check) {
             if (check == true) {
