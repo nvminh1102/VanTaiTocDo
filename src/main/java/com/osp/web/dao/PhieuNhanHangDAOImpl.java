@@ -174,6 +174,31 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
         }
         return true;
     }
+    
+    
+    
+    @Override
+    public Boolean delete(Integer id, User user, String ip) {
+        try {
+            if (id != null) {
+                Query querydetail = entityManager.createQuery("delete from VtGoodsReceiptDetail a WHERE a.goodsreceiptid=:goodsreceiptid").setParameter("goodsreceiptid", id);
+                querydetail.executeUpdate();
+                Query query = entityManager.createQuery("delete from VtGoodsReceipt a WHERE a.id=:id").setParameter("id", id);
+                query.executeUpdate();
+                entityManager.flush();
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            entityManager.getTransaction().rollback();
+            return false;
+        }
+        return true;
+    }
+
+    
+    
 
     @Override
     public VTGoodsReceiptForm getVTGoodsReceiptFormById(Integer id) {

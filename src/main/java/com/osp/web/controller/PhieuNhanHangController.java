@@ -2,6 +2,7 @@ package com.osp.web.controller;
 
 import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
+import com.osp.common.Utils;
 import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
 import com.osp.model.view.VTGoodsReceiptForm;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/phieu-nhan-hang")
@@ -106,11 +108,32 @@ public class PhieuNhanHangController {
         MessReponse reponse = new MessReponse();
         boolean check = phieuNhanHangDAO.add(vTGoodsReceiptForm, user);
         if (check) {
-            reponse = new MessReponse(true, 200);
+            reponse = new MessReponse(true, 200, "Lưu thành công!");
         } else {
-            reponse = new MessReponse(false, 500);
+            reponse = new MessReponse(false, 500, "Hệ thống đang bận, vui lòng thực hiện lại sau!");
         }
         return new ResponseEntity<MessReponse>(reponse, HttpStatus.OK);
+    }
+    
+    
+    @PostMapping("/delete")
+    public String delete(Integer id, RedirectAttributes attributes, HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            String ipClient = Utils.getIpClient(request);
+            boolean check = phieuNhanHangDAO.delete(id, user, ipClient);
+            if(check){
+                attributes.addFlashAttribute("messageError", "Xóa thành công!");
+                return "redirect:/phieu-nhan-hang/list";
+            }else{
+                attributes.addFlashAttribute("messageError", "Hệ thống bận, vui lòng thực hiện sau!");
+                return "redirect:/phieu-nhan-hang/list";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        attributes.addFlashAttribute("messageError", "Hệ thống bận, vui lòng thực hiện sau!");
+        return "redirect:/phieu-nhan-hang/list";
     }
 
 }

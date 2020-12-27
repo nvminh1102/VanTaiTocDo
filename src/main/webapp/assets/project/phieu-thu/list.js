@@ -1,37 +1,27 @@
 app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q) {
 
-        $scope.search = {basic: 0, receiptCode: "", truckPartner: "", loaiXe: "", bienSo: "", fromDelivery: "", toDelivery: "", fromReceive: "", toReceive: ""};
+        $scope.search = {receiptCode: "", nameStock: "", fromPushStock: "", toPushStock: ""};
         var search = JSON.stringify($scope.search);
         $scope.listData = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
         $scope.checkAll_ = false;
 
         $scope.clear = function () {
-            $scope.search.basic = 0;
             $scope.search.receiptCode = "";
-            $scope.search.truckPartner = "";
-            $scope.search.loaiXe = "";
-            $scope.search.bienSo = "";
-            $scope.search.fromDelivery = "";
-            $scope.search.toDelivery = "";
-            $scope.search.fromReceive = "";
-            $scope.search.toReceive = "";
-            $("#fromDelivery").data("DateTimePicker").date(null);
-            $("#toDelivery").data("DateTimePicker").date(null);
-            $("#fromReceive").data("DateTimePicker").date(null);
-            $("#toReceive").data("DateTimePicker").date(null);
+            $scope.search.nameStock = "";
+            $scope.search.fromPushStock = "";
+            $scope.search.toPushStock = "";
+            $("#fromPushStock").data("DateTimePicker").date(null);
+            $("#toPushStock").data("DateTimePicker").date(null);
             $timeout(function () {
-                $('#fromDelivery').data("DateTimePicker").maxDate(moment("01/01/9999999999", "DD-MM-YYYY").toDate());
-                $('#toDelivery').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
-                $('#fromReceive').data("DateTimePicker").maxDate(moment("01/01/9999999999", "DD-MM-YYYY").toDate());
-                $('#toReceive').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
+                $('#fromPushStock').data("DateTimePicker").maxDate(moment("01/01/9999999999", "DD-MM-YYYY").toDate());
+                $('#toPushStock').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
             }, 0);
         };
 
 
-        $http.get(preUrl + "/phieu-nhan-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+        $http.get(preUrl + "/phieu-thu/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                 .then(function (response) {
                     $scope.listData = response.data;
-
                     $scope.listData.numberPerPage = $scope.numberPerPage;
                     $scope.listData.pageCount = getPageCount($scope.listData);
                     $scope.listData.pageList = getPageList($scope.listData);
@@ -61,10 +51,9 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         //reload list
         $scope.loadListData = function () {
             var search = JSON.stringify($scope.search);
-            $http.get(preUrl + "/phieu-nhan-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/phieu-thu/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData = response.data;
-
                         $scope.listData.numberPerPage = $scope.numberPerPage;
                         $scope.listData.pageCount = getPageCount($scope.listData);
                         $scope.listData.pageList = getPageList($scope.listData);
@@ -82,10 +71,9 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         $scope.loadPageData = function (index) {
             var search = JSON.stringify($scope.search);
             $scope.listData.pageNumber = index;
-            $http.get(preUrl + "/phieu-nhan-hang/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/phieu-thu/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData.items = response.data.items;
-
                         $scope.listData.numberPerPage = $scope.numberPerPage;
                         $scope.listData.pageList = getPageList($scope.listData);
                         $scope.tooltip();
@@ -164,17 +152,6 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         };
 
         $(document).ready(function () {
-            $(".deletePhieuNhan").click(function () {
-                alert("delete");
-                var id = $(this).data('item.id');
-                var name = $(this).data('item.name');
-                console.log(id);
-                console.log(name);
-                $(".info_id").val(id);
-                $(".modal-title").text('Xóa phiếu nhận "' + name + '"');
-            });
-
-
             $("#fromDelivery").datetimepicker({
                 locale: 'vi-VN',
                 format: 'DD-MM-YYYY'
@@ -215,7 +192,6 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                         $('#fromReceive').data("DateTimePicker").maxDate(moment($('#toReceive').val(), "DD-MM-YYYY").toDate());
                 }
             });
-
         });
 
     }]);
