@@ -110,6 +110,6 @@
         }
     });
     toastr.options = {
-        "positionClass": "toast-bottom-right"
+        "positionClass": "toast-top-right"
     }
 </script>
