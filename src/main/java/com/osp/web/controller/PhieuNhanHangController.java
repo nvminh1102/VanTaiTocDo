@@ -6,6 +6,7 @@ import com.osp.common.Utils;
 import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
 import com.osp.model.view.VTGoodsReceiptForm;
+import com.osp.model.view.VtGoodsReceiptBO;
 import com.osp.web.dao.PhieuNhanHangDAO;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PhieuNhanHangController {
 
     SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
-    
+
     @Autowired
     PhieuNhanHangDAO phieuNhanHangDAO;
 //    @Autowired
@@ -85,7 +86,8 @@ public class PhieuNhanHangController {
 
     @GetMapping("/preAdd")
     public String preAdd(HttpServletRequest request) {
-        String receiptCode = "GH-" + formatteryyyy.format(new Date()) +"-"+ (phieuNhanHangDAO.getMaxId()+1);
+        Integer maxId = phieuNhanHangDAO.getMaxId();
+        String receiptCode = "GH-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
         request.setAttribute("receiptCode", receiptCode);
         return "phieuNhan.add";
     }
@@ -114,26 +116,22 @@ public class PhieuNhanHangController {
         }
         return new ResponseEntity<MessReponse>(reponse, HttpStatus.OK);
     }
-    
-    
+
     @PostMapping("/delete")
-    public String delete(Integer id, RedirectAttributes attributes, HttpServletRequest request) {
+    public ResponseEntity<String> delete(@RequestBody @Valid final VtGoodsReceiptBO vtGoodsReceiptBO, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             String ipClient = Utils.getIpClient(request);
-            boolean check = phieuNhanHangDAO.delete(id, user, ipClient);
-            if(check){
-                attributes.addFlashAttribute("messageError", "Xóa thành công!");
-                return "redirect:/phieu-nhan-hang/list";
-            }else{
-                attributes.addFlashAttribute("messageError", "Hệ thống bận, vui lòng thực hiện sau!");
-                return "redirect:/phieu-nhan-hang/list";
+            boolean check = phieuNhanHangDAO.delete(vtGoodsReceiptBO.getId(), user, ipClient);
+            if (check) {
+                return new ResponseEntity<String>("0", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<String>("1", HttpStatus.OK);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        attributes.addFlashAttribute("messageError", "Hệ thống bận, vui lòng thực hiện sau!");
-        return "redirect:/phieu-nhan-hang/list";
+        return new ResponseEntity<String>("1", HttpStatus.OK);
     }
 
 }

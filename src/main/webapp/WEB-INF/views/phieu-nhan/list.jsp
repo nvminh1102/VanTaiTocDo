@@ -197,10 +197,7 @@
                                         <td class="text-left v-inherit">{{item.totalDebt}}</td>
                                         <td class="text-center v-inherit">
                                             <a  class="btn btn-success btn-sm font-bold" href="<%=request.getContextPath()%>/phieu-nhan-hang/preEdit/{{item.id}}"><i class="fa fa-edit"></i>Sửa</a>
-                                            <a class="deletePhieuNhan btn btn-danger btn-sm font-bold"
-                                               data-toggle="modal" data-target="#deleteItem"
-                                               data-item.id="{{item.id}}"
-                                               data-item.name="{{item.receiptCode}}"><i class="fa fa-times"></i>Xóa</a>
+                                            <a class="deletePhieuNhan btn btn-danger btn-sm font-bold" ng-click="preXoa(item)"<i class="fa fa-times"></i>Xóa</a>
                                         </td>
 
                                     </tr>
@@ -232,26 +229,23 @@
         </section>
     </section>
 
-    <div class="modal fade"  id="deleteItem"  role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 500px;">
-            <div class="modal-content"style="max-width: 500px;">
-                <div class="modal-header" style="padding: 7px;">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h5 class="modal-title" id="myModalLable">Xóa phiếu nhận hàng</h5>
+    <div class="modal fade" id="xoaPhieuNhan" tabindex="-1" role="dialog"
+         aria-labelledby="xoaPhieuNhan" aria-hidden="true" aria-label="Close">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header alert-info">
+                    <button type="button" class="btn btn-default close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Xóa phiếu nhận</h4>
                 </div>
-                <form id="filter" method="POST"  action="<%=request.getContextPath()%>/phieu-nhan-hang/delete" theme="simple" enctype="multipart/form-data" cssClass="form-horizontal" cssStyle="" validate="false">
-                    <div class="modal-body"  style="padding: 10px;">
-                        <div class="form-group">
-                            <label class="control-label"><spring:message code="message.modal.question.remove"/></label>
-                            <input name="id"  type="hidden" class="form-control info_id" />
-                        </div>
+                <div class="modal-body">
+                    <span>Bạn có chắc chắn muốn xóa phiếu nhận </span><br/>
+                    <span style="color: #3c763d">{{receiptCode}}</span> <span> hay không?</span>
 
-                    </div>
-                    <div class="modal-footer" style="padding: 10px;" >
-                        <button type="button" class="btn btn-default" data-dismiss="modal"><spring:message code="message.modal.cancel"/></button>
-                        <button type="submit" class="btn btn-danger"><spring:message code="label.button.delete"/></button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="xoaPhieuNhan()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
+                </div>
             </div>
         </div>
     </div>

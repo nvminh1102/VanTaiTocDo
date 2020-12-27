@@ -100,48 +100,36 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                     + "&fromDateSign=" + $scope.search.fromDateSign + "&toDateSign=" + $scope.search.toDateSign;
         };
 
+        $scope.preXoa = function (item) {
+            $scope.delId = item.id;
+            $scope.receiptCode = item.receiptCode;
+            $("#xoaPhieuNhan").modal("show");
+        };
+
+        $scope.xoaPhieuNhan = function () {
+            var call = {id: $scope.delId};
+            var vtGoodsReceiptBO = JSON.parse(JSON.stringify(call));
+            $http.post(preUrl + "/phieu-nhan-hang/delete", vtGoodsReceiptBO, {headers: {'Content-Type': 'application/json'}})
+                    .then(function (response) {
+                        switch (Number(response.data)) {
+                            case 0:
+                                $scope.loadListData();
+                                $("#xoaPhieuNhan").modal("hide");
+                                toastr.success("Xóa thành công!");
+                                break;
+                            case 1:
+                                $("#xoaPhieuNhan").modal("hide");
+                                toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");
+                                break;
+                        }
+                    });
+        };
+
+
+
         $scope.delete = function (idAppoint) {
             $scope.idDelete = idAppoint;
             $("#confirm-delete").modal("show");
-        };
-
-        $scope.confirmDelete = function () {
-
-            $http.post(preUrl + "/xoa-thong-tin-bo-nhiem-ccv", $scope.idDelete, {headers: {'Content-Type': 'application/json'}})
-                    .then(function (response) {
-                        if (response.data.reponseCode == 200 && response.data.success == true) {
-                            toastr.success("Xóa thành công!");
-                        } else {
-                            toastr.error("Có lỗi trong quá trình xử lý, Vui lòng thử lại sau.");
-                        }
-                        $scope.searchSelect(null);
-                        $("#confirm-delete").modal("hide");
-                    },
-                            function (response) {
-                                $("#confirm-delete").modal("hide");
-                                $("#confirm-error").modal("show");
-                            });
-
-        };
-
-        //chi tiết thông tin bổ nhiệm, từ chối bổ nhiệm
-        $scope.detail_ = function (idAppoint) {
-            $scope.idAppoint = idAppoint;
-            $("#chi-tiet-bo-nhiem").modal("show");
-
-            $http.get(preUrl + "/chi-tiet-thong-tin-ccv/searchBoNhiem", {params: {idAppoint: $scope.idAppoint}})
-                    .then(function (response) {
-                        $scope.notaryInfo = response.data.notaryInfo;
-                        $scope.appoint = response.data.appoint;
-                        $scope.document = response.data.document;
-                    });
-
-        };
-
-
-        $scope.tuchoibonhiem = function (idNotaryInfo) {
-            $scope.idNotary = idNotaryInfo;
-            $("#tu-choi-bo-nhiem-ccv").modal("show");
         };
 
         $scope.removeIndexList = function (index, list) {
