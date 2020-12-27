@@ -28,7 +28,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         };
 
 
-        $http.get(preUrl + "/phieu-nhan-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+        $http.get(preUrl + "/toa-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                 .then(function (response) {
                     $scope.listData = response.data;
 
@@ -61,7 +61,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         //reload list
         $scope.loadListData = function () {
             var search = JSON.stringify($scope.search);
-            $http.get(preUrl + "/phieu-nhan-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/toa-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData = response.data;
 
@@ -82,7 +82,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         $scope.loadPageData = function (index) {
             var search = JSON.stringify($scope.search);
             $scope.listData.pageNumber = index;
-            $http.get(preUrl + "/phieu-nhan-hang/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/toa-hang/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData.items = response.data.items;
 
@@ -95,7 +95,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                     });
         };
         $scope.export = function () {
-            window.location.href = preUrl + "/phieu-nhan-hang/export?fullName=" + $scope.search.fullName + "&dispatchCode=" + $scope.search.dispatchCode
+            window.location.href = preUrl + "/toa-hang/export?fullName=" + $scope.search.fullName + "&dispatchCode=" + $scope.search.dispatchCode
                     + "&type=" + $scope.search.type
                     + "&fromDateSign=" + $scope.search.fromDateSign + "&toDateSign=" + $scope.search.toDateSign;
         };
@@ -109,7 +109,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         $scope.xoaPhieuNhan = function () {
             var call = {id: $scope.delId};
             var vtGoodsReceiptBO = JSON.parse(JSON.stringify(call));
-            $http.post(preUrl + "/phieu-nhan-hang/delete", vtGoodsReceiptBO, {headers: {'Content-Type': 'application/json'}})
+            $http.post(preUrl + "/toa-hang/delete", vtGoodsReceiptBO, {headers: {'Content-Type': 'application/json'}})
                     .then(function (response) {
                         switch (Number(response.data)) {
                             case 0:

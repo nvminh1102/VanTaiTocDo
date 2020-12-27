@@ -5,7 +5,9 @@
  */
 package com.osp.model;
 
+import com.osp.model.view.VtPhieuThuView;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -88,6 +90,29 @@ public class VtPhieuThu implements Serializable {
     private String updatedBy;
 
     public VtPhieuThu() {
+    }
+
+    public VtPhieuThu(VtPhieuThuView vtPhieuThuView) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            this.id = vtPhieuThuView.getId();
+            this.receiptCode = vtPhieuThuView.getReceiptCode();
+            this.deliveryPartnerId = vtPhieuThuView.getDeliveryPartnerId();
+            this.receivePartnerId = vtPhieuThuView.getReceivePartnerId();
+            this.nameStock = vtPhieuThuView.getNameStock();
+            this.payer = vtPhieuThuView.getPayer();
+            this.employee = vtPhieuThuView.getEmployee();
+            this.createdBy = vtPhieuThuView.getCreatedBy();
+            this.updatedBy = vtPhieuThuView.getUpdatedBy();
+            if(vtPhieuThuView.getStrDateReceipt()!=null && !vtPhieuThuView.getStrDateReceipt().trim().equals("")){
+                this.dateReceipt = simpleDateFormat.parse(vtPhieuThuView.getStrDateReceipt());
+            }
+            if(vtPhieuThuView.getStrDatePushStock()!=null && !vtPhieuThuView.getStrDatePushStock().trim().equals("")){
+                this.datepushStock = simpleDateFormat.parse(vtPhieuThuView.getStrDatePushStock());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public VtPhieuThu(Integer id) {
@@ -245,5 +270,5 @@ public class VtPhieuThu implements Serializable {
     public String toString() {
         return "com.osp.model.VtPhieuThu[ id=" + id + " ]";
     }
-    
+
 }

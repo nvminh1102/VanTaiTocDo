@@ -125,13 +125,13 @@
                                             class="fa fa-angle-right"></i> <span>Biên nhận</span> </a></li>
                             </ul>
                             <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Phiếu nhận hàng</span> </a></li>
+                                <li class="<%= isActive(request.getContextPath() + "/toa-hang/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/toa-hang/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Toa hàng</span> </a></li>
                             </ul>
                             <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                <li class="<%= isActive(request.getContextPath() + "/phieu-thu/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/phieu-thu/list" class=""> <i
                                             class="fa fa-angle-right"></i> <span>Phiếu thu tiền</span> </a></li>
                             </ul>
                             <ul class="nav lt">

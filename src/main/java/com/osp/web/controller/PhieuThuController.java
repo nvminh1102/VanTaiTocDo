@@ -7,7 +7,9 @@ import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.model.view.VtGoodsReceiptBO;
+import com.osp.model.view.VtPhieuThuView;
 import com.osp.web.dao.PhieuNhanHangDAO;
+import com.osp.web.dao.PhieuThuDAO;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -26,27 +28,26 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/phieu-nhan-hang")
-public class PhieuNhanHangController {
+@RequestMapping("/phieu-thu")
+public class PhieuThuController {
 
     SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
 
     @Autowired
-    PhieuNhanHangDAO phieuNhanHangDAO;
+    PhieuThuDAO phieuThuDAO;
 //    @Autowired
 //    LogAccessDAO logAccessDao;
 
     @GetMapping("/list")
     public String list() {
-        return "phieunhanhang.list";
+        return "phieuthu.list";
     }
 
     @RequestMapping(value = "/load-list", method = RequestMethod.GET)
     public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String search, @RequestParam @Valid final int offset, @RequestParam @Valid final int number, HttpServletRequest request) {
-        VtGoodsReceipt item = new VtGoodsReceipt();
+        VtPhieuThuView item = new VtPhieuThuView();
         PagingResult page = new PagingResult();
         JSONObject searchObject = new JSONObject(search);
         SimpleDateFormat formatterddMMyyyy = new SimpleDateFormat("dd-MM-yyyy");
@@ -54,61 +55,49 @@ public class PhieuNhanHangController {
             if (searchObject.has("receiptCode") && !StringUtils.isBlank(searchObject.get("receiptCode").toString())) {
                 item.setReceiptCode(searchObject.get("receiptCode").toString().trim());
             }
-            if (searchObject.has("fromDelivery") && !StringUtils.isBlank(searchObject.get("fromDelivery").toString())) {
-                item.setFromDelivery(formatterddMMyyyy.parse(searchObject.get("fromDelivery").toString().trim()));
+            if (searchObject.has("fromPushStock") && !StringUtils.isBlank(searchObject.get("fromPushStock").toString())) {
+                item.setFromPushStock(formatterddMMyyyy.parse(searchObject.get("fromPushStock").toString().trim()));
             }
-            if (searchObject.has("toDelivery") && !StringUtils.isBlank(searchObject.get("toDelivery").toString())) {
-                item.setToDelivery(formatterddMMyyyy.parse(searchObject.get("toDelivery").toString().trim()));
+            if (searchObject.has("toPushStock") && !StringUtils.isBlank(searchObject.get("toPushStock").toString())) {
+                item.setToPushStock(formatterddMMyyyy.parse(searchObject.get("toPushStock").toString().trim()));
             }
-            if (searchObject.has("fromReceive") && !StringUtils.isBlank(searchObject.get("fromReceive").toString())) {
-                item.setFromReceive(formatterddMMyyyy.parse(searchObject.get("fromReceive").toString().trim()));
-            }
-            if (searchObject.has("toReceive") && !StringUtils.isBlank(searchObject.get("toReceive").toString())) {
-                item.setToReceive(formatterddMMyyyy.parse(searchObject.get("toReceive").toString().trim()));
-            }
-            if (searchObject.has("truckPartner") && !StringUtils.isBlank(searchObject.get("truckPartner").toString())) {
-                item.setTruckPartnerName(searchObject.get("truckPartner").toString().trim());
-            }
-            if (searchObject.has("loaiXe") && !StringUtils.isBlank(searchObject.get("loaiXe").toString())) {
-                item.setLoaiXe(searchObject.get("loaiXe").toString().trim());
-            }
-            if (searchObject.has("bienSo") && !StringUtils.isBlank(searchObject.get("bienSo").toString())) {
-                item.setBienSo(searchObject.get("bienSo").toString().trim());
+            if (searchObject.has("nameStock") && !StringUtils.isBlank(searchObject.get("nameStock").toString())) {
+                item.setNameStock(searchObject.get("nameStock").toString().trim());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         page.setNumberPerPage(number);
         page.setPageNumber(offset);
-        page = phieuNhanHangDAO.search(item, page).orElse(new PagingResult());
+        page = phieuThuDAO.search(item, page).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
 
     @GetMapping("/preAdd")
     public String preAdd(HttpServletRequest request) {
-        Integer maxId = phieuNhanHangDAO.getMaxId();
-        String receiptCode = "GH-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
+        Integer maxId = phieuThuDAO.getMaxId();
+        String receiptCode = "PT-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
         request.setAttribute("receiptCode", receiptCode);
-        return "phieuNhan.add";
+        return "phieuthu.add";
     }
 
     @GetMapping("/preEdit/{id}")
     public String preEdit(@PathVariable("id") Integer id, HttpServletRequest request) {
         request.setAttribute("id", id);
-        return "phieuNhan.add";
+        return "phieuthu.add";
     }
 
     @RequestMapping(value = "/loadDataEdit", method = RequestMethod.GET)
     public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
-        VTGoodsReceiptForm vTGoodsReceiptForm = phieuNhanHangDAO.getVTGoodsReceiptFormById(id);
+        VTGoodsReceiptForm vTGoodsReceiptForm = phieuThuDAO.getVtPhieuThuFormById(id);
         return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
+    public ResponseEntity<MessReponse> add(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
-        boolean check = phieuNhanHangDAO.add(vTGoodsReceiptForm, user);
+        boolean check = phieuThuDAO.add(vTGoodsReceiptForm, user);
         if (check) {
             reponse = new MessReponse(true, 200, "Lưu thành công!");
         } else {
@@ -118,11 +107,11 @@ public class PhieuNhanHangController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<String> delete(@RequestBody @Valid final VtGoodsReceiptBO vtGoodsReceiptBO, HttpServletRequest request) {
+    public ResponseEntity<String> delete(@RequestBody @Valid final VtPhieuThuView vtPhieuThuView, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             String ipClient = Utils.getIpClient(request);
-            boolean check = phieuNhanHangDAO.delete(vtGoodsReceiptBO.getId(), user, ipClient);
+            boolean check = phieuThuDAO.delete(vtPhieuThuView.getId(), user, ipClient);
             if (check) {
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {

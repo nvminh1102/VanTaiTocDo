@@ -88,13 +88,21 @@
         <put-attribute name="title" value="Thêm mới biên nhận"/>
         <put-attribute name="page" value="/WEB-INF/views/bien-nhan/add.jsp" />
     </definition>
-    <definition name="phieunhanhang.list" extends="default">
-        <put-attribute name="title" value="Phiếu nhận hàng"/>
-        <put-attribute name="page" value="/WEB-INF/views/phieu-nhan/list.jsp" />
+    <definition name="toahang.list" extends="default">
+        <put-attribute name="title" value="Toa hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/toa-hang/list.jsp" />
     </definition>
-    <definition name="phieuNhan.add" extends="default">
-        <put-attribute name="title" value="Phiếu nhận hàng"/>
-        <put-attribute name="page" value="/WEB-INF/views/phieu-nhan/add.jsp" />
+    <definition name="toahang.add" extends="default">
+        <put-attribute name="title" value="Toa hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/toa-hang/add.jsp" />
+    </definition>
+    <definition name="phieuthu.list" extends="default">
+        <put-attribute name="title" value="Phiếu thu"/>
+        <put-attribute name="page" value="/WEB-INF/views/phieu-thu/list.jsp" />
+    </definition>
+    <definition name="phieuthu.add" extends="default">
+        <put-attribute name="title" value="Phiếu thu"/>
+        <put-attribute name="page" value="/WEB-INF/views/phieu-thu/add.jsp" />
     </definition>
     <definition name="bienNhan.list" extends="default">
         <put-attribute name="title" value="Danh sách biên nhận"/>

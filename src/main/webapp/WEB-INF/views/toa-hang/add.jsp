@@ -5,7 +5,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
-<script src="<%=request.getContextPath()%>/assets/project/phieu-nhan/add.js${urlCache}" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/assets/project/toa-hang/add.js${urlCache}" type="text/javascript"></script>
 <script>
     var id = '${id}';
     var receiptCode = '${receiptCode}';
@@ -15,12 +15,12 @@
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/phieu-nhan-hang/list">Phiếu biên nhận </a></li>
-                <li><a href="javascript:void(0)">Thông tin phiếu nhận hàng</a></li>
+                <li><a href="<%=request.getContextPath()%>/toa-hang/list">Toa hàng</a></li>
+                <li><a href="javascript:void(0)">Thông tin toa hàng</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;"  ng-controller="vantai">
                 <header class="panel-heading">
-                    <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">PHIẾU NHẬN HÀNG</h4></a>
+                    <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">TOA HÀNG</h4></a>
                 </header>
                 <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true">
                     <div class="panel-body background-xam">
@@ -122,7 +122,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
                                         <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieuNhan()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
-                                        <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
+                                        <a href="<%=request.getContextPath()%>/toa-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>
                             </div>

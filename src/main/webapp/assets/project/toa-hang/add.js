@@ -15,7 +15,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         }
 
         if (id != null && id != '') {
-            $http.get(preUrl + "/phieu-nhan-hang/loadDataEdit", {params: {id: id}})
+            $http.get(preUrl + "/toa-hang/loadDataEdit", {params: {id: id}})
                     .then(function (response) {
                         $scope.phieuNhan = response.data.vtGoodsReceiptBO;
                         $scope.phieuNhan.dateReceive = response.data.vtGoodsReceiptBO.strDateReceive;
@@ -27,10 +27,10 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         }
 
         $scope.savePhieuNhan = function () {
-            console.log("id1:" + id);
             if ($("#formAdd").parsley().validate()) {
                 if (typeof $scope.phieuNhan != "undefined" && typeof $scope.phieuNhan.receiptCode != 'undefined') {
-                    if (typeof $scope.listBienNhanDaChon != "undefined") {
+                    console.log($scope.listBienNhanDaChon);
+                    if (typeof $scope.listBienNhanDaChon != "undefined" && $scope.listBienNhanDaChon.items != "" && $scope.listBienNhanDaChon.items.length>0) {
                         if (id != null && id != '') {
                             $scope.phieuNhan.id = id;
                         }
@@ -40,11 +40,11 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                         };
                         var vTGoodsReceiptForm = JSON.stringify($scope.call);
                         console.log(vTGoodsReceiptForm);
-                        $http.post(preUrl + "/phieu-nhan-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
+                        $http.post(preUrl + "/toa-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
                                 .then(function (response) {
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
                                         toastr.success(response.data.messageError);
-                                        window.location.href = preUrl + "/phieu-nhan-hang/list";
+                                        window.location.href = preUrl + "/toa-hang/list";
                                     } else {
                                         toastr.success(response.data.messageError);
                                     }
@@ -53,10 +53,10 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                                 }
                                 );
                     } else {
-                        toastr.success('Chưa chọn danh sách biên nhận!');
+                        toastr.error('Chưa chọn danh sách biên nhận!');
                     }
                 } else {
-                    toastr.success('Chưa nhập mã phiếu nhận hàng!');
+                    toastr.error('Chưa nhập mã phiếu nhận hàng!');
                 }
             }
         };

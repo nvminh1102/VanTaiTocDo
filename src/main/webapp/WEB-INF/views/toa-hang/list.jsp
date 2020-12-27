@@ -9,7 +9,7 @@
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </head>
 
-<script src="<%=request.getContextPath()%>/assets/project/phieu-nhan/list.js${urlCache}" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/assets/project/toa-hang/list.js${urlCache}" type="text/javascript"></script>
 
 <section id="content" ng-app="FrameworkBase"  ng-controller="vantai">
     <section class="vbox background-white">
@@ -157,7 +157,7 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/phieu-nhan-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
+                                <a href="<%=request.getContextPath()%>/toa-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
                             </div>
                         </div>
 
@@ -196,7 +196,7 @@
                                         <td class="text-left v-inherit">{{item.partnerNameReceive}}</td>
                                         <td class="text-left v-inherit">{{item.totalDebt}}</td>
                                         <td class="text-center v-inherit">
-                                            <a  class="btn btn-success btn-sm font-bold" href="<%=request.getContextPath()%>/phieu-nhan-hang/preEdit/{{item.id}}"><i class="fa fa-edit"></i>Sửa</a>
+                                            <a  class="btn btn-success btn-sm font-bold" href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}"><i class="fa fa-edit"></i>Sửa</a>
                                             <a class="deletePhieuNhan btn btn-danger btn-sm font-bold" ng-click="preXoa(item)"<i class="fa fa-times"></i>Xóa</a>
                                         </td>
 

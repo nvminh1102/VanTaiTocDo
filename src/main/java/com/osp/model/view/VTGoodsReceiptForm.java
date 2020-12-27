@@ -10,8 +10,18 @@ import java.util.List;
  */
 public class VTGoodsReceiptForm {
     private VtGoodsReceiptBO vtGoodsReceiptBO;
+    private VtPhieuThuView vtPhieuThuView;
     private List<VtReceiptView> vtReceiptViews;
 
+    public VtPhieuThuView getVtPhieuThuView() {
+        return vtPhieuThuView;
+    }
+
+    public void setVtPhieuThuView(VtPhieuThuView vtPhieuThuView) {
+        this.vtPhieuThuView = vtPhieuThuView;
+    }
+
+    
     public VtGoodsReceiptBO getVtGoodsReceiptBO() {
         return vtGoodsReceiptBO;
     }

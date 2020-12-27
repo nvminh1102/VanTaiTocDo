@@ -1,5 +1,6 @@
 package com.osp.web.dao;
 
+import com.osp.common.DateUtils;
 import com.osp.common.PagingResult;
 import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
@@ -78,13 +79,13 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
                 queryCount.setParameter("fromDelivery", item.getFromDelivery());
             }
             if (item.getToDelivery() != null) {
-                queryCount.setParameter("toDelivery", item.getToDelivery());
+                queryCount.setParameter("toDelivery", DateUtils.addDays(item.getToDelivery(), 1));
             }
             if (item.getFromReceive() != null) {
                 queryCount.setParameter("fromReceipt", item.getFromReceive());
             }
             if (item.getToReceive() != null) {
-                queryCount.setParameter("toReceipt", item.getToReceive());
+                queryCount.setParameter("toReceipt", DateUtils.addDays(item.getToReceive(), 1));
             }
             if (item.getLoaiXe() != null && !item.getLoaiXe().trim().equals("")) {
                 queryCount.setParameter("loaiXe", item.getLoaiXe());
@@ -106,13 +107,13 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
                     queryAll.setParameter("fromDelivery", item.getFromDelivery());
                 }
                 if (item.getToDelivery() != null) {
-                    queryAll.setParameter("toDelivery", item.getToDelivery());
+                    queryAll.setParameter("toDelivery", DateUtils.addDays(item.getToDelivery(), 1));
                 }
                 if (item.getFromReceive() != null) {
                     queryAll.setParameter("fromReceipt", item.getFromReceive());
                 }
                 if (item.getToReceive() != null) {
-                    queryAll.setParameter("toReceipt", item.getToReceive());
+                    queryAll.setParameter("toReceipt", DateUtils.addDays(item.getToReceive(), 1));
                 }
                 if (item.getLoaiXe() != null && !item.getLoaiXe().trim().equals("")) {
                     queryAll.setParameter("loaiXe", item.getLoaiXe());
