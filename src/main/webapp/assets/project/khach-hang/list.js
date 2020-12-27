@@ -79,7 +79,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     });
   };
 
-  $scope.resetValue = function () {
+  $scope.resetValueAdd = function () {
     $scope.info.id = '';
     $scope.info.taxCode = '';
     $scope.info.fullName = '';

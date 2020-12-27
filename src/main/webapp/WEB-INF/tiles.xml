@@ -116,4 +116,8 @@
         <put-attribute name="title" value="Quản lý khách hàng"/>
         <put-attribute name="page" value="/WEB-INF/views/khach-hang/list.jsp" />
     </definition>
+    <definition name="nhaXe.list" extends="default">
+        <put-attribute name="title" value="Quản lý nhà xe"/>
+        <put-attribute name="page" value="/WEB-INF/views/nha-xe/list.jsp" />
+    </definition>
 </tiles-definitions>
