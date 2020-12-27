@@ -115,7 +115,7 @@ public class NhaXeController {
         saveObj.setGenDate(new Date());
         saveObj.setCreatedBy(user.getUsername());
         saveObj.setLastUpdate(new Date());
-        saveObj.setCreatedBy(user.getUsername());
+        saveObj.setUpdatedBy(user.getUsername());
         nhaXeDAO.add(saveObj);
         return new ResponseEntity<String>("0", HttpStatus.OK);
       }
