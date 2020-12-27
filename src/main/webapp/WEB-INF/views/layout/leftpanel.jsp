@@ -149,6 +149,11 @@
                                     <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
                                             class="fa fa-angle-right"></i> <span>Phiêu giao hàng</span> </a></li>
                             </ul>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/khach-hang/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/bienNhan/khach-hang/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Khách hàng</span> </a></li>
+                            </ul>
                         </li>
 
                         <li>

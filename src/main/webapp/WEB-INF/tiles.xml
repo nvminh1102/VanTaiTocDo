@@ -104,5 +104,8 @@
         <put-attribute name="title" value="Chỉnh sửa biên nhận"/>
         <put-attribute name="page" value="/WEB-INF/views/bien-nhan/edit.jsp" />
     </definition>
-
+    <definition name="khachHang.list" extends="default">
+        <put-attribute name="title" value="Quản lý khách hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/khach-hang/list.jsp" />
+    </definition>
 </tiles-definitions>
