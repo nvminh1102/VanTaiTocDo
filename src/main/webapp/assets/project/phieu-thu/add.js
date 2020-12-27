@@ -43,7 +43,6 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                         $http.post(preUrl + "/phieu-nhan-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
                                 .then(function (response) {
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
-                                        toastr.success(response.data.messageError);
                                         window.location.href = preUrl + "/phieu-nhan-hang/list";
                                     } else {
                                         toastr.success(response.data.messageError);

@@ -12,6 +12,7 @@ public interface PhieuNhanHangDAO {
 
     Optional<PagingResult> search(VtGoodsReceipt item, PagingResult page);
     Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user);
+    Boolean delete(Integer id, User user, String ip);
     VTGoodsReceiptForm getVTGoodsReceiptFormById(Integer id);
     Integer getMaxId();
 
