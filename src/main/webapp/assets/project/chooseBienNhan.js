@@ -1,26 +1,24 @@
-app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
+app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $timeout, $q, popupBienNhan) {
         $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: ""};
-        $scope.listBienNhan = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
+        $scope.listBienNhan = [];
+        $scope.listHangHoa = [];
 
         $scope.idSelected = "";
         $scope.checkLoadData = false;
         $scope.numberPerPage = "5";
-        $scope.listBienNhan.numberPerPage = $scope.numberPerPage;
 
         $scope.checked = [];
+        $scope.checkedHH = [];
         $scope.checkAll = false;
+        $scope.checkAllHH = false;
         $scope.selectedItems = [];
+        $scope.selectedItemsHH = [];
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
-        $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0, number: $scope.listBienNhan.numberPerPage}})
+        $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
                 .then(function (response) {
-                    $scope.listBienNhan = response.data;
-                    $scope.listBienNhan.numberPerPage = $scope.numberPerPage;
-                    $scope.listBienNhan.pageCount = getPageCount($scope.listBienNhan);
-                    $scope.listBienNhan.pageList = getPageList($scope.listBienNhan);
+                    $scope.listBienNhan = response.data.items;
                     $scope.tooltip();
                 });
-
-
 
         $scope.clear = function () {
             $scope.searchBienNhan.receiptCode = "";
@@ -36,79 +34,43 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'file
             }, 0);
         };
 
-
-
-// init
-//        $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0, number: $scope.listBienNhan.numberPerPage}})
-//                .then(function (response) {
-//                    $scope.listBienNhan = response.data;
-//                    $scope.listBienNhan.numberPerPage = $scope.numberPerPage;
-//                    $scope.listBienNhan.pageCount = getPageCount($scope.listBienNhan);
-//                    $scope.listBienNhan.pageList = getPageList($scope.listBienNhan);
-//                    $scope.tooltip();
-//                });
-
-        $scope.searchData = function () {
-            $scope.searchBienNhan.basic = 1;
-            $scope.listBienNhan.pageNumber = 1;
-            $scope.loadListData();
-        };
-
         /*reload list*/
         $scope.loadListData = function () {
             var searchBienNhan = JSON.stringify($scope.searchBienNhan);
-            $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0, number: $scope.listBienNhan.numberPerPage}})
+            $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan}})
                     .then(function (response) {
-                        $scope.listBienNhan = response.data;
-
-                        $scope.listBienNhan.numberPerPage = $scope.numberPerPage;
-                        $scope.listBienNhan.pageCount = getPageCount($scope.listBienNhan);
-                        $scope.listBienNhan.pageList = getPageList($scope.listBienNhan);
+                        $scope.listBienNhan = response.data.items;
                         $scope.tooltip();
                     });
         };
-
-        /*reload page*/
-        $scope.loadPageData = function (index) {
-            var searchBienNhan = JSON.stringify($scope.searchBienNhan);
-            $scope.listBienNhan.pageNumber = index;
-            $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: $scope.listBienNhan.numberPerPage * ($scope.listBienNhan.pageNumber - 1), number: $scope.listBienNhan.numberPerPage}})
-                    .then(function (response) {
-                        $scope.listBienNhan.items = response.data.items;
-                        $scope.listBienNhan.numberPerPage = $scope.numberPerPage;
-                        $scope.listBienNhan.pageList = getPageList($scope.listBienNhan);
-                        $scope.tooltip();
-                    });
-        };
-
-        $scope.setNumberPerPage = function (numberPerPage) {
-            $scope.listBienNhan.numberPerPage = numberPerPage;
-            $scope.searchData();
-        };
-
 
         $scope.addListBienNhan = function () {
+            console.log("-----------------------------------");
+            console.log($scope.selectedItems);
             popupBienNhan.setListDataBN($scope.selectedItems);
+            popupBienNhan.setListDataHH($scope.selectedItemsHH);
         };
-
-
-
-
 
 
         $scope.chooseBienNhan = function (objectBienNhan, check) {
             if (check == true) {
 //                $scope.idCallBackManage = id;
-                /* check add luon, validateDL sau
-                 $http.get(preUrl + "/quan-ly-dang-ki-hhcc-va-cap-the-ccv/checkNotaryManage", {params: {idNotary: id}})
-                 .then(function (response) {
-                 if (response.data.success == true) {
-                 $scope.thongBao = response.data.messageError;
-                 $("#popup-message").modal("show");
-                 }
-                 $scope.selectedItems.push($scope.idCallBackManage);
-                 });
-                 */
+                // check add luon, validateDL sau
+                $http.get(preUrl + "/bienNhan/loadListHangHoa", {params: {id: objectBienNhan.id}})
+                        .then(function (response) {
+                            console.log("response.data:");
+                            console.log(response.data);
+                            if (response.data !== "undefined" && response.data !== "[]") {
+//                                var list_ = [];
+                                for (var i = 0; i < response.data.length; i++) {
+//                                    list_.push(response.data[i].id);
+                                    $scope.listHangHoa.push(response.data[i]);
+                                    $scope.selectedItemsHH.push(response.data[i]);
+                                }
+                            }
+                            $scope.selectAllHH(true);
+                        });
+
                 $scope.selectedItems.push(objectBienNhan);
             } else {
                 var idRemove = objectBienNhan.id;
@@ -118,14 +80,43 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'file
                         list_.push($scope.selectedItems[i]);
                     }
                 }
-                $scope.selectedItems = list_;
+                var list2_ = [];
+                for (var i = 0; i < $scope.listHangHoa.length; i++) {
+                    if ($scope.listHangHoa[i].receiptId != idRemove) {
+                        list2_.push($scope.listHangHoa[i]);
+                    }
+                }
+                $scope.listHangHoa = list2_;
             }
-            if ($('.onChangeSelectBox_:checked').length == $('.onChangeSelectBox_').length) {
+            if ($('.onChangeBNSelectBox_:checked').length == $('.onChangeBNSelectBox_').length) {
                 $scope.checkAll = true;
-                $("#select_all").prop('checked', true);
+                $("#select_allBN").prop('checked', true);
             } else {
                 $scope.checkAll = false;
-                $("#select_all").prop('checked', false);
+                $("#select_allBN").prop('checked', false);
+            }
+        };
+
+
+        $scope.chonHH = function (hanghoa, check) {
+            if (check == true) {
+                $scope.selectedItemsHH.push(hanghoa);
+            } else {
+                var idRemove = hanghoa.id;
+                var list_ = [];
+                for (var i = 0; i < $scope.selectedItemsHH.length; i++) {
+                    if ($scope.selectedItemsHH[i].id != idRemove) {
+                        list_.push($scope.selectedItemsHH[i]);
+                    }
+                }
+                $scope.selectedItemsHH = list_;
+            }
+            if ($('.onChangeHHSelectBox_:checked').length == $('.onChangeHHSelectBox_').length) {
+                $scope.checkAll = true;
+                $("#select_allHH").prop('checked', true);
+            } else {
+                $scope.checkAll = false;
+                $("#select_allHH").prop('checked', false);
             }
         };
 
@@ -133,13 +124,27 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$filter', '$window', 'file
         $scope.selectAll = function (checkAll) {
             $scope.selectedItems = [];
             if (checkAll) {
-                for (var i = 0; i < $scope.listBienNhan.items.length; i++) {
-                    $scope.selectedItems.push($scope.listBienNhan.items[i]);
+                for (var i = 0; i < $scope.listBienNhan.length; i++) {
+                    $scope.selectedItems.push($scope.listBienNhan[i]);
                     $scope.checked[i] = true;
                 }
             } else {
-                for (var i = 0; i < $scope.listBienNhan.items.length; i++) {
+                for (var i = 0; i < $scope.listBienNhan.length; i++) {
                     $scope.checked[i] = false;
+                }
+            }
+        };
+
+        $scope.selectAllHH = function (checkAllHH) {
+            $scope.selectedItemsHH = [];
+            if (checkAllHH) {
+                for (var i = 0; i < $scope.listHangHoa.length; i++) {
+                    $scope.selectedItemsHH.push($scope.listHangHoa[i]);
+                    $scope.checkedHH[i] = true;
+                }
+            } else {
+                for (var i = 0; i < $scope.listHangHoa.length; i++) {
+                    $scope.checkedHH[i] = false;
                 }
             }
         };

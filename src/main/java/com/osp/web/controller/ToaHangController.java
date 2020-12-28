@@ -5,11 +5,15 @@ import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
+import com.osp.model.VtReceiptDetail;
+import com.osp.model.VtToaHang;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.model.view.VtGoodsReceiptBO;
 import com.osp.web.dao.PhieuNhanHangDAO;
+import com.osp.web.dao.ToaHangDAO;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +38,7 @@ public class ToaHangController {
     SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
 
     @Autowired
-    PhieuNhanHangDAO phieuNhanHangDAO;
+    ToaHangDAO toaHangDAO;
 //    @Autowired
 //    LogAccessDAO logAccessDao;
 
@@ -45,49 +49,43 @@ public class ToaHangController {
 
     @RequestMapping(value = "/load-list", method = RequestMethod.GET)
     public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String search, @RequestParam @Valid final int offset, @RequestParam @Valid final int number, HttpServletRequest request) {
-        VtGoodsReceipt item = new VtGoodsReceipt();
+        VtToaHang vtToaHang = new VtToaHang();
         PagingResult page = new PagingResult();
         JSONObject searchObject = new JSONObject(search);
         SimpleDateFormat formatterddMMyyyy = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            if (searchObject.has("receiptCode") && !StringUtils.isBlank(searchObject.get("receiptCode").toString())) {
-                item.setReceiptCode(searchObject.get("receiptCode").toString().trim());
-            }
-            if (searchObject.has("fromDelivery") && !StringUtils.isBlank(searchObject.get("fromDelivery").toString())) {
-                item.setFromDelivery(formatterddMMyyyy.parse(searchObject.get("fromDelivery").toString().trim()));
-            }
-            if (searchObject.has("toDelivery") && !StringUtils.isBlank(searchObject.get("toDelivery").toString())) {
-                item.setToDelivery(formatterddMMyyyy.parse(searchObject.get("toDelivery").toString().trim()));
-            }
-            if (searchObject.has("fromReceive") && !StringUtils.isBlank(searchObject.get("fromReceive").toString())) {
-                item.setFromReceive(formatterddMMyyyy.parse(searchObject.get("fromReceive").toString().trim()));
-            }
-            if (searchObject.has("toReceive") && !StringUtils.isBlank(searchObject.get("toReceive").toString())) {
-                item.setToReceive(formatterddMMyyyy.parse(searchObject.get("toReceive").toString().trim()));
-            }
-            if (searchObject.has("truckPartner") && !StringUtils.isBlank(searchObject.get("truckPartner").toString())) {
-                item.setTruckPartnerName(searchObject.get("truckPartner").toString().trim());
-            }
-            if (searchObject.has("loaiXe") && !StringUtils.isBlank(searchObject.get("loaiXe").toString())) {
-                item.setLoaiXe(searchObject.get("loaiXe").toString().trim());
+            if (searchObject.has("toaHangCode") && !StringUtils.isBlank(searchObject.get("toaHangCode").toString())) {
+                vtToaHang.setToaHangCode(searchObject.get("toaHangCode").toString().trim());
             }
             if (searchObject.has("bienSo") && !StringUtils.isBlank(searchObject.get("bienSo").toString())) {
-                item.setBienSo(searchObject.get("bienSo").toString().trim());
+                vtToaHang.setBienSo(searchObject.get("bienSo").toString().trim());
+            }
+            if (searchObject.has("noiDen") && !StringUtils.isBlank(searchObject.get("noiDen").toString())) {
+                vtToaHang.setNoiDen(searchObject.get("noiDen").toString().trim());
+            }
+            if (searchObject.has("noiDi") && !StringUtils.isBlank(searchObject.get("noiDi").toString())) {
+                vtToaHang.setNoiDi(searchObject.get("noiDi").toString().trim());
+            }
+            if (searchObject.has("fromGenDate") && !StringUtils.isBlank(searchObject.get("fromGenDate").toString())) {
+                vtToaHang.setFromGenDate(formatterddMMyyyy.parse(searchObject.get("fromGenDate").toString().trim()));
+            }
+            if (searchObject.has("toGenDate") && !StringUtils.isBlank(searchObject.get("toGenDate").toString())) {
+                vtToaHang.setToGenDate(formatterddMMyyyy.parse(searchObject.get("toGenDate").toString().trim()));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         page.setNumberPerPage(number);
         page.setPageNumber(offset);
-        page = phieuNhanHangDAO.search(item, page).orElse(new PagingResult());
+        page = toaHangDAO.search(vtToaHang, page).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
 
     @GetMapping("/preAdd")
     public String preAdd(HttpServletRequest request) {
-        Integer maxId = phieuNhanHangDAO.getMaxId();
-        String receiptCode = "GH-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
-        request.setAttribute("receiptCode", receiptCode);
+        Integer maxId = toaHangDAO.getMaxId();
+        String toaHangCode = "TOA-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
+        request.setAttribute("toaHangCode", toaHangCode);
         return "toahang.add";
     }
 
@@ -99,15 +97,15 @@ public class ToaHangController {
 
     @RequestMapping(value = "/loadDataEdit", method = RequestMethod.GET)
     public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
-        VTGoodsReceiptForm vTGoodsReceiptForm = phieuNhanHangDAO.getVTGoodsReceiptFormById(id);
+        VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getVTGoodsReceiptFormById(id);
         return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
     }
-
+    
     @PostMapping("/add")
     public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
-        boolean check = phieuNhanHangDAO.add(vTGoodsReceiptForm, user);
+        boolean check = toaHangDAO.add(vTGoodsReceiptForm, user);
         if (check) {
             reponse = new MessReponse(true, 200, "Lưu thành công!");
         } else {
@@ -117,11 +115,11 @@ public class ToaHangController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<String> delete(@RequestBody @Valid final VtGoodsReceiptBO vtGoodsReceiptBO, HttpServletRequest request) {
+    public ResponseEntity<String> delete(@RequestBody @Valid final VtToaHang vtToaHang, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             String ipClient = Utils.getIpClient(request);
-            boolean check = phieuNhanHangDAO.delete(vtGoodsReceiptBO.getId(), user, ipClient);
+            boolean check = toaHangDAO.delete(vtToaHang.getId(), user, ipClient);
             if (check) {
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {

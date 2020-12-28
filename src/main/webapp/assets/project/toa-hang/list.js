@@ -1,6 +1,6 @@
 app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q) {
 
-        $scope.search = {toaHangCode: "", bienSo: "", noiDen: "", noiDi: "", fromGenDate: "", toGenDate: "" };
+        $scope.search = {toaHangCode: "", bienSo: "", noiDen: "", noiDi: "", fromGenDate: "", toGenDate: ""};
         var search = JSON.stringify($scope.search);
         $scope.listData = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
         $scope.checkAll_ = false;
@@ -94,14 +94,14 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
 
         $scope.preXoa = function (item) {
             $scope.delId = item.id;
-            $scope.receiptCode = item.receiptCode;
+            $scope.toaHangCode = item.toaHangCode;
             $("#xoaToaHang").modal("show");
         };
 
         $scope.xoaToaHang = function () {
             var call = {id: $scope.delId};
-            var vtGoodsReceiptBO = JSON.parse(JSON.stringify(call));
-            $http.post(preUrl + "/toa-hang/delete", vtGoodsReceiptBO, {headers: {'Content-Type': 'application/json'}})
+            var vtToaHang = JSON.parse(JSON.stringify(call));
+            $http.post(preUrl + "/toa-hang/delete", vtToaHang, {headers: {'Content-Type': 'application/json'}})
                     .then(function (response) {
                         switch (Number(response.data)) {
                             case 0:
@@ -115,13 +115,6 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                                 break;
                         }
                     });
-        };
-
-
-
-        $scope.delete = function (idAppoint) {
-            $scope.idDelete = idAppoint;
-            $("#confirm-delete").modal("show");
         };
 
         $scope.removeIndexList = function (index, list) {
@@ -144,7 +137,6 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         };
 
         $(document).ready(function () {
-
             $("#fromGenDate").datetimepicker({
                 locale: 'vi-VN',
                 format: 'DD-MM-YYYY'

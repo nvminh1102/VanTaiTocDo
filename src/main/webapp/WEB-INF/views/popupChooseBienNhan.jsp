@@ -56,7 +56,7 @@
 
                 <div class="row form-group text-center">
                     <img class="hidden _custum_searchSuccess" src="<%=request.getContextPath()%>/assets/images/loading.gif" />
-                    <button ng-disabled="_custum_searchSuccess" ng-init="_custum_searchSuccess = false;" type="button" class="btn btn-info btn-s-sm" ng-click="searchData($event);">
+                    <button ng-disabled="_custum_searchSuccess" ng-init="_custum_searchSuccess = false;" type="button" class="btn btn-info btn-s-sm" ng-click="loadListData($event);">
                         <i class="fa fa-search"></i> Tìm kiếm
                     </button>
                     <button style="margin-left: 10px" type="button" class="btn btn-l btn-gray btn-default" ng-click="clear();">Xóa điều kiện</button>
@@ -64,18 +64,12 @@
 
 
                 <div class="row padding" style="padding-top: 0px;">
-                    <label class="input-sm">Tổng số: </label>
-                    <label style="color: red;">{{listBienNhan.rowCount}}</label>
-                    <label class="input-sm">Hiển thị: </label>
-                    <select class="input-sm form-control input-s-sm inline" style="width: 60px;" ng-model="numberPerPage" ng-change="setNumberPerPage(numberPerPage);" ng-init="numberPerPage = '25'">
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="25">25</option>
-                    </select>
+                    <label class="input-sm">Tổng số phiếu nhận hàng: </label>
+                    <label style="color: red;">{{listBienNhan.length}}</label>
                 </div>
 
                 <div class="table-responsive bg-white"  style="overflow-x: auto">
-                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;table-layout: fixed;" ng-switch on="listBienNhan.rowCount">
+                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;table-layout: fixed;" ng-switch on="listBienNhan.length">
                         <thead class="bg-gray">
                             <tr>
                                 <th class="text-center v-inherit text-dark" style="width: 7%;">STT</th>
@@ -87,7 +81,7 @@
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số thùng</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số HD</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
-                                <th class="text-center v-inherit text-dark" style="width: 5%;"><input id="select_all" type="checkbox" ng-model="checkAll" ng-change="selectAll(checkAll)"/></th>
+                                <th class="text-center v-inherit text-dark" style="width: 5%;"><input id="select_allBN" type="checkbox" ng-model="checkAll" ng-change="selectAll(checkAll)"/></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -96,8 +90,8 @@
                                     Không có dữ liệu
                                 </td>
                             </tr>
-                            <tr ng-switch-default ng-repeat="item in listBienNhan.items track by $index">
-                                <td class="text-center v-inherit">{{(listBienNhan.pageNumber>0 ? (listBienNhan.pageNumber - 1):0) * listBienNhan.numberPerPage + $index + 1}}</td>
+                            <tr ng-switch-default ng-repeat="item in listBienNhan track by $index">
+                                <td class="text-center v-inherit">{{$index + 1}}</td>
                                 <td class="text-left v-inherit">{{item.receiptCode}}</td>
                                 <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
                                 <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>
@@ -106,26 +100,55 @@
                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                 <td class="text-center v-inherit">{{item.note}}</td>
-                                <td class="text-center v-inherit"><input type="checkbox" class="onChangeSelectBox_" ng-model="checked[$index]" ng-init="checked[$index] = false" ng-change="chooseBienNhan(item, checked[$index])"/></td>
+                                <td class="text-center v-inherit"><input type="checkbox" class="onChangeBNSelectBox_" ng-model="checked[$index]" ng-init="checked[$index] = false" ng-change="chooseBienNhan(item, checked[$index])"/></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+                    
+               <div class="row padding" style="padding-top: 0px;">
+                    <label class="input-sm">Tổng số hàng hóa: </label>
+                    <label style="color: red;">{{listHangHoa.length}}</label>
+                </div>
 
-                <footer class="panel-footer">
-                    <div class="row">
-                        <div class="p-r-0 col-sm-12 text-right text-center-xs">
-                            <ul class="pagination pagination-sm m-t-none m-b-none">
-                                <li ng-if="listBienNhan.pageNumber > 1"><a href="javascript:void(0)" ng-click="loadPageData(1)">«</a></li>
-                                <li ng-repeat="item in listBienNhan.pageList">
-                                    <a href="javascript:void(0)" ng-if="item == listBienNhan.pageNumber" style="color:mediumvioletred;"> {{item}}</a>
-                                    <a href="javascript:void(0)" ng-if="item != listBienNhan.pageNumber" ng-click="loadPageData(item)"> {{item}}</a>
-                                </li>
-                                <li ng-if="listBienNhan.pageNumber < listBienNhan.pageCount"><a href="javascript:void(0)" ng-click="loadPageData(listBienNhan.pageCount)">»</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </footer>
+                <div class="table-responsive bg-white"  style="overflow-x: auto">
+                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;table-layout: fixed;" ng-switch on="listHangHoa.length">
+                        <thead class="bg-gray">
+                            <tr>
+                                <th class="text-center v-inherit text-dark" style="width: 7%;">STT</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Mã phiếu nhận hàng</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Tên hàng</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Đơn vị tính</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Số lượng</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Trọng lượng</th>
+                                <th class="text-center v-inherit text-dark" style="width: 20%;">Kích thước</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Thành tiền</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
+                                <th class="text-center v-inherit text-dark" style="width: 5%;"><input id="select_allHH" type="checkbox" ng-model="checkAllHH" ng-change="selectAllHH(checkAllHH)"/></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-switch-when="0">
+                                <td colspan="13" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                    Không có dữ liệu
+                                </td>
+                            </tr>
+                            <tr ng-switch-default ng-repeat="item2 in listHangHoa track by $index">
+                                <td class="text-center v-inherit">{{$index + 1}}</td>
+                                <td class="text-left v-inherit">{{item2.receiptCode}}</td>
+                                <td class="text-left v-inherit">{{item2.name}}</td>
+                                <td class="text-center v-inherit">{{item2.unit}}</td>
+                                <td class="text-center v-inherit">{{item2.numbers}}</td>
+                                <td class="text-center v-inherit">{{item2.weight}}</td>
+                                <td class="text-center v-inherit">{{item2.sizes}}</td>
+                                <td class="text-center v-inherit">{{item2.cost}}</td>
+                                <td class="text-center v-inherit">{{item2.note}}</td>
+                                <td class="text-center v-inherit"><input type="checkbox" class="onChangeHHSelectBox_" ng-model="checkedHH[$index]" ng-init="checkedHH[$index] = false" ng-change="chonHH(item2, checkedHH[$index])"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                    
             </div>
             <div class="modal-footer text-center" style="text-align: center;">
                 <button type="button" ng-click="addListBienNhan();" class="btn btn-1 btn-info btn-default" data-dismiss="modal"><i class="fa fa-check"></i>Đồng ý</button>

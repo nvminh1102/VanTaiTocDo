@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -57,6 +58,11 @@ public class VtToaHang implements Serializable {
     private Date lastUpdate;
     @Column(name = "updated_by", length = 200)
     private String updatedBy;
+    
+    @Transient
+    private Date fromGenDate;
+    @Transient
+    private Date toGenDate;
 
     public VtToaHang() {
     }
@@ -193,5 +199,22 @@ public class VtToaHang implements Serializable {
     public String toString() {
         return "com.osp.model.VtToaHang[ id=" + id + " ]";
     }
+
+    public Date getFromGenDate() {
+        return fromGenDate;
+    }
+
+    public void setFromGenDate(Date fromGenDate) {
+        this.fromGenDate = fromGenDate;
+    }
+
+    public Date getToGenDate() {
+        return toGenDate;
+    }
+
+    public void setToGenDate(Date toGenDate) {
+        this.toGenDate = toGenDate;
+    }
+    
     
 }

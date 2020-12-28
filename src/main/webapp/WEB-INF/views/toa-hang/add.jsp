@@ -67,16 +67,12 @@
                                     </div>
                                 </div>
                                 <div class="row" style="margin: 0px;">
-                                    <div class="p-r-0 p-l-0 col-md-6">
-                                        <label class="input-sm">Số bản ghi: </label>
-                                        <label style="color: red;">{{listBienNhanDaChon.rowCount}}</label>
-                                    </div>
-                                    <div class="p-r-0 p-l-0 col-md-6">
+                                    <div class="p-r-0 p-l-0 col-md-12">
                                         <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chonPhieuNhanHang"><i class="fa fa-plus"></i> Chọn phiếu nhận hàng</button>
                                     </div>
                                 </div>
                                 <div class="table-responsive bg-white" style="margin-bottom: 10px;">
-                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.rowCount">
+                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.length">
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark">STT</th>
@@ -98,8 +94,8 @@
                                                     Không có dữ liệu
                                                 </td>
                                             </tr>
-                                            <tr ng-switch-default ng-repeat="item in listBienNhanDaChon.items track by $index">
-                                                <td class="text-center v-inherit" >{{(listBienNhanDaChon.pageNumber - 1) * listBienNhanDaChon.numberPerPage + $index + 1}}</td>
+                                            <tr ng-switch-default ng-repeat="item in listBienNhanDaChon track by $index">
+                                                <td class="text-center v-inherit" >{{$index + 1}}</td>
                                                 <td class="text-center v-inherit">{{item.receiptCode}}</td>
                                                 <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
                                                 <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>

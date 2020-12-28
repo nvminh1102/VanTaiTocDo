@@ -163,7 +163,7 @@ public class BienNhanController {
     }
 
     @RequestMapping(value = "/list-bien-nhan", method = RequestMethod.GET)
-    public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String searchBienNhan, @RequestParam @Valid final int offset, @RequestParam @Valid final int number, HttpServletRequest request) {
+    public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String searchBienNhan, HttpServletRequest request) {
         VtReceipt item = new VtReceipt();
         PagingResult page = new PagingResult();
         JSONObject searchObject = new JSONObject(searchBienNhan);
@@ -187,8 +187,6 @@ public class BienNhanController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        page.setNumberPerPage(number);
-        page.setPageNumber(offset);
         page = bienNhanDAO.page(page, item.getReceiptCode(), item.getNameStock(), item.getFromDeceipt(), item.getToDeceipt(), item.getLoaiXe(), item.getBienSo()).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
@@ -417,5 +415,11 @@ public class BienNhanController {
             info.setStatus(1);
             matHangDAO.add(info);
         }
+    }
+    
+    @RequestMapping(value = "/loadListHangHoa", method = RequestMethod.GET)
+    public ResponseEntity<List<VtReceiptDetail>> loadListHangHoa(@RequestParam @Valid final Integer id) {
+        List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetail(id);
+        return new ResponseEntity<List<VtReceiptDetail>>(vtReceiptDetails, HttpStatus.OK);
     }
 }

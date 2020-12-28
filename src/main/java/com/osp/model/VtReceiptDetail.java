@@ -13,13 +13,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,24 +26,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "vt_receipt_detail")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VtReceiptDetail.findAll", query = "SELECT v FROM VtReceiptDetail v")
-    , @NamedQuery(name = "VtReceiptDetail.findById", query = "SELECT v FROM VtReceiptDetail v WHERE v.id = :id")
-    , @NamedQuery(name = "VtReceiptDetail.findByReceiptId", query = "SELECT v FROM VtReceiptDetail v WHERE v.receiptId = :receiptId")
-    , @NamedQuery(name = "VtReceiptDetail.findByName", query = "SELECT v FROM VtReceiptDetail v WHERE v.name = :name")
-    , @NamedQuery(name = "VtReceiptDetail.findByUnit", query = "SELECT v FROM VtReceiptDetail v WHERE v.unit = :unit")
-    , @NamedQuery(name = "VtReceiptDetail.findByNumbers", query = "SELECT v FROM VtReceiptDetail v WHERE v.numbers = :numbers")
-    , @NamedQuery(name = "VtReceiptDetail.findByWeight", query = "SELECT v FROM VtReceiptDetail v WHERE v.weight = :weight")
-    , @NamedQuery(name = "VtReceiptDetail.findBySizes", query = "SELECT v FROM VtReceiptDetail v WHERE v.sizes = :sizes")
-    , @NamedQuery(name = "VtReceiptDetail.findByCost", query = "SELECT v FROM VtReceiptDetail v WHERE v.cost = :cost")
-    , @NamedQuery(name = "VtReceiptDetail.findByDebt", query = "SELECT v FROM VtReceiptDetail v WHERE v.debt = :debt")
-    , @NamedQuery(name = "VtReceiptDetail.findByDocument", query = "SELECT v FROM VtReceiptDetail v WHERE v.document = :document")
-    , @NamedQuery(name = "VtReceiptDetail.findByNote", query = "SELECT v FROM VtReceiptDetail v WHERE v.note = :note")
-    , @NamedQuery(name = "VtReceiptDetail.findByStatus", query = "SELECT v FROM VtReceiptDetail v WHERE v.status = :status")
-    , @NamedQuery(name = "VtReceiptDetail.findByGenDate", query = "SELECT v FROM VtReceiptDetail v WHERE v.genDate = :genDate")
-    , @NamedQuery(name = "VtReceiptDetail.findByCreatedBy", query = "SELECT v FROM VtReceiptDetail v WHERE v.createdBy = :createdBy")
-    , @NamedQuery(name = "VtReceiptDetail.findByLastUpdate", query = "SELECT v FROM VtReceiptDetail v WHERE v.lastUpdate = :lastUpdate")
-    , @NamedQuery(name = "VtReceiptDetail.findByUpdatedBy", query = "SELECT v FROM VtReceiptDetail v WHERE v.updatedBy = :updatedBy")})
 public class VtReceiptDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -88,6 +67,8 @@ public class VtReceiptDetail implements Serializable {
     @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
+    @Transient
+    private String receiptCode;
     public VtReceiptDetail() {
     }
 
@@ -252,5 +233,14 @@ public class VtReceiptDetail implements Serializable {
     public String toString() {
         return "com.osp.model.VtReceiptDetail[ id=" + id + " ]";
     }
+
+    public String getReceiptCode() {
+        return receiptCode;
+    }
+
+    public void setReceiptCode(String receiptCode) {
+        this.receiptCode = receiptCode;
+    }
+    
     
 }

@@ -76,6 +76,8 @@ public class VtReceipt implements Serializable {
     private Date lastUpdate;
     @Column(name = "updated_by", length = 200)
     private String updatedBy;
+    @Column(name = "tien_da_tra")
+    private Integer tienDaTra;
 
     
     @Transient
@@ -299,6 +301,15 @@ public class VtReceipt implements Serializable {
     public void setToDeceipt(Date toDeceipt) {
         this.toDeceipt = toDeceipt;
     }
+
+    public Integer getTienDaTra() {
+        return tienDaTra;
+    }
+
+    public void setTienDaTra(Integer tienDaTra) {
+        this.tienDaTra = tienDaTra;
+    }
+    
     
     
 }

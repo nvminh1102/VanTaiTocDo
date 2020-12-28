@@ -1,7 +1,7 @@
 package com.osp.model.view;
 
-import com.osp.model.VtGoodsReceiptDetail;
-import com.osp.model.VtReceipt;
+import com.osp.model.VtReceiptDetail;
+import com.osp.model.VtToaHang;
 
 import java.util.List;
 
@@ -11,7 +11,9 @@ import java.util.List;
 public class VTGoodsReceiptForm {
     private VtGoodsReceiptBO vtGoodsReceiptBO;
     private VtPhieuThuView vtPhieuThuView;
+    private VtToaHang vtToaHang;
     private List<VtReceiptView> vtReceiptViews;
+    private List<VtReceiptDetail> vtReceiptDetail;
 
     public VtPhieuThuView getVtPhieuThuView() {
         return vtPhieuThuView;
@@ -38,5 +40,21 @@ public class VTGoodsReceiptForm {
         this.vtReceiptViews = vtReceiptViews;
     }
 
+    public VtToaHang getVtToaHang() {
+        return vtToaHang;
+    }
 
+    public void setVtToaHang(VtToaHang vtToaHang) {
+        this.vtToaHang = vtToaHang;
+    }
+
+    public List<VtReceiptDetail> getVtReceiptDetail() {
+        return vtReceiptDetail;
+    }
+
+    public void setVtReceiptDetail(List<VtReceiptDetail> vtReceiptDetail) {
+        this.vtReceiptDetail = vtReceiptDetail;
+    }
+    
+    
 }
