@@ -3,6 +3,7 @@ package com.osp.web.dao;
 import com.osp.common.PagingResult;
 import com.osp.model.NhaXe;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -144,5 +145,31 @@ public class NhaXeDAOImpl implements NhaXeDAO {
       e.printStackTrace();
     }
     return false;
+  }
+
+  @Override
+  public List<NhaXe> danhSachNhaXe() {
+    List<NhaXe> lst = new ArrayList<>();
+    try {
+      StringBuffer sqlBuffer = new StringBuffer("SELECT a from NhaXe a");
+      Query query = entityManager.createQuery(sqlBuffer.toString());
+      lst = query.getResultList();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return lst;
+  }
+
+  @Override
+  public NhaXe getByBienSo(String bienSo) {
+    try {
+      String sql = " select a from NhaXe a where a.bienSo=:bienSo ";
+      Query query = entityManager.createQuery(sql, NhaXe.class);
+      query.setParameter("bienSo", bienSo);
+      return (NhaXe) query.getSingleResult();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 }

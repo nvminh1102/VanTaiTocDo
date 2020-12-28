@@ -22,6 +22,8 @@ public class VtReceiptView {
   private String bienSo;
   @Column(name = "employee")
   private String employee;
+  @Column(name = "payer")
+  private String payer;
   @Column(name = "ten_nguoi_gui")
   private String tenNguoiGui;
   @Column(name = "dia_chi_nguoi_gui")
@@ -128,5 +130,12 @@ public class VtReceiptView {
     public void setMobileNguoiNhan(String mobileNguoiNhan) {
         this.mobileNguoiNhan = mobileNguoiNhan;
     }
-  
+
+  public String getPayer() {
+    return payer;
+  }
+
+  public void setPayer(String payer) {
+    this.payer = payer;
+  }
 }

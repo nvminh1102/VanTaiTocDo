@@ -16,8 +16,8 @@
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="#">Biên nhận</a></li>
-                <li><a href="#" id="title">Danh sách biên nhận</a></li>
+                <li><a href="#">Phiếu nhận hàng</a></li>
+                <li><a href="#" id="title">Danh sách phiếu nhận hàng</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;">
                 <header class="panel-heading">
@@ -32,7 +32,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="col-md-4">
-                                        <label class="control-label text-dark" style="padding: 0px">Số biên nhận</label>
+                                        <label class="control-label text-dark" style="padding: 0px">Số phiếu nhận</label>
                                     </div>
                                     <div class="col-md-8">
                                         <input ng-model="search.receiptCode" class="form-control input-sm" placeholder="GH­2012­0036"/>
@@ -83,7 +83,7 @@
             <section class="panel panel-default">
                 <header class="panel-heading">
                     <a href="javascript:void(0)"><h4 class="panel-title font-bold" data-toggle="collapse" data-target="#collapseTwo">
-                        DANH SÁCH BIÊN NHẬN
+                        DANH SÁCH PHIẾU NHẬN HÀNG
                     </h4></a>
                 </header>
                 <div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true">
@@ -100,7 +100,7 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/bienNhan/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu biên nhận</a>
+                                <a href="<%=request.getContextPath()%>/bienNhan/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
                             </div>
                         </div>
 
@@ -110,7 +110,7 @@
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số biên nhận</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Kho tiếp nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Nhân viên tiếp nhận</th>
@@ -137,9 +137,9 @@
                                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                     class="glyphicon glyphicon-cog"></i></button>
                                             <ul class="dropdown-menu pull-left" style="width: 230px;">
-                                                <%--<li>--%>
-                                                    <%--<a href="javascript:void(0)" ng-click="onViewAuctionInfo(item)" >Xem chi tiết</a>--%>
-                                                <%--</li>--%>
+                                                <li>
+                                                    <a href="javascript:void(0)" ng-click="exportPhieuNhanHang(item.id)" >In phiếu nhận hàng</a>
+                                                </li>
 
                                                 <li>
                                                     <div class="line line-dashed m-b-none m-t-none"></div>
@@ -168,7 +168,7 @@
                                     <td class="text-left v-inherit">{{item.diaChiNguoiGui}}</td>
                                     <td class="text-left v-inherit">{{item.tenNguoiNhan}}</td>
                                     <td class="text-left v-inherit">{{item.diaChiNguoiNhan}}</td>
-                                    <td class="text-left v-inherit"></td>
+                                    <td class="text-left v-inherit">{{item.payer}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -203,10 +203,10 @@
             <div class="modal-content">
                 <div class="modal-header alert-info">
                     <button type="button" class="btn btn-default close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Xóa biên nhận</h4>
+                    <h4 class="modal-title">Xóa phiếu nhận hàng</h4>
                 </div>
                 <div class="modal-body">
-                    <span>Bạn có chắc chắn muốn xóa biên nhận</span><br/>
+                    <span>Bạn có chắc chắn muốn xóa phiếu nhận</span><br/>
                     <span style="color: #3c763d">{{delReceiptCode}}</span> <span> hay không?</span>
 
                 </div>

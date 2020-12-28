@@ -66,8 +66,13 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (bienSo != null && !bienSo.trim().equals("")) {
                 strWhere.append(" and upper(t.bien_so) = :bienSo");
             }
+<<<<<<< HEAD
 
             StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+=======
+            
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payer,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+>>>>>>> dababc43405abb2379ff489a0e3fa132face5583
                     + " c.MOBILE as mobile_nguoi_nhan  "
                     + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
                     + " where 1=1 ");
@@ -229,6 +234,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
     }
 
     @Override
+<<<<<<< HEAD
     public List<VtReceiptDetail> getListVtReceiptDetail(Integer id) {
         List<VtReceiptDetail> vtReceiptDetails = new ArrayList<>();
         try {
@@ -247,5 +253,16 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             e.printStackTrace();
         }
         return vtReceiptDetails;
+=======
+    public Integer getMaxId() {
+        Integer maxId = 0;
+        try {
+            Query query = entityManager.createQuery(" select max(r.id) from VtReceipt r ");
+            maxId = (Integer) query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return maxId;
+>>>>>>> dababc43405abb2379ff489a0e3fa132face5583
     }
 }

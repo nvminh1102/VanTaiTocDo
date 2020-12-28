@@ -65,25 +65,25 @@
         <section class="scrollable padder" style="background: white;padding-bottom: 200px;">
             <ul class="bg-primary breadcrumb no-border no-radius b-b b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/bienNhan/list">Biên nhận</a></li>
-                <li><a href="#" id="title">Chỉnh sửa biên nhận</a></li>
+                <li><a href="<%=request.getContextPath()%>/bienNhan/list">Phiếu nhận hàng</a></li>
+                <li><a href="#" id="title">Chỉnh sửa phiếu nhận hàng</a></li>
             </ul>
             <%--<div class="m-b-md">--%>
             <%--<span style="color:red">${messageError}</span>--%>
             <%--</div>--%>
 
             <section class="panel panel-default">
-                <header class="panel-heading" style="text-align: center"><h4>CHỈNH SỬA BIÊN NHẬN</h4></header>
+                <header class="panel-heading" style="text-align: center"><h4>CHỈNH SỬA PHIẾU NHẬN HÀNG</h4></header>
                 <div class="panel-body">
                     <form method="post" action="javascript:void(0)"  enctype="multipart/form-data" class="form-horizontal" id="editBienNhanForm" name="editBienNhanForm">
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
                                 <div class="col-sm-2"  style="text-align: right">
-                                    <label>Số biên nhận</label>
+                                    <label>Số phiếu nhận hàng</label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.bienNhan.receiptCode" name="receiptCode" id="receiptCode" maxlength="250"
-                                           class="input-sm form-control"/>
+                                           class="input-sm form-control" readonly/>
                                 </div>
 
                                 <div class="col-sm-2"  style="text-align: right">
@@ -108,6 +108,30 @@
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Loại thanh toán <span style="color: red">*</span></label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="paymentType" id="paymentType" ng-model="info.bienNhan.paymentType">
+                                        <option value="" selected>Loại thanh toán</option>
+                                        <option ng-value="1">Trả trước</option>
+                                        <option ng-value="2">Trả sau</option>
+                                        <option ng-value="3">Công nợ</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-2" style="text-align: right">
+                                    <label>Người thanh toán</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.bienNhan.payer" name="info.bienNhan.payer" id="info.bienNhan.payer" maxlength="250"
+                                           class="input-sm form-control"/>
                                 </div>
                             </div>
                         </div>
@@ -201,18 +225,37 @@
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
                                 <div class="col-sm-2"  style="text-align: right">
+                                    <label>Biển số</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.bienNhan.bienSo" name="bienNhan.bienSo" id="bienNhan.bienSo" maxlength="20"
+                                           class="input-sm form-control"/>
+                                </div>
+                                <div class="col-sm-2"  style="text-align: right">
                                     <label>Nhà xe</label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.bienNhan.nhaXe" name="bienNhan.nhaXe" id="bienNhan.nhaXe" maxlength="250"
                                            class="input-sm form-control"/>
                                 </div>
+                            </div>
+                        </div>
 
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
                                 <div class="col-sm-2"  style="text-align: right">
-                                    <label>Biển số</label>
+                                    <label>Loại xe</label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input ng-model="info.bienNhan.bienSo" name="bienNhan.bienSo" id="bienNhan.bienSo" maxlength="20"
+                                    <input ng-model="info.bienNhan.loaiXe" name="bienNhan.loaiXe" id="bienNhan.loaiXe" maxlength="250"
+                                           class="input-sm form-control"/>
+                                </div>
+
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Nhân viên nhà xe</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.bienNhan.employee" name="bienNhan.employee" id="bienNhan.employee" maxlength="250"
                                            class="input-sm form-control"/>
                                 </div>
                             </div>
