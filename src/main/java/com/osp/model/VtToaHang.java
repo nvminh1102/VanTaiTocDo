@@ -13,36 +13,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author THANH-LOI
+ * @author Admin
  */
 @Entity
 @Table(name = "vt_toa_hang")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VtToaHang.findAll", query = "SELECT v FROM VtToaHang v")
-    , @NamedQuery(name = "VtToaHang.findById", query = "SELECT v FROM VtToaHang v WHERE v.id = :id")
-    , @NamedQuery(name = "VtToaHang.findByToaHangCode", query = "SELECT v FROM VtToaHang v WHERE v.toaHangCode = :toaHangCode")
-    , @NamedQuery(name = "VtToaHang.findByFromWhere", query = "SELECT v FROM VtToaHang v WHERE v.fromWhere = :fromWhere")
-    , @NamedQuery(name = "VtToaHang.findByToWhere", query = "SELECT v FROM VtToaHang v WHERE v.toWhere = :toWhere")
-    , @NamedQuery(name = "VtToaHang.findByBienSo", query = "SELECT v FROM VtToaHang v WHERE v.bienSo = :bienSo")
-    , @NamedQuery(name = "VtToaHang.findByPartnerId", query = "SELECT v FROM VtToaHang v WHERE v.partnerId = :partnerId")
-    , @NamedQuery(name = "VtToaHang.findByNguoiNhan", query = "SELECT v FROM VtToaHang v WHERE v.nguoiNhan = :nguoiNhan")
-    , @NamedQuery(name = "VtToaHang.findByNoiNhan", query = "SELECT v FROM VtToaHang v WHERE v.noiNhan = :noiNhan")
-    , @NamedQuery(name = "VtToaHang.findByGenDate", query = "SELECT v FROM VtToaHang v WHERE v.genDate = :genDate")
-    , @NamedQuery(name = "VtToaHang.findByCreatedBy", query = "SELECT v FROM VtToaHang v WHERE v.createdBy = :createdBy")
-    , @NamedQuery(name = "VtToaHang.findByLastUpdate", query = "SELECT v FROM VtToaHang v WHERE v.lastUpdate = :lastUpdate")
-    , @NamedQuery(name = "VtToaHang.findByUpdatedBy", query = "SELECT v FROM VtToaHang v WHERE v.updatedBy = :updatedBy")})
 public class VtToaHang implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,14 +33,16 @@ public class VtToaHang implements Serializable {
     private Integer id;
     @Column(name = "toa_hang_code", length = 200)
     private String toaHangCode;
-    @Column(name = "from_where", length = 500)
-    private String fromWhere;
-    @Column(name = "to_where" , length = 500)
-    private String toWhere;
+    @Column(name = "noi_di", length = 500)
+    private String noiDi;
+    @Column(name = "noi_den", length = 500)
+    private String noiDen;
     @Column(name = "bien_so", length = 50)
     private String bienSo;
-    @Column(name = "partner_id")
-    private Integer partnerId;
+    @Column(name = "ten_lai_xe", length = 200)
+    private String tenLaiXe;
+    @Column(name = "sdt_lai_xe", length = 20)
+    private String sdtLaiXe;
     @Column(name = "nguoi_nhan", length = 200)
     private String nguoiNhan;
     @Column(name = "noi_nhan", length = 500)
@@ -83,11 +65,6 @@ public class VtToaHang implements Serializable {
         this.id = id;
     }
 
-    public VtToaHang(Integer id, Date genDate) {
-        this.id = id;
-        this.genDate = genDate;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -104,20 +81,20 @@ public class VtToaHang implements Serializable {
         this.toaHangCode = toaHangCode;
     }
 
-    public String getFromWhere() {
-        return fromWhere;
+    public String getNoiDi() {
+        return noiDi;
     }
 
-    public void setFromWhere(String fromWhere) {
-        this.fromWhere = fromWhere;
+    public void setNoiDi(String noiDi) {
+        this.noiDi = noiDi;
     }
 
-    public String getToWhere() {
-        return toWhere;
+    public String getNoiDen() {
+        return noiDen;
     }
 
-    public void setToWhere(String toWhere) {
-        this.toWhere = toWhere;
+    public void setNoiDen(String noiDen) {
+        this.noiDen = noiDen;
     }
 
     public String getBienSo() {
@@ -128,12 +105,20 @@ public class VtToaHang implements Serializable {
         this.bienSo = bienSo;
     }
 
-    public Integer getPartnerId() {
-        return partnerId;
+    public String getTenLaiXe() {
+        return tenLaiXe;
     }
 
-    public void setPartnerId(Integer partnerId) {
-        this.partnerId = partnerId;
+    public void setTenLaiXe(String tenLaiXe) {
+        this.tenLaiXe = tenLaiXe;
+    }
+
+    public String getSdtLaiXe() {
+        return sdtLaiXe;
+    }
+
+    public void setSdtLaiXe(String sdtLaiXe) {
+        this.sdtLaiXe = sdtLaiXe;
     }
 
     public String getNguoiNhan() {

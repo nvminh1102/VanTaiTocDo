@@ -8,7 +8,7 @@
 <script src="<%=request.getContextPath()%>/assets/project/toa-hang/add.js${urlCache}" type="text/javascript"></script>
 <script>
     var id = '${id}';
-    var receiptCode = '${receiptCode}';
+    var toaHangCode = '${toaHangCode}';
 </script>
 <section id="content" ng-app="FrameworkBase"  >
     <section class="vbox background-white">
@@ -27,63 +27,60 @@
                         <form id="formAdd" class="form-horizontal"  data-parsley-validate="true">
                             <div id="collapseSearch" class="panel-collapse collapse in" aria-expanded="true">
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label text-dark">Số phiếu nhận<span style="color: red;">(*)</span></label>
+                                    <label class="col-md-2 control-label text-dark">Số toa hàng<span style="color: red;">(*)</span></label>
                                     <div class="col-md-4">
-                                        <input ng-model="phieuNhan.receiptCode"  data-parsley-required="true"  data-parsley-error-message="Số phiều bắt buộc nhập!!" maxlength="200" class="form-control input-sm"/>
+                                        <input ng-model="toaHang.toaHangCode"  data-parsley-required="true"  data-parsley-error-message="Số phiều bắt buộc nhập!!" maxlength="200" class="form-control input-sm"/>
                                     </div>
-                                    <label class="col-md-2 control-label text-dark">Ngày lập phiếu</label>
+                                    <label class="col-md-2 control-label text-dark">Nơi đi</label>
                                     <div class="col-md-4">
-                                        <div class='input-group date' id="startDate1">
-                                            <input ng-model="phieuNhan.dateReceive" type='text' class="form-control datepickerEnter" id="dateReceive" name="dateReceive"/>
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
+                                        <input ng-model="toaHang.noiDi"  maxlength="500" class="form-control input-sm"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label text-dark">Nhà xe</label>
+                                    <label class="col-md-2 control-label text-dark">Nơi đến</label>
                                     <div class="col-md-4">
-                                        <select id="search_orgNotaryInfoId" class="select2" ng-model="phieuNhan.truckPartnerId" style="width: 100% !important;">
-                                            <option value="">Tất cả</option>
-                                            <option ng-repeat="item in vtPartners" value="{{item.id}}">{{item.fullName}}</option>
-                                        </select>
-                                    </div>
-                                    <label class="col-md-2 control-label text-dark"></label>
-                                    <div class="col-md-4">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label text-dark">Loại xe</label>
-                                    <div class="col-md-4">
-                                        <input ng-model="phieuNhan.loaiXe" maxlength="200" class="form-control input-sm"/>
+                                        <input ng-model="toaHang.noiDen"  maxlength="500" class="form-control input-sm"/>
                                     </div>
                                     <label class="col-md-2 control-label text-dark">Biển số</label>
                                     <div class="col-md-4">
-                                        <input ng-model="phieuNhan.bienSo" maxlength="50" class="form-control input-sm"/>
+                                        <input ng-model="toaHang.bienSo"  maxlength="50" class="form-control input-sm"/>
                                     </div>
                                 </div>
-
-<!--                                <div class="form-group">
-                                    <div class="col-md-12 text-right">
-                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal" data-target="#chooseBienNhan"><i class="fa fa-plus"></i> Chọn biên nhận</button>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label text-dark">Tên lái xe</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.tenLaiXe" maxlength="200" class="form-control input-sm"/>
                                     </div>
-                                </div>-->
+                                    <label class="col-md-2 control-label text-dark">Số điện thoại lái xe</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.sdtLaiXe" maxlength="20" class="form-control input-sm"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label text-dark">Người nhận</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.nguoiNhan" maxlength="200" class="form-control input-sm"/>
+                                    </div>
+                                    <label class="col-md-2 control-label text-dark">Nơi nhận</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.noiNhan" maxlength="500" class="form-control input-sm"/>
+                                    </div>
+                                </div>
                                 <div class="row" style="margin: 0px;">
                                     <div class="p-r-0 p-l-0 col-md-6">
                                         <label class="input-sm">Số bản ghi: </label>
                                         <label style="color: red;">{{listBienNhanDaChon.rowCount}}</label>
                                     </div>
                                     <div class="p-r-0 p-l-0 col-md-6">
-                                    <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chooseBienNhan"><i class="fa fa-plus"></i> Chọn biên nhận</button>
-                                </div>
+                                        <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chonPhieuNhanHang"><i class="fa fa-plus"></i> Chọn phiếu nhận hàng</button>
+                                    </div>
                                 </div>
                                 <div class="table-responsive bg-white" style="margin-bottom: 10px;">
                                     <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.rowCount">
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark">STT</th>
-                                                <th class="text-center v-inherit text-dark">Số biên nhận</th>
+                                                <th class="text-center v-inherit text-dark">Số phiếu nhận</th>
                                                 <th class="text-center v-inherit text-dark">Người gửi</th>
                                                 <th class="text-center v-inherit text-dark">Người nhận</th>
                                                 <th class="text-center v-inherit text-dark">Điện thoại</th>
@@ -121,7 +118,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieuNhan()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
+                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="saveToaHang()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
                                         <a href="<%=request.getContextPath()%>/toa-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>

@@ -31,29 +31,10 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="col-md-4">
-                                            <label class="control-label text-dark" style="padding: 0px">Số phiếu nhận</label>
+                                            <label class="control-label text-dark" style="padding: 0px">Số toa hàng</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input ng-model="search.receiptCode" class="form-control input-sm" placeholder=""/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="col-md-4">
-                                            <label class="control-label text-dark">Nhà xe</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input ng-model="search.truckPartner" class="form-control input-sm" placeholder=""/>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row" style="margin-top:10px;">
-                                    <div class="col-md-6">
-                                        <div class="col-md-4">
-                                            <label class="control-label text-dark">Loại xe</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input id="loaiXe" ng-model="search.loaiXe" class="form-control input-sm" placeholder=""/>
+                                            <input ng-model="search.toaHangCode" class="form-control input-sm" placeholder=""/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -61,7 +42,7 @@
                                             <label class="control-label text-dark">Biển số xe</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <input id="bienSo" ng-model="search.bienSo" class="form-control input-sm" placeholder=""/>
+                                            <input ng-model="search.bienSo" class="form-control input-sm" placeholder=""/>
                                         </div>
                                     </div>
                                 </div>
@@ -69,39 +50,30 @@
                                 <div class="row" style="margin-top:10px;">
                                     <div class="col-md-6">
                                         <div class="col-md-4">
-                                            <label class="control-label text-dark">Ngày gửi hàng</label>
+                                            <label class="control-label text-dark">Nơi đến</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <div class='input-group date' id="startDate1">
-                                                <input ng-model="search.fromDelivery" type='text' class="form-control datepickerEnter" id="fromDelivery" name="fromDelivery" placeholder="dd-MM-yyyy"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
+                                            <input id="loaiXe" ng-model="search.noiDen" class="form-control input-sm" placeholder=""/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="col-md-4">
-
+                                            <label class="control-label text-dark">Nơi đi</label>
                                         </div>
                                         <div class="col-md-8">
-                                            <div class='input-group date' id="startDate1">
-                                                <input ng-model="search.toDelivery" type='text' class="form-control datepickerEnter" id="toDelivery" name="toDelivery" placeholder="dd-MM-yyyy"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
+                                            <input id="bienSo" ng-model="search.noiDi" class="form-control input-sm" placeholder=""/>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row" style="margin-top:10px;">
                                     <div class="col-md-6">
                                         <div class="col-md-4">
-                                            <label class="control-label text-dark">Ngày lập phiếu nhận</label>
+                                            <label class="control-label text-dark">Ngày lập toa</label>
                                         </div>
                                         <div class="col-md-8">
                                             <div class='input-group date' id="startDate1">
-                                                <input ng-model="search.fromReceive" type='text' class="form-control datepickerEnter" id="fromReceive" name="fromReceive" placeholder="dd-MM-yyyy"/>
+                                                <input ng-model="search.fromGenDate" type='text' class="form-control datepickerEnter" id="fromGenDate" name="fromGenDate" placeholder="dd-MM-yyyy"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -113,8 +85,8 @@
 
                                         </div>
                                         <div class="col-md-8">
-                                            <div class='input-group date' id="startDate1">
-                                                <input ng-model="search.toReceive" type='text' class="form-control datepickerEnter" id="toReceive" name="toReceive" placeholder="dd-MM-yyyy"/>
+                                            <div class='input-group date' id="startDate2">
+                                                <input ng-model="search.toGenDate" type='text' class="form-control datepickerEnter" id="toGenDate" name="toGenDate" placeholder="dd-MM-yyyy"/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -140,7 +112,7 @@
             <section class="panel panel-default">
                 <header class="panel-heading">
                     <a href="javascript:void(0)"><h4 class="panel-title font-bold" data-toggle="collapse" data-target="#collapseTwo">
-                            DANH SÁCH PHIẾU NHẬN HÀNG
+                            DANH SÁCH TOA HÀNG
                         </h4></a>
                 </header>
                 <div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true">
@@ -157,7 +129,7 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/toa-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
+                                <a href="<%=request.getContextPath()%>/toa-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm toa hàng</a>
                             </div>
                         </div>
 
@@ -166,16 +138,16 @@
                                 <thead class="bg-gray">
                                     <tr>
                                         <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày lập phiếu</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Nhà xe</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Loại xe</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Biển số xe</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày chạy</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Người giao</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Người lập</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Tổng tiền phải thu</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Số toa</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày lập toa</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Nơi đến</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Nơi đi</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Biển số xe</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Tên lái xe</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Nơi nhận</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Tổng tiền phải thu</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -186,20 +158,36 @@
                                     </tr>
                                     <tr ng-switch-default ng-repeat="item in listData.items track by $index">
                                         <td class="text-center v-inherit" >{{(listData.pageNumber > 0 ? (listData.pageNumber - 1): 0) * listData.numberPerPage + $index + 1}}</td>
-                                        <td class="text-left v-inherit">{{item.receiptCode}}</td>
-                                        <td class="text-center v-inherit">{{item.dateReceive|date:'dd/MM/yyyy'}}</td>
-                                        <td class="text-left v-inherit">{{item.truckPartnerName}}</td>
-                                        <td class="text-left v-inherit">{{item.loaiXe}}</td>
-                                        <td class="text-left v-inherit">{{item.bienSo}}</td>
-                                        <td class="text-center v-inherit">{{item.dateReceive|date:'dd/MM/yyyy'}}</td>
-                                        <td class="text-left v-inherit">{{item.partnerNameDelivery}}</td>
-                                        <td class="text-left v-inherit">{{item.partnerNameReceive}}</td>
-                                        <td class="text-left v-inherit">{{item.totalDebt}}</td>
-                                        <td class="text-center v-inherit">
-                                            <a  class="btn btn-success btn-sm font-bold" href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}"><i class="fa fa-edit"></i>Sửa</a>
-                                            <a class="deletePhieuNhan btn btn-danger btn-sm font-bold" ng-click="preXoa(item)"<i class="fa fa-times"></i>Xóa</a>
-                                        </td>
+                                        <td class="text-center">
+                                        <div class="btn-group">
+                                            <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
+                                                    class="glyphicon glyphicon-cog"></i></button>
+                                            <ul class="dropdown-menu pull-left" style="width: 230px;">
+                                                <li>
+                                                    <div class="line line-dashed m-b-none m-t-none"></div>
+                                                    <a href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}">
+                                                        Chỉnh sửa
+                                                    </a>
+                                                </li>
 
+                                                <li>
+                                                    <div class="line line-dashed m-b-none m-t-none"></div>
+                                                    <a href="#" ng-click="preXoa(item)">
+                                                        Xóa
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                        <td class="text-left v-inherit">{{item.toaHangCode}}</td>
+                                        <td class="text-center v-inherit">{{item.genDate|date:'dd/MM/yyyy'}}</td>
+                                        <td class="text-left v-inherit">{{item.noiDen}}</td>
+                                        <td class="text-left v-inherit">{{item.noiDi}}</td>
+                                        <td class="text-left v-inherit">{{item.bienSo}}</td>
+                                        <td class="text-left v-inherit">{{item.tenLaiXe}}</td>
+                                        <td class="text-left v-inherit">{{item.nguoiNhan}}</td>
+                                        <td class="text-left v-inherit">{{item.noiNhan}}</td>
+                                        <td class="text-left v-inherit">{{item.totalDebt}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -229,8 +217,8 @@
         </section>
     </section>
 
-    <div class="modal fade" id="xoaPhieuNhan" tabindex="-1" role="dialog"
-         aria-labelledby="xoaPhieuNhan" aria-hidden="true" aria-label="Close">
+    <div class="modal fade" id="xoaToaHang" tabindex="-1" role="dialog"
+         aria-labelledby="xoaToaHang" aria-hidden="true" aria-label="Close">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header alert-info">
@@ -238,12 +226,11 @@
                     <h4 class="modal-title">Xóa phiếu nhận</h4>
                 </div>
                 <div class="modal-body">
-                    <span>Bạn có chắc chắn muốn xóa phiếu nhận </span><br/>
-                    <span style="color: #3c763d">{{receiptCode}}</span> <span> hay không?</span>
+                    <span>Bạn có chắc chắn muốn xóa phiếu nhận </span><span style="color: #3c763d">{{toaHangCode}}</span> <span> hay không?</span>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="xoaPhieuNhan()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="xoaToaHang()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
                 </div>
             </div>

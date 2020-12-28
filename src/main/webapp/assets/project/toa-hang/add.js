@@ -1,7 +1,6 @@
 app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q, popupBienNhan) {
-        console.log("1121212121");
         $scope.listBienNhanDaChon = {items: "", rowCount: 0, numberPerPage: 5, pageNumber: 1, pageList: [], pageCount: 0};
-        $scope.phieuNhan = {receiptCode: "", dateReceive: "", strDateDelivery: "", strDateReceive: "", truckPartnerId: "", loaiXe: "", bienSo: ""};
+        $scope.toaHang = {toaHangCode: "", noiDi: "", noiDen: "", bienSo: "", tenLaiXe: "", sdtLaiXe: "", nguoiNhan: "", noiNhan:""};
         $scope.numberPerPage = "5";
         $scope.listBienNhanDaChon.numberPerPage = $scope.numberPerPage;
         $scope.listBienNhanDaChon = popupBienNhan.getListDataBN();
@@ -10,15 +9,14 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                 .then(function (response) {
                     $scope.vtPartners = response.data;
                 });
-        if (receiptCode != null && receiptCode != '') {
-            $scope.phieuNhan.receiptCode = receiptCode;
+        if (toaHangCode != null && toaHangCode != '') {
+            $scope.toaHang.toaHangCode = toaHangCode;
         }
 
         if (id != null && id != '') {
             $http.get(preUrl + "/toa-hang/loadDataEdit", {params: {id: id}})
                     .then(function (response) {
-                        $scope.phieuNhan = response.data.vtGoodsReceiptBO;
-                        $scope.phieuNhan.dateReceive = response.data.vtGoodsReceiptBO.strDateReceive;
+                        $scope.toaHang = response.data.vtGoodsReceiptBO;
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
                             $scope.listBienNhanDaChon.items = response.data.vtReceiptViews;
                             $scope.listBienNhanDaChon.rowCount = response.data.vtReceiptViews.length;
@@ -26,16 +24,16 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                     });
         }
 
-        $scope.savePhieuNhan = function () {
+        $scope.saveToaHang = function () {
             if ($("#formAdd").parsley().validate()) {
-                if (typeof $scope.phieuNhan != "undefined" && typeof $scope.phieuNhan.receiptCode != 'undefined') {
+                if (typeof $scope.toaHang != "undefined" && typeof $scope.toaHang.toaHangCode != 'undefined') {
                     console.log($scope.listBienNhanDaChon);
                     if (typeof $scope.listBienNhanDaChon != "undefined" && $scope.listBienNhanDaChon.items != "" && $scope.listBienNhanDaChon.items.length>0) {
                         if (id != null && id != '') {
-                            $scope.phieuNhan.id = id;
+                            $scope.toaHang.id = id;
                         }
                         $scope.call = {
-                            vtGoodsReceiptBO: angular.copy($scope.phieuNhan),
+                            vtGoodsReceiptBO: angular.copy($scope.toaHang),
                             vtReceiptViews: angular.copy($scope.listBienNhanDaChon.items)
                         };
                         var vTGoodsReceiptForm = JSON.stringify($scope.call);
@@ -60,20 +58,6 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                 }
             }
         };
-        $(document).ready(function () {
-            console.log("vào")
-            $("#dateReceive").datetimepicker({
-                locale: 'vi-VN',
-                format: 'DD-MM-YYYY'
-            }).on('dp.change', function (e) {
-                if (e != null) {
-                    $scope.phieuNhan.strDateDelivery = $(this).val();
-                    $scope.phieuNhan.strDateReceive = $(this).val();
-                }
-            });
-        });
-
-
         /*load tooltip*/
         $scope.tooltip = function () {
             var defer = $q.defer();

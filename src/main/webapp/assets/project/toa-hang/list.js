@@ -1,32 +1,24 @@
 app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q) {
 
-        $scope.search = {basic: 0, receiptCode: "", truckPartner: "", loaiXe: "", bienSo: "", fromDelivery: "", toDelivery: "", fromReceive: "", toReceive: ""};
+        $scope.search = {toaHangCode: "", bienSo: "", noiDen: "", noiDi: "", fromGenDate: "", toGenDate: "" };
         var search = JSON.stringify($scope.search);
         $scope.listData = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
         $scope.checkAll_ = false;
 
         $scope.clear = function () {
-            $scope.search.basic = 0;
-            $scope.search.receiptCode = "";
-            $scope.search.truckPartner = "";
-            $scope.search.loaiXe = "";
+            $scope.search.toaHangCode = "";
             $scope.search.bienSo = "";
-            $scope.search.fromDelivery = "";
-            $scope.search.toDelivery = "";
-            $scope.search.fromReceive = "";
-            $scope.search.toReceive = "";
-            $("#fromDelivery").data("DateTimePicker").date(null);
-            $("#toDelivery").data("DateTimePicker").date(null);
-            $("#fromReceive").data("DateTimePicker").date(null);
-            $("#toReceive").data("DateTimePicker").date(null);
+            $scope.search.noiDen = "";
+            $scope.search.noiDi = "";
+            $scope.search.fromGenDate = "";
+            $scope.search.toGenDate = "";
+            $("#fromGenDate").data("DateTimePicker").date(null);
+            $("#toGenDate").data("DateTimePicker").date(null);
             $timeout(function () {
-                $('#fromDelivery').data("DateTimePicker").maxDate(moment("01/01/9999999999", "DD-MM-YYYY").toDate());
-                $('#toDelivery').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
-                $('#fromReceive').data("DateTimePicker").maxDate(moment("01/01/9999999999", "DD-MM-YYYY").toDate());
-                $('#toReceive').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
+                $('#fromGenDate').data("DateTimePicker").maxDate(moment("01/01/9999999999", "DD-MM-YYYY").toDate());
+                $('#toGenDate').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
             }, 0);
         };
-
 
         $http.get(preUrl + "/toa-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                 .then(function (response) {
@@ -103,10 +95,10 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         $scope.preXoa = function (item) {
             $scope.delId = item.id;
             $scope.receiptCode = item.receiptCode;
-            $("#xoaPhieuNhan").modal("show");
+            $("#xoaToaHang").modal("show");
         };
 
-        $scope.xoaPhieuNhan = function () {
+        $scope.xoaToaHang = function () {
             var call = {id: $scope.delId};
             var vtGoodsReceiptBO = JSON.parse(JSON.stringify(call));
             $http.post(preUrl + "/toa-hang/delete", vtGoodsReceiptBO, {headers: {'Content-Type': 'application/json'}})
@@ -114,11 +106,11 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                         switch (Number(response.data)) {
                             case 0:
                                 $scope.loadListData();
-                                $("#xoaPhieuNhan").modal("hide");
+                                $("#xoaToaHang").modal("hide");
                                 toastr.success("Xóa thành công!");
                                 break;
                             case 1:
-                                $("#xoaPhieuNhan").modal("hide");
+                                $("#xoaToaHang").modal("hide");
                                 toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");
                                 break;
                         }
@@ -152,58 +144,27 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         };
 
         $(document).ready(function () {
-            $(".deletePhieuNhan").click(function () {
-                alert("delete");
-                var id = $(this).data('item.id');
-                var name = $(this).data('item.name');
-                console.log(id);
-                console.log(name);
-                $(".info_id").val(id);
-                $(".modal-title").text('Xóa phiếu nhận "' + name + '"');
-            });
 
-
-            $("#fromDelivery").datetimepicker({
+            $("#fromGenDate").datetimepicker({
                 locale: 'vi-VN',
                 format: 'DD-MM-YYYY'
             }).on('dp.change', function (e) {
                 if (e != null) {
-                    $scope.search.fromDelivery = $(this).val();
-                    if ($('#fromDelivery').val() != "")
-                        $('#toDelivery').data("DateTimePicker").minDate(moment($('#fromDelivery').val(), "DD-MM-YYYY").toDate());
+                    $scope.search.fromGenDate = $(this).val();
+                    if ($('#fromGenDate').val() != "")
+                        $('#toGenDate').data("DateTimePicker").minDate(moment($('#fromGenDate').val(), "DD-MM-YYYY").toDate());
                 }
             });
-            $("#toDelivery").datetimepicker({
+            $("#toGenDate").datetimepicker({
                 locale: 'vi-VN',
                 format: 'DD-MM-YYYY'
             }).on('dp.change', function (e) {
                 if (e != null) {
-                    $scope.search.toDelivery = $(this).val();
-                    if ($('#toDelivery').val() != "")
-                        $('#fromDelivery').data("DateTimePicker").maxDate(moment($('#toDelivery').val(), "DD-MM-YYYY").toDate());
+                    $scope.search.toGenDate = $(this).val();
+                    if ($('#toGenDate').val() != "")
+                        $('#fromGenDate').data("DateTimePicker").maxDate(moment($('#toGenDate').val(), "DD-MM-YYYY").toDate());
                 }
             });
-            $("#fromReceive").datetimepicker({
-                locale: 'vi-VN',
-                format: 'DD-MM-YYYY'
-            }).on('dp.change', function (e) {
-                if (e != null) {
-                    $scope.search.fromReceive = $(this).val();
-                    if ($('#fromReceive').val() != "")
-                        $('#toReceive').data("DateTimePicker").minDate(moment($('#fromReceive').val(), "DD-MM-YYYY").toDate());
-                }
-            });
-            $("#toReceive").datetimepicker({
-                locale: 'vi-VN',
-                format: 'DD-MM-YYYY'
-            }).on('dp.change', function (e) {
-                if (e != null) {
-                    $scope.search.toReceive = $(this).val();
-                    if ($('#toReceive').val() != "")
-                        $('#fromReceive').data("DateTimePicker").maxDate(moment($('#toReceive').val(), "DD-MM-YYYY").toDate());
-                }
-            });
-
         });
 
     }]);

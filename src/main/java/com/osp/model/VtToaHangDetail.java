@@ -13,32 +13,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author THANH-LOI
+ * @author Admin
  */
 @Entity
 @Table(name = "vt_toa_hang_detail")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VtToaHangDetail.findAll", query = "SELECT v FROM VtToaHangDetail v")
-    , @NamedQuery(name = "VtToaHangDetail.findById", query = "SELECT v FROM VtToaHangDetail v WHERE v.id = :id")
-    , @NamedQuery(name = "VtToaHangDetail.findByToaHangId", query = "SELECT v FROM VtToaHangDetail v WHERE v.toaHangId = :toaHangId")
-    , @NamedQuery(name = "VtToaHangDetail.findByReceiptId", query = "SELECT v FROM VtToaHangDetail v WHERE v.receiptId = :receiptId")
-    , @NamedQuery(name = "VtToaHangDetail.findByFileAttach", query = "SELECT v FROM VtToaHangDetail v WHERE v.fileAttach = :fileAttach")
-    , @NamedQuery(name = "VtToaHangDetail.findByGenDate", query = "SELECT v FROM VtToaHangDetail v WHERE v.genDate = :genDate")
-    , @NamedQuery(name = "VtToaHangDetail.findByCreatedBy", query = "SELECT v FROM VtToaHangDetail v WHERE v.createdBy = :createdBy")
-    , @NamedQuery(name = "VtToaHangDetail.findByLastUpdate", query = "SELECT v FROM VtToaHangDetail v WHERE v.lastUpdate = :lastUpdate")
-    , @NamedQuery(name = "VtToaHangDetail.findByUpdatedBy", query = "SELECT v FROM VtToaHangDetail v WHERE v.updatedBy = :updatedBy")})
 public class VtToaHangDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,6 +37,8 @@ public class VtToaHangDetail implements Serializable {
     private Integer toaHangId;
     @Column(name = "receipt_id")
     private Integer receiptId;
+    @Column(name = "vt_receipt_detail_id")
+    private Integer vtReceiptDetailId;
     @Column(name = "file_attach", length = 200)
     private String fileAttach;
     @Column(name = "gen_date")
@@ -69,11 +57,6 @@ public class VtToaHangDetail implements Serializable {
 
     public VtToaHangDetail(Integer id) {
         this.id = id;
-    }
-
-    public VtToaHangDetail(Integer id, Date genDate) {
-        this.id = id;
-        this.genDate = genDate;
     }
 
     public Integer getId() {
@@ -98,6 +81,14 @@ public class VtToaHangDetail implements Serializable {
 
     public void setReceiptId(Integer receiptId) {
         this.receiptId = receiptId;
+    }
+
+    public Integer getVtReceiptDetailId() {
+        return vtReceiptDetailId;
+    }
+
+    public void setVtReceiptDetailId(Integer vtReceiptDetailId) {
+        this.vtReceiptDetailId = vtReceiptDetailId;
     }
 
     public String getFileAttach() {
