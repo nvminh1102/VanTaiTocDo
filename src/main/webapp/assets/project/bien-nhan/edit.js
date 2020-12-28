@@ -1,6 +1,9 @@
 
 app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($scope, $http, fileUpload) {
   $scope.info = {};
+    $scope.info.bienNhan = {receiptCode: "", nameStock: "", dateReceipt: "", paymentType: "", payer: "", nhaXe: "", bienSo: "", loaiXe: "", employee: ""};
+    $scope.info.nguoiGui = {taxCode: "", fullName: "", mobile: "", address: ""};
+    $scope.info.nguoiNhan = {taxCode: "", fullName: "", mobile: "", address: ""};
   $scope.info.property = [];
   $scope.titleModal = 'ADD';
   var arrIdDelete = [];
@@ -126,33 +129,40 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     };
 
     $scope.saveAuctionInfo = function () {
-        document.getElementById("btnSaveAuctionInfo").disabled = true;
         if ($('#receiptCode').val() == '') {
-            toastr.error("Số biên nhận không được để trống!");
+            toastr.error("Số phiếu nhận hàng không được để trống!");
             document.getElementById("receiptCode").focus();
             return false;
         } else if ($('#nameStock').val() == '') {
             toastr.error("Kho nhận không được để trống!");
             document.getElementById("nameStock").focus();
             return false;
-        } else if ($('#nguoiGui.taxCode').val() == '') {
+        } else if ($('#paymentType').val() == '') {
+            toastr.error("Bạn chưa chọn loại thanh toán!");
+            document.getElementById("paymentType").focus();
+            return false;
+        } else if ($scope.info.nguoiGui.taxCode == '') {
             toastr.error("MST/CMND người gửi không được để trống!");
             document.getElementById("nguoiGui.taxCode").focus();
             return false;
-        } else if ($('#nguoiGui.fullName').val() == '') {
+        } else if ($scope.info.nguoiGui.fullName == '') {
             toastr.error("Tên người gửi không được để trống!");
             document.getElementById("nguoiGui.fullName").focus();
             return false;
-        } else if ($('#nguoiNhan.taxCode').val() == '') {
+        } else if ($scope.info.nguoiNhan.taxCode == '') {
             toastr.error("MST/CMND người nhận không được để trống!");
             document.getElementById("nguoiNhan.taxCode").focus();
             return false;
-        } else if ($('#nguoiNhan.fullName').val() == '') {
+        } else if ($scope.info.nguoiNhan.fullName == '') {
             toastr.error("Tên người nhận không được để trống!");
             document.getElementById("nguoiNhan.fullName").focus();
             return false;
         }
-        $scope.info.bienNhan.dateReceipt = stringToDate($("#dateReceipt").val(), "dd/mm/yyyy", "/");
+        document.getElementById("btnSaveAuctionInfo").disabled = true;
+        if ($scope.info.nguoiGui.dateReceipt != '') {
+            $scope.info.bienNhan.dateReceipt = stringToDate($("#dateReceipt").val(), "dd/mm/yyyy", "/");
+
+        }
         var info = {
             bienNhan: $scope.info.bienNhan,
             nguoiGui: $scope.info.nguoiGui,
@@ -175,7 +185,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
                 switch (Number(response.data)) {
                     case 1:
                         document.getElementById("btnSaveAuctionInfo").disabled = false;
-                        toastr.success("Chỉnh sửa phiếu biên nhận thành công!");
+                        toastr.success("Chỉnh sửa phiếu nhận hàng thành công!");
                         break;
                     case 0:
                         toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");

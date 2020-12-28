@@ -6,6 +6,7 @@
 package com.osp.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -82,7 +83,6 @@ public class VtReceipt implements Serializable {
     private Date fromDeceipt;
     @Transient
     private Date toDeceipt;
-    
     
     public VtReceipt() {
     }
@@ -299,6 +299,5 @@ public class VtReceipt implements Serializable {
     public void setToDeceipt(Date toDeceipt) {
         this.toDeceipt = toDeceipt;
     }
-    
-    
+
 }

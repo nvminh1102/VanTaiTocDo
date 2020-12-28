@@ -102,5 +102,9 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         $('#frmEdit').submit();
     }
 
+    $scope.exportPhieuNhanHang = function (giaoHangId) {
+        window.open(preUrl+"/bienNhan/exportExcelPhieuNhan?giaoHangId=" + giaoHangId , '_blank');
+    }
+
 
     }]);

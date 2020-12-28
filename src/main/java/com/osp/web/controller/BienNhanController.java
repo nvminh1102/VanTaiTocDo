@@ -1,51 +1,58 @@
 package com.osp.web.controller;
 
+import com.osp.common.ConstantAuthor;
 import com.osp.common.Constants;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
-import com.osp.model.User;
-import com.osp.model.VtPartner;
-import com.osp.model.VtReceipt;
-import com.osp.model.VtReceiptDetail;
+import com.osp.model.*;
 import com.osp.model.view.BienNhanForm;
 import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.KhachHangDAO;
 import com.osp.web.dao.MatHangDAO;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
-import org.apache.commons.fileupload.FileUpload;
+import com.osp.web.dao.NhaXeDAO;
+import net.sf.jett.transform.ExcelTransformer;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.InputStream;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @RequestMapping("/bienNhan")
 public class BienNhanController {
-    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    private SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
+    private final String templatePhieuNhanHang = "/fileTemplate/templatePhieuNhanHang.xlsx";
     @Autowired
     BienNhanDAO bienNhanDAO;
     @Autowired
     KhachHangDAO khachHangDAO;
     @Autowired
     MatHangDAO matHangDAO;
+    @Autowired
+    NhaXeDAO nhaXeDAO;
 
     @GetMapping("/preAdd")
-    public String list() {
+    public String list(Model model) {
+        Integer maxId = bienNhanDAO.getMaxId();
+        String receiptCode = "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
+        model.addAttribute("receiptCode", receiptCode);
         return "bienNhan.add";
     }
 
@@ -107,13 +114,15 @@ public class BienNhanController {
             bienNhan.setDateReceipt(item.getBienNhan().getDateReceipt());
             bienNhan.setDatepushStock(new Date());
             // 1 trả trước, 2 trả sau, 3 công nợ
-            bienNhan.setPaymentType(1);
+            bienNhan.setPaymentType(item.getBienNhan().getPaymentType());
             bienNhan.setPayer(item.getBienNhan().getPayer());
             bienNhan.setTaxCode(item.getBienNhan().getTaxCode());
             bienNhan.setNhaXe(item.getBienNhan().getNhaXe());
             bienNhan.setBienSo(item.getBienNhan().getBienSo());
+            bienNhan.setLoaiXe(item.getBienNhan().getLoaiXe());
             bienNhan.setEmployee(item.getBienNhan().getEmployee());
             //Nhận hàng
+            //1: Nhận hàng, 2: Nhập kho, 3: Đang giao, 4: Đã giao hàng
             bienNhan.setStatus(1);
             bienNhan.setFileAttach(item.getBienNhan().getFileAttach());
             bienNhan.setGenDate(new Date());
@@ -303,6 +312,7 @@ public class BienNhanController {
 
     @PostMapping(value = "/chinh-sua-bien-nhan")
     public ResponseEntity<String> editAuctionInfo(@RequestBody BienNhanForm item, HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         VtReceipt bienNhanCu = bienNhanDAO.getById(item.getBienNhan().getId());
         List<VtReceiptDetail> propertyList = item.getMatHang();
         try {
@@ -364,13 +374,18 @@ public class BienNhanController {
             }
 
             bienNhanCu.setLastUpdate(new Date());
-            bienNhanCu.setReceiptCode(item.getBienNhan().getReceiptCode().trim());
+//            bienNhanCu.setReceiptCode(item.getBienNhan().getReceiptCode().trim());
             bienNhanCu.setNameStock(item.getBienNhan().getNameStock().trim());
             bienNhanCu.setDateReceipt(item.getBienNhan().getDateReceipt());
+            bienNhanCu.setPaymentType(item.getBienNhan().getPaymentType());
+            bienNhanCu.setPayer(item.getBienNhan().getPayer());
             bienNhanCu.setDeliveryPartnerId(item.getBienNhan().getDeliveryPartnerId());
             bienNhanCu.setReceivePartnerId(item.getBienNhan().getReceivePartnerId());
             bienNhanCu.setNhaXe(item.getBienNhan().getNhaXe());
             bienNhanCu.setBienSo(item.getBienNhan().getBienSo());
+            bienNhanCu.setLoaiXe(item.getBienNhan().getLoaiXe());
+            bienNhanCu.setEmployee(item.getBienNhan().getEmployee());
+            bienNhanCu.setUpdatedBy(user.getUsername());
             boolean blUpdate = bienNhanDAO.edit(bienNhanCu);
 
             if (blUpdate) {
@@ -416,6 +431,76 @@ public class BienNhanController {
             //1 nhận hàng, 2 nhập kho, 3 đang giao, 4 đã giao
             info.setStatus(1);
             matHangDAO.add(info);
+        }
+    }
+
+    @GetMapping("/danhSachNhaXe")
+    public ResponseEntity<List> danhSachNhaXe() {
+        return new ResponseEntity<>(nhaXeDAO.danhSachNhaXe(), HttpStatus.OK);
+    }
+
+    @GetMapping("/thongTinNhaXe")
+    public ResponseEntity<NhaXe> thongTinNhaXe(@RequestParam(value = "bienSo", required = true) String bienSo,
+                                               HttpServletRequest request) {
+        NhaXe nhaXe = new NhaXe();
+        try {
+            nhaXe = nhaXeDAO.getByBienSo(bienSo.trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new ResponseEntity<NhaXe>(nhaXe, HttpStatus.OK);
+    }
+
+    @GetMapping("/exportExcelPhieuNhan")
+//    @Secured(ConstantAuthor.PublishAuctionTc.view)
+    public void exportExcel(HttpServletResponse response, HttpServletRequest request,
+                            @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
+        PagingResult page = new PagingResult();
+        page.setPageNumber(1);
+        VtReceipt phieuNhanHang = new VtReceipt();
+        VtPartner nguoiGui = new VtPartner();
+        VtPartner nguoiNhan = new VtPartner();
+        String typePayment = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+//            Calendar cal = Calendar.getInstance();
+//            int day = cal.get(Calendar.DATE);
+//            int month = cal.get(Calendar.MONTH) + 1;
+//            int year = cal.get(Calendar.YEAR);
+            phieuNhanHang = bienNhanDAO.getById(giaoHangId);
+            if (phieuNhanHang.getPaymentType() == 1) {
+                typePayment = "Trả trước";
+            } else if (phieuNhanHang.getPaymentType() == 2) {
+                typePayment = "Trả sau";
+            } else {
+                typePayment = "Công nợ";
+            }
+            nguoiGui = khachHangDAO.getById(phieuNhanHang.getDeliveryPartnerId());
+            nguoiNhan = khachHangDAO.getById(phieuNhanHang.getReceivePartnerId());
+            page.setItems(matHangDAO.getDsMatHang(giaoHangId));
+            Map<String, Object> beans = new HashMap<String, Object>();
+            if (phieuNhanHang.getDateReceipt() != null) {
+                beans.put("ngayNhanHang", sdf.format(phieuNhanHang.getDateReceipt()));
+            }
+            beans.put("phieuNhanHang", phieuNhanHang);
+            beans.put("nguoiGui", nguoiGui);
+            beans.put("loaiThanhToan", typePayment);
+            beans.put("nguoiNhan", nguoiNhan);
+            beans.put("page", page);
+            Resource resource = new ClassPathResource(templatePhieuNhanHang);
+            InputStream fileIn = resource.getInputStream();
+            ExcelTransformer transformer = new ExcelTransformer();
+            Workbook workbook = transformer.transform(fileIn, beans);
+
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-nhan-hang-" + phieuNhanHang.getReceiptCode() + ".xlsx");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

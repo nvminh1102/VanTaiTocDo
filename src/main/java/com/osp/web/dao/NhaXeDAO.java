@@ -2,6 +2,8 @@ package com.osp.web.dao;
 
 import com.osp.common.PagingResult;
 import com.osp.model.NhaXe;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface NhaXeDAO {
@@ -10,4 +12,6 @@ public interface NhaXeDAO {
   boolean edit(NhaXe item);
   Optional<PagingResult> page(PagingResult page, String nhaXe, String loaiXe, String bienSo, String tenLaiXe);
   boolean delete(int id);
+  List<NhaXe> danhSachNhaXe();
+  NhaXe getByBienSo(String bienSo);
 }

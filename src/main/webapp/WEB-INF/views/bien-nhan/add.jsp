@@ -65,29 +65,29 @@
         <section class="scrollable padder" style="background: white;padding-bottom: 200px;">
             <ul class="bg-primary breadcrumb no-border no-radius b-b b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/bienNhan/list">Biên nhận</a></li>
-                <li><a href="#" id="title">Thêm mới biên nhận</a></li>
+                <li><a href="<%=request.getContextPath()%>/bienNhan/list">Phiếu nhận hàng</a></li>
+                <li><a href="#" id="title">Thêm mới phiếu nhận hàng</a></li>
             </ul>
             <%--<div class="m-b-md">--%>
             <%--<span style="color:red">${messageError}</span>--%>
             <%--</div>--%>
 
             <section class="panel panel-default">
-                <header class="panel-heading" style="text-align: center"><h4>THÊM MỚI BIÊN NHẬN</h4></header>
+                <header class="panel-heading" style="text-align: center"><h4>THÊM MỚI PHIẾU NHẬN HÀNG</h4></header>
                 <div class="panel-body">
                     <form method="post" action="javascript:void(0)"  enctype="multipart/form-data" class="form-horizontal" id="addBienNhanForm" name="addBienNhanForm">
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
                                 <div class="col-sm-2"  style="text-align: right">
-                                    <label>Số biên nhận</label>
+                                    <label>Số phiếu nhận</label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.bienNhan.receiptCode" name="receiptCode" id="receiptCode" maxlength="250"
-                                           class="input-sm form-control"/>
+                                           class="input-sm form-control" readonly/>
                                 </div>
 
                                 <div class="col-sm-2"  style="text-align: right">
-                                    <label>Kho nhận</label>
+                                    <label>Kho nhận <span style="color: red">*</span></label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.bienNhan.nameStock" name="nameStock" id="nameStock" maxlength="250"
@@ -114,8 +114,32 @@
 
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Loại thanh toán <span style="color: red">*</span></label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="paymentType" id="paymentType" ng-model="info.bienNhan.paymentType">
+                                        <option value="" selected>Loại thanh toán</option>
+                                        <option ng-value="1">Trả trước</option>
+                                        <option ng-value="2">Trả sau</option>
+                                        <option ng-value="3">Công nợ</option>
+                                    </select>
+                                </div>
+
                                 <div class="col-sm-2" style="text-align: right">
-                                    <label>MST/CMND người gửi</label>
+                                    <label>Người thanh toán</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.bienNhan.payer" name="info.bienNhan.payer" id="info.bienNhan.payer" maxlength="250"
+                                           class="input-sm form-control"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
+                                <div class="col-sm-2" style="text-align: right">
+                                    <label>MST/CMND người gửi <span style="color: red">*</span></label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.nguoiGui.taxCode" name="nguoiGui.taxCode" id="nguoiGui.taxCode" maxlength="250"
@@ -123,7 +147,7 @@
                                 </div>
 
                                 <div class="col-sm-2" style="text-align: right">
-                                    <label>Tên người gửi</label>
+                                    <label>Tên người gửi <span style="color: red">*</span></label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.nguoiGui.fullName" name="nguoiGui.fullName" id="nguoiGui.fullName" maxlength="250"
@@ -158,7 +182,7 @@
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
                                 <div class="col-sm-2" style="text-align: right">
-                                    <label>MST/CMND người nhận</label>
+                                    <label>MST/CMND người nhận <span style="color: red">*</span></label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.nguoiNhan.taxCode" name="nguoiNhan.taxCode" id="nguoiNhan.taxCode" maxlength="250"
@@ -166,7 +190,7 @@
                                 </div>
 
                                 <div class="col-sm-2" style="text-align: right">
-                                    <label>Tên người nhận</label>
+                                    <label>Tên người nhận <span style="color: red">*</span></label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.nguoiNhan.fullName" name="nguoiNhan.fullName" id="nguoiNhan.fullName" maxlength="250"
@@ -201,19 +225,43 @@
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
                                 <div class="col-sm-2"  style="text-align: right">
+                                    <label>Biển số</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <%--<input ng-model="info.bienNhan.bienSo" name="bienNhan.bienSo" id="bienNhan.bienSo" maxlength="20"--%>
+                                    <%--class="input-sm form-control"/>--%>
+                                    <select ng-model="info.bienNhan.bienSo" id="info.bienNhan.bienSo" name ="info.bienNhan.bienSo" class="select2" style="width: 100%" ng-change="onChangeBienSo()">
+                                        <option value="" selected >-- Lựa chọn --</option>
+                                        <option ng-repeat="item in nhaXeList track by $index" ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
+                                    </select>
+
+                                </div>
+                                <div class="col-sm-2"  style="text-align: right">
                                     <label>Nhà xe</label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.bienNhan.nhaXe" name="bienNhan.nhaXe" id="bienNhan.nhaXe" maxlength="250"
-                                           class="input-sm form-control"/>
+                                           class="input-sm form-control" readonly/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Loại xe</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.bienNhan.loaiXe" name="bienNhan.loaiXe" id="bienNhan.loaiXe" maxlength="250"
+                                           class="input-sm form-control" readonly/>
                                 </div>
 
                                 <div class="col-sm-2"  style="text-align: right">
-                                    <label>Biển số</label>
+                                    <label>Nhân viên nhà xe</label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input ng-model="info.bienNhan.bienSo" name="bienNhan.bienSo" id="bienNhan.bienSo" maxlength="20"
-                                           class="input-sm form-control"/>
+                                    <input ng-model="info.bienNhan.employee" name="bienNhan.employee" id="bienNhan.employee" maxlength="250"
+                                           class="input-sm form-control" readonly/>
                                 </div>
                             </div>
                         </div>
@@ -289,7 +337,7 @@
                     <%--<form id="addPropertyInfoForm" action="javascript:void(0)" enctype="multipart/form-data" cssClass="form-horizontal">--%>
                     <div class="modal-body"  style="padding: 10px;">
                         <div class="form-group ui-widget">
-                           Tên hàng hóa(<font color="red">*</font>)
+                            Tên hàng hóa(<font color="red">*</font>)
                             <input ng-model="property.name" name="name" id="name" maxlength="500" style="width: 95%; height: 60%" class="form-control"  type="text"/>
                         </div>
                         <div class="form-group">
@@ -359,107 +407,108 @@
 </section>
 
 <script>
-  $(document).ready(function() {
-    $('#startDate1').datetimepicker({
-      format: 'DD/MM/YYYY',
-      sideBySide: true
-    }).data('autoclose', true);
-  });
+    var receiptCode = '${receiptCode}';
+    $(document).ready(function() {
+        $('#startDate1').datetimepicker({
+            format: 'DD/MM/YYYY',
+            sideBySide: true
+        }).data('autoclose', true);
+    });
 
-  $("input[data-type='currency']").on({
-    keyup: function() {
-      formatCurrency($(this));
-    },
-    blur: function() {
-      formatCurrency($(this), "blur");
-    }
-  });
+    $("input[data-type='currency']").on({
+        keyup: function() {
+            formatCurrency($(this));
+        },
+        blur: function() {
+            formatCurrency($(this), "blur");
+        }
+    });
 
-  function formatNumber(n) {
-    // format number 1000000 to 1,234,567
-    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  }
-
-  function convertToNumber(currency) {
-    if (currency == '' || currency == null || currency == 'undefined') {
-      return "";
-    } else {
-      return Number(currency.replace(/[^0-9.-]+/g,""));
-    }
-  }
-  function formatCurrency(input, blur) {
-    // appends $ to value, validates decimal side
-    // and puts cursor back in right position.
-
-    // get input value
-    var input_val = input.val();
-
-    // don't validate empty input
-    if (input_val === "") { return; }
-
-    // original length
-    var original_len = input_val.length;
-
-    // initial caret position
-    var caret_pos = input.prop("selectionStart");
-
-    // check for decimal
-    if (input_val.indexOf(".") >= 0) {
-
-      // get position of first decimal
-      // this prevents multiple decimals from
-      // being entered
-      var decimal_pos = input_val.indexOf(".");
-
-      // split number by decimal point
-      var left_side = input_val.substring(0, decimal_pos);
-      var right_side = input_val.substring(decimal_pos);
-
-      // add commas to left side of number
-      left_side = formatNumber(left_side);
-
-      // validate right side
-      right_side = formatNumber(right_side);
-
-      // On blur make sure 2 numbers after decimal
-      if (blur === "blur") {
-        right_side += "";
-      }
-
-      // Limit decimal to only 2 digits
-      right_side = right_side.substring(0, 2);
-
-      // join number by .
-      input_val = "" + left_side + "." + right_side;
-
-    } else {
-      // no decimal entered
-      // add commas to number
-      // remove all non-digits
-      input_val = formatNumber(input_val);
-      input_val = "" + input_val;
-
-      // final formatting
-      if (blur === "blur") {
-        input_val += "";
-      }
+    function formatNumber(n) {
+        // format number 1000000 to 1,234,567
+        return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
     }
 
-    // send updated string to input
-    input.val(input_val);
-
-    // put caret back in the right position
-    var updated_len = input_val.length;
-    caret_pos = updated_len - original_len + caret_pos;
-    input[0].setSelectionRange(caret_pos, caret_pos);
-  }
-  // $("#btnSaveAuctionInfo").click(function() {
-  //     for ( instance in CKEDITOR.instances )
-  //         CKEDITOR.instances[instance].updateElement();
-  // });
-  $(".datepickerEnter").keydown(function (e) {
-    if (e.keyCode == 13) {
-      $(".datepickerEnter").blur();
+    function convertToNumber(currency) {
+        if (currency == '' || currency == null || currency == 'undefined') {
+            return "";
+        } else {
+            return Number(currency.replace(/[^0-9.-]+/g,""));
+        }
     }
-  });
+    function formatCurrency(input, blur) {
+        // appends $ to value, validates decimal side
+        // and puts cursor back in right position.
+
+        // get input value
+        var input_val = input.val();
+
+        // don't validate empty input
+        if (input_val === "") { return; }
+
+        // original length
+        var original_len = input_val.length;
+
+        // initial caret position
+        var caret_pos = input.prop("selectionStart");
+
+        // check for decimal
+        if (input_val.indexOf(".") >= 0) {
+
+            // get position of first decimal
+            // this prevents multiple decimals from
+            // being entered
+            var decimal_pos = input_val.indexOf(".");
+
+            // split number by decimal point
+            var left_side = input_val.substring(0, decimal_pos);
+            var right_side = input_val.substring(decimal_pos);
+
+            // add commas to left side of number
+            left_side = formatNumber(left_side);
+
+            // validate right side
+            right_side = formatNumber(right_side);
+
+            // On blur make sure 2 numbers after decimal
+            if (blur === "blur") {
+                right_side += "";
+            }
+
+            // Limit decimal to only 2 digits
+            right_side = right_side.substring(0, 2);
+
+            // join number by .
+            input_val = "" + left_side + "." + right_side;
+
+        } else {
+            // no decimal entered
+            // add commas to number
+            // remove all non-digits
+            input_val = formatNumber(input_val);
+            input_val = "" + input_val;
+
+            // final formatting
+            if (blur === "blur") {
+                input_val += "";
+            }
+        }
+
+        // send updated string to input
+        input.val(input_val);
+
+        // put caret back in the right position
+        var updated_len = input_val.length;
+        caret_pos = updated_len - original_len + caret_pos;
+        input[0].setSelectionRange(caret_pos, caret_pos);
+    }
+    // $("#btnSaveAuctionInfo").click(function() {
+    //     for ( instance in CKEDITOR.instances )
+    //         CKEDITOR.instances[instance].updateElement();
+    // });
+    $(".datepickerEnter").keydown(function (e) {
+        if (e.keyCode == 13) {
+            $(".datepickerEnter").blur();
+        }
+    });
 </script>
