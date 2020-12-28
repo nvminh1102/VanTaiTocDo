@@ -120,4 +120,8 @@
         <put-attribute name="title" value="Quản lý nhà xe"/>
         <put-attribute name="page" value="/WEB-INF/views/nha-xe/list.jsp" />
     </definition>
+    <definition name="thanhToan.list" extends="default">
+        <put-attribute name="title" value="Quản lý thanh toán"/>
+        <put-attribute name="page" value="/WEB-INF/views/thanh-toan/list.jsp" />
+    </definition>
 </tiles-definitions>

@@ -122,7 +122,7 @@
                             <ul class="nav lt">
                                 <li class="<%= isActive(request.getContextPath() + "/bienNhan/danh-sach", request) ? "active" : ""%>">
                                     <a href="<%=request.getContextPath()%>/bienNhan/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Biên nhận</span> </a></li>
+                                            class="fa fa-angle-right"></i> <span>Phiếu nhận hàng</span> </a></li>
                             </ul>
                             <ul class="nav lt">
                                 <li class="<%= isActive(request.getContextPath() + "/toa-hang/list", request) ? "active" : ""%>">
@@ -158,6 +158,11 @@
                                 <li class="<%= isActive(request.getContextPath() + "/bienNhan/nha-xe/list", request) ? "active" : ""%>">
                                     <a href="<%=request.getContextPath()%>/bienNhan/nha-xe/list" class=""> <i
                                             class="fa fa-angle-right"></i> <span>Nhà xe</span> </a></li>
+                            </ul>
+                            <ul class="nav lt">
+                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/thanh-toan/list", request) ? "active" : ""%>">
+                                    <a href="<%=request.getContextPath()%>/bienNhan/thanh-toan/list" class=""> <i
+                                            class="fa fa-angle-right"></i> <span>Thanh toán</span> </a></li>
                             </ul>
                         </li>
 

@@ -49,8 +49,10 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             $scope.info = response.data;
             $scope.info.property = response.data.matHang;
             var dateReceipt = new Date($scope.info.bienNhan.dateReceipt);
-            $scope.info.bienNhan.dateReceipt = moment(dateReceipt).format('DD/MM/YYYY');
-            console.log("$scope.info = ", $scope.info)
+            if (dateReceipt != null && dateReceipt != '') {
+              $scope.info.bienNhan.dateReceipt = moment(dateReceipt).format('DD/MM/YYYY');
+
+            }
             // $scope.myFile.listFileDocument = $scope.info.fileUploads;
         });
 
