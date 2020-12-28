@@ -9,15 +9,15 @@
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </head>
 
-<script src="<%=request.getContextPath()%>/assets/project/khach-hang/list.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/assets/project/nha-xe/list.js" type="text/javascript"></script>
 
 <section id="content" ng-app="FrameworkBase"  ng-controller="frameworkCtrl">
     <section class="vbox background-white">
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="#">Khách hàng</a></li>
-                <li><a href="#" id="title">Danh sách Khách hàng</a></li>
+                <li><a href="#">Nhà xe</a></li>
+                <li><a href="#" id="title">Danh sách nhà xe</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;">
                 <header class="panel-heading">
@@ -32,37 +32,18 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="col-md-4">
-                                        <label class="control-label text-dark" style="padding: 0px">Số CMTND</label>
+                                        <label class="control-label text-dark" style="padding: 0px">Nhà xe</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input ng-model="search.taxCode" class="form-control input-sm" placeholder="Số CMTND"/>
+                                        <input ng-model="search.nhaXe" class="form-control input-sm" placeholder="Tên nhà xe"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="col-md-4">
-                                        <label class="control-label text-dark">Tên khách hàng</label>
+                                        <label class="control-label text-dark">Loại xe</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input ng-model="search.fullName" class="form-control input-sm" placeholder="Tên khách hàng"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row" style="margin-top:10px;">
-                                <div class="col-md-6">
-                                    <div class="col-md-4">
-                                        <label class="control-label text-dark">Số điện thoại</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="mobile" ng-model="search.mobile" class="form-control input-sm" placeholder="Số điện thoại khách hàng"/>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="col-md-4">
-                                        Địa chỉ
-                                    </div>
-                                    <div class="col-md-8">
-                                        <input id="address" ng-model="search.address" class="form-control input-sm" placeholder="Địa chỉ khách hàng"/>
+                                        <input ng-model="search.loaiXe" class="form-control input-sm" placeholder="Loại xe"/>
                                     </div>
                                 </div>
                             </div>
@@ -70,15 +51,18 @@
                             <div class="row" style="margin-top:10px;">
                                 <div class="col-md-6">
                                     <div class="col-md-4">
-                                        <label class="control-label text-dark">Loại khách hàng</label>
+                                        <label class="control-label text-dark">Biển số</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <select class="form-control" name="search.typePartner" id="search.typePartner" ng-model="search.typePartner">
-                                            <option value="" selected>Tất cả</option>
-                                            <option ng-value="2">Người gửi</option>
-                                            <option ng-value="3">Người nhận</option>
-                                            <option ng-value="4">Nhà xe</option>
-                                        </select>
+                                        <input id="mobile" ng-model="search.bienSo" class="form-control input-sm" placeholder="Biển số xe"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                       Tên lái xe
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input id="address" ng-model="search.tenLaiXe" class="form-control input-sm" placeholder="Tên lái xe"/>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +83,7 @@
             <section class="panel panel-default">
                 <header class="panel-heading">
                     <a href="javascript:void(0)"><h4 class="panel-title font-bold" data-toggle="collapse" data-target="#collapseTwo">
-                        DANH SÁCH KHÁCH HÀNG
+                        DANH SÁCH NHÀ XE
                     </h4></a>
                 </header>
                 <div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true">
@@ -116,7 +100,7 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a ng-click="preAddKhachHang()" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm mới khách hàng</a>
+                                <a ng-click="preAddNhaXe()" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm mới nha xe</a>
                             </div>
                         </div>
 
@@ -126,17 +110,17 @@
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tên khách hàng</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số CMTND</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số điện thoại</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Địa chỉ</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Loại khách hàng</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tên nhà xe</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Loại xe</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Biển số</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tên lái xe</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số điện thoại lái xe</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày tạo</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr ng-switch-when="0">
-                                    <td colspan="12" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                    <td colspan="8" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
                                         Không có dữ liệu
                                     </td>
                                 </tr>
@@ -169,11 +153,11 @@
                                         </div>
                                         <%--</sec:authorize>--%>
                                     </td>
-                                    <td class="text-left v-inherit">{{item.fullName}}</td>
-                                    <td class="text-left v-inherit">{{item.taxCode}}</td>
-                                    <td class="text-left v-inherit">{{item.mobile}}</td>
-                                    <td class="text-left v-inherit">{{item.address}}</td>
-                                    <td class="text-left v-inherit">{{item.typePartner == 2 ? "Người gửi" : item.typePartner == 3 ? "Người nhận" : item.typePartner == 4 ? "Nhà xe" : ""}}</td>
+                                    <td class="text-left v-inherit">{{item.nhaXe}}</td>
+                                    <td class="text-left v-inherit">{{item.loaiXe}}</td>
+                                    <td class="text-left v-inherit">{{item.bienSo}}</td>
+                                    <td class="text-left v-inherit">{{item.tenLaiXe}}</td>
+                                    <td class="text-left v-inherit">{{item.sdtLaiXe}}</td>
                                     <td class="text-center v-inherit">{{item.genDate|date:'dd/MM/yyyy'}}</td>
                                 </tr>
                                 </tbody>
@@ -203,29 +187,29 @@
 
         </section>
     </section>
-    <div class="modal fade" id="xoaKhachHang" tabindex="-1" role="dialog"
-         aria-labelledby="xoaKhachHang" aria-hidden="true" aria-label="Close">
+    <div class="modal fade" id="xoaNhaXe" tabindex="-1" role="dialog"
+         aria-labelledby="xoaNhaXe" aria-hidden="true" aria-label="Close">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header alert-info">
                     <button type="button" class="btn btn-default close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Xóa khách hàng</h4>
+                    <h4 class="modal-title">Xóa nhà xe</h4>
                 </div>
                 <div class="modal-body">
-                    <span>Bạn có chắc chắn muốn xóa khách hàng</span><br/>
-                    <span style="color: red">{{delFullName}}</span> <span> hay không?</span>
+                    <span>Bạn có chắc chắn muốn xóa nhà xe</span><br/>
+                    <span style="color: red">{{delNhaXe}}</span> <span> hay không?</span>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="xoaKhachHang()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="xoaNhaXe()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="addOrEditKhachHang" tabindex="-1" role="dialog"
-         aria-labelledby="addOrEditKhachHang" aria-hidden="true" aria-label="Close">
+    <div class="modal fade" id="addOrEditNhaXe" tabindex="-1" role="dialog"
+         aria-labelledby="addOrEditNhaXe" aria-hidden="true" aria-label="Close">
         <div class="modal-dialog">
             <div class="modal-content" style="width: 150%">
                 <div class="modal-header alert-info">
@@ -235,46 +219,38 @@
                 <div class="modal-body">
                     <input style="display: none" name="info.id" ng-value="info.id" ng-model="info.id" class="form-control"/>
                     <div class="row">
-                        <label class="col-sm-2 control-label" style="line-height: 30px">Số CMTND <span style="color: red"> (*)</span></label>
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Nhà xe <span style="color: red"> (*)</span></label>
                         <div class="col-sm-4">
-                            <input name="info.taxCode" id="info.taxCode" ng-value="info.taxCode" ng-model="info.taxCode" maxlength="20" class="form-control"/>
+                            <input name="info.nhaXe" id="info.nhaXe" ng-value="info.nhaXe" ng-model="info.nhaXe" maxlength="200" class="form-control"/>
                         </div>
-                        <label class="col-sm-2 control-label" style="line-height: 30px">Loại khách hàng <span style="color: red"> (*)</span></label>
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Loại xe <span style="color: red"> (*)</span></label>
                         <div class="col-sm-4">
-                            <select class="form-control" name="info.typePartner" id="info.typePartner" ng-model="info.typePartner">
-                                <option ng-value="2">Người gửi</option>
-                                <option ng-value="3">Người nhận</option>
-                                <option ng-value="4">Nhà xe</option>
-                            </select>
+                            <input name="info.loaiXe" id="info.loaiXe" ng-value="info.loaiXe" ng-model="info.loaiXe" maxlength="200" class="form-control"/>
                         </div>
                     </div>
 
                     <div class="row" style="padding-top: 2%">
-                        <label class="col-sm-2 control-label" style="line-height: 30px">Tên khách hàng <span style="color: red"> (*)</span></label>
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Biển số <span style="color: red"> (*)</span></label>
                         <div class="col-sm-4">
-                            <input name="info.fullName" id="info.fullName" ng-value="info.fullName" ng-model="info.fullName" maxlength="150" class="form-control"/>
+                            <input name="info.bienSo" id="info.bienSo" ng-value="info.bienSo" ng-model="info.bienSo" maxlength="20" class="form-control"/>
                         </div>
-                        <label class="col-sm-2 control-label" style="line-height: 30px">Số điện thoại</label>
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Tên lái xe</label>
                         <div class="col-sm-4">
-                            <input name="info.mobile" id="info.mobile" ng-value="info.mobile" ng-model="info.mobile" maxlength="20" class="form-control"/>
+                            <input name="info.tenLaiXe" id="info.tenLaiXe" ng-value="info.tenLaiXe" ng-model="info.tenLaiXe" maxlength="150" class="form-control"/>
                         </div>
                     </div>
 
                     <div class="row" style="padding-top: 2%">
-                        <label class="col-sm-2 control-label" style="line-height: 30px">Địa chỉ</label>
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Số điện thoại lái xe</label>
                         <div class="col-sm-4">
-                            <input name="info.address" id="info.address" ng-value="info.address" ng-model="info.address" maxlength="400" class="form-control"/>
-                        </div>
-                        <label class="col-sm-2 control-label" style="line-height: 30px">Email</label>
-                        <div class="col-sm-4">
-                            <input name="info.email" id="info.email" ng-value="info.email" ng-model="info.email" maxlength="150" class="form-control"/>
+                            <input name="info.sdtLaiXe" id="info.sdtLaiXe" ng-value="info.sdtLaiXe" ng-model="info.sdtLaiXe" maxlength="15" class="form-control"/>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <div class="row" style="text-align: center">
                         <button ng-show="info.id == null || info.id == '' || info.id == 'undefined'" type="button" class="btn btn-default" ng-click="resetValueAdd()" style="text-transform: none;">Reset</button>
-                        <button class="btn btn-primary" ng-click="addKhachHang()">Lưu</button>
+                        <button class="btn btn-primary" ng-click="addNhaXe()">Lưu</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
                     </div>
                 </div>
