@@ -302,7 +302,6 @@ public class VtReceipt implements Serializable {
         this.toDeceipt = toDeceipt;
     }
 
-<<<<<<< HEAD
     public Integer getTienDaTra() {
         return tienDaTra;
     }
@@ -310,9 +309,4 @@ public class VtReceipt implements Serializable {
     public void setTienDaTra(Integer tienDaTra) {
         this.tienDaTra = tienDaTra;
     }
-    
-    
-    
-=======
->>>>>>> dababc43405abb2379ff489a0e3fa132face5583
 }

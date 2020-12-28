@@ -20,12 +20,8 @@ public interface BienNhanDAO {
     VtReceipt getById(Integer id);
 
     boolean edit(VtReceipt item);
-<<<<<<< HEAD
     
     List<VtReceiptDetail> getListVtReceiptDetail(Integer receiptId);
-=======
 
     Integer getMaxId();
-
->>>>>>> dababc43405abb2379ff489a0e3fa132face5583
 }

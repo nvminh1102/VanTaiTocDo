@@ -66,13 +66,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (bienSo != null && !bienSo.trim().equals("")) {
                 strWhere.append(" and upper(t.bien_so) = :bienSo");
             }
-<<<<<<< HEAD
-
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-=======
-            
             StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payer,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
->>>>>>> dababc43405abb2379ff489a0e3fa132face5583
                     + " c.MOBILE as mobile_nguoi_nhan  "
                     + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
                     + " where 1=1 ");
@@ -132,8 +126,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
         }
         return Optional.ofNullable(page);
     }
-    
-    
+
     @Override
     public Optional<PagingResult> search(PagingResult page, String receiptCode, String nameStock,
             Date fromGenDate, Date toGenDate, String loaiXe, String bienSo) {
@@ -234,7 +227,6 @@ public class BienNhanDAOImpl implements BienNhanDAO {
     }
 
     @Override
-<<<<<<< HEAD
     public List<VtReceiptDetail> getListVtReceiptDetail(Integer id) {
         List<VtReceiptDetail> vtReceiptDetails = new ArrayList<>();
         try {
@@ -242,18 +234,19 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             Query queryAll = entityManager.createQuery("select r from VtReceiptDetail r where r.receiptId = :receiptId and r.status = 1 ");
             queryAll.setParameter("receiptId", id);
             vtReceiptDetails = queryAll.getResultList();
-            if(vtReceiptDetails!=null && vtReceiptDetails.size()>0){
-                for(VtReceiptDetail vtReceiptDetail: vtReceiptDetails){
+            if (vtReceiptDetails != null && vtReceiptDetails.size() > 0) {
+                for (VtReceiptDetail vtReceiptDetail : vtReceiptDetails) {
                     VtReceipt info = entityManager.find(VtReceipt.class, id);
                     vtReceiptDetail.setReceiptCode(info.getReceiptCode());
                 }
-                
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return vtReceiptDetails;
-=======
+    }
+
     public Integer getMaxId() {
         Integer maxId = 0;
         try {
@@ -263,6 +256,5 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             e.printStackTrace();
         }
         return maxId;
->>>>>>> dababc43405abb2379ff489a0e3fa132face5583
     }
 }

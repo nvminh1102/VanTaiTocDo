@@ -431,13 +431,12 @@ public class BienNhanController {
             matHangDAO.add(info);
         }
     }
-<<<<<<< HEAD
     
     @RequestMapping(value = "/loadListHangHoa", method = RequestMethod.GET)
     public ResponseEntity<List<VtReceiptDetail>> loadListHangHoa(@RequestParam @Valid final Integer id) {
         List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetail(id);
         return new ResponseEntity<List<VtReceiptDetail>>(vtReceiptDetails, HttpStatus.OK);
-=======
+    }
 
     @GetMapping("/danhSachNhaXe")
     public ResponseEntity<List> danhSachNhaXe() {
@@ -507,6 +506,5 @@ public class BienNhanController {
         } catch (Exception e) {
             e.printStackTrace();
         }
->>>>>>> dababc43405abb2379ff489a0e3fa132face5583
     }
 }
