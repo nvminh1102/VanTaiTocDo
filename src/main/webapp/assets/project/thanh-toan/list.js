@@ -95,8 +95,6 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       $scope.info.tienDaTra = Number($scope.info.tienDaTra);
     }
 
-    console.log("$scope.$scope.info.tienDaTra",$scope.info.tienDaTra);
-
     var info = {
       bienNhan: $scope.info
     };
@@ -125,9 +123,20 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
                $scope.tienPhaiTra = response.data;
             });
     };
-
-    $scope.xuatPhieuCongNo = function (item) {
-        window.open(preUrl+"/bienNhan/thanh-toan/exportExcelCongNo?giaoHangId=" + item.id , '_blank');
+    $scope.search = {
+        soPhieuNhan: '',
+        nguoiGui: '',
+        typePayment: '',
+        isPayment: '',
+        fromDateReceipt: '',
+        toDateReceipt: ''
+    };
+    $scope.xuatPhieuThanhToan = function () {
+        window.open(preUrl+"/bienNhan/thanh-toan/exportExcelThanhToan?soPhieuNhan=" +  $scope.search.soPhieuNhan +
+            "&nguoiGui=" + $scope.search.nguoiGui + "&typePayment=" + $scope.search.typePayment + "&isPayment=" + $scope.search.isPayment +
+            "&fromGenDate=" + $scope.search.fromDateReceipt + "&toGenDate=" + $scope.search.toDateReceipt, '_blank');
     }
+    // window.open(preUrl+"/system/auction-info/listAuctionInfo/exportExcel?fullName=" +$scope.fullName+ "&propertyName=" + $scope.propertyName
+    //     + "&aucStatus=" + $scope.aucStatus + "&fromAucTime=" + $scope.fromAucTime + "&toAucTime=" + $scope.toAucTime  + "&publish2=" + $scope.publish2  + "&sensitiveWord=" + $scope.sensitiveWord, '_blank');
 
   }]);

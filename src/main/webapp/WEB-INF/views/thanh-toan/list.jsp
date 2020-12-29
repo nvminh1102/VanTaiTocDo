@@ -135,7 +135,7 @@
                                 <thead class="bg-gray">
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Thanh toán</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tên khách hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số tiền</th>
@@ -172,9 +172,9 @@
                                     <td class="text-left v-inherit">{{item.tenNguoiGui}}</td>
                                     <td class="text-left v-inherit">{{item.receiptCode}}</td>
                                     <td class="text-center v-inherit">{{item.tongTien|number}}</td>
-                                    <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
-                                    <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
-                                    <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
+                                    <td class="text-left v-inherit">{{item.paymentType == 1 && item.tienDaTra > 0 ? (item.tienDaTra|number) : ""}}</td>
+                                    <td class="text-left v-inherit">{{item.paymentType == 2 && item.tienDaTra > 0 ? (item.tienDaTra|number) : ""}}</td>
+                                    <td class="text-left v-inherit">{{item.paymentType == 3 && item.tienDaTra > 0 ? (item.tienDaTra|number) : ""}}</td>
                                     <td class="text-left v-inherit">{{(item.tongTien - item.tienDaTra)|number}}</td>
                                     <td class="text-left v-inherit">{{item.tienDaTra != null && item.tienDaTra != '' ? "Đã thanh toán" :  "Chưa thanh toán"}}</td>
                                 </tr>
@@ -185,7 +185,7 @@
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="p-l-0 col-sm-6 text-left text-center-xs m-b-xs">
-                                    <button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i> Xuất excel</button>
+                                    <button class="btn btn-info btn-s-sm" ng-click="xuatPhieuThanhToan();"><i class="fa fa-file-excel-o"></i> Xuất phiếu thanh toán</button>
                                 </div>
                                 <div class="p-r-0 col-sm-6 text-right text-center-xs">
                                     <ul class="pagination pagination-sm m-t-none m-b-none">

@@ -4,6 +4,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 @Entity
 public class VtReceiptView {
@@ -40,6 +41,18 @@ public class VtReceiptView {
   private Long tienDaTra;
   @Column(name = "tong_tien")
   private Long tongTien;
+
+  @Transient
+  private Long tienTraTruoc;
+  @Transient
+  private Long tienTraSau;
+  @Transient
+  private Long tienCongNo;
+  @Transient
+  private Long tienConPhaiThu;
+  @Transient
+  private String daThanhToan;
+
 
   public Long getId() {
     return id;
@@ -167,5 +180,45 @@ public class VtReceiptView {
 
   public void setTongTien(Long tongTien) {
     this.tongTien = tongTien;
+  }
+
+  public Long getTienTraTruoc() {
+    return tienTraTruoc;
+  }
+
+  public void setTienTraTruoc(Long tienTraTruoc) {
+    this.tienTraTruoc = tienTraTruoc;
+  }
+
+  public Long getTienTraSau() {
+    return tienTraSau;
+  }
+
+  public void setTienTraSau(Long tienTraSau) {
+    this.tienTraSau = tienTraSau;
+  }
+
+  public Long getTienCongNo() {
+    return tienCongNo;
+  }
+
+  public void setTienCongNo(Long tienCongNo) {
+    this.tienCongNo = tienCongNo;
+  }
+
+  public Long getTienConPhaiThu() {
+    return tienConPhaiThu;
+  }
+
+  public void setTienConPhaiThu(Long tienConPhaiThu) {
+    this.tienConPhaiThu = tienConPhaiThu;
+  }
+
+  public String getDaThanhToan() {
+    return daThanhToan;
+  }
+
+  public void setDaThanhToan(String daThanhToan) {
+    this.daThanhToan = daThanhToan;
   }
 }
