@@ -150,32 +150,15 @@ public class ToaHangController {
                             @RequestParam(value = "idToaHang", required = false) Integer idToaHang) {
         PagingResult page = new PagingResult();
         page.setPageNumber(1);
-        VtReceipt phieuNhanHang = new VtReceipt();
-        VtPartner nguoiGui = new VtPartner();
-        VtPartner nguoiNhan = new VtPartner();
-        String typePayment = "";
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        VtToaHang vtToaHang = new VtToaHang();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
             VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getVTGoodsReceiptFormById(idToaHang);
-//            phieuNhanHang = bienNhanDAO.getById(giaoHangId);
-            if (phieuNhanHang.getPaymentType() == 1) {
-                typePayment = "Trả trước";
-            } else if (phieuNhanHang.getPaymentType() == 2) {
-                typePayment = "Trả sau";
-            } else {
-                typePayment = "Công nợ";
-            }
-//            nguoiGui = khachHangDAO.getById(phieuNhanHang.getDeliveryPartnerId());
-//            nguoiNhan = khachHangDAO.getById(phieuNhanHang.getReceivePartnerId());
-//            page.setItems(matHangDAO.getDsMatHang(giaoHangId));
+            vtToaHang = vTGoodsReceiptForm.getVtToaHang();
+            page.setItems(vTGoodsReceiptForm.getVtReceiptViews());
             Map<String, Object> beans = new HashMap<String, Object>();
-            if (phieuNhanHang.getDateReceipt() != null) {
-                beans.put("ngayNhanHang", sdf.format(phieuNhanHang.getDateReceipt()));
-            }
-            beans.put("phieuNhanHang", phieuNhanHang);
-            beans.put("nguoiGui", nguoiGui);
-            beans.put("loaiThanhToan", typePayment);
-            beans.put("nguoiNhan", nguoiNhan);
+            beans.put("vtToaHang", vtToaHang);
+            beans.put("ngayLap", sdf.format(new Date()));
             beans.put("page", page);
             Resource resource = new ClassPathResource(templatePhieuBienNhan);
             InputStream fileIn = resource.getInputStream();
@@ -183,7 +166,7 @@ public class ToaHangController {
             Workbook workbook = transformer.transform(fileIn, beans);
 
             response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-nhan-hang-" + phieuNhanHang.getReceiptCode() + ".xlsx");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-nhan-hang-" + vtToaHang.getToaHangCode() + "-" + sdf.format(new Date())+ ".xlsx");
             ServletOutputStream out = response.getOutputStream();
             workbook.write(out);
             out.flush();
