@@ -171,13 +171,12 @@
                                     </td>
                                     <td class="text-left v-inherit">{{item.tenNguoiGui}}</td>
                                     <td class="text-left v-inherit">{{item.receiptCode}}</td>
-                                    <td class="text-center v-inherit">{{item.tongTien}}</td>
-                                    <td class="text-left v-inherit">{{item.nameStock}}</td>
+                                    <td class="text-center v-inherit">{{item.tongTien|number}}</td>
                                     <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
                                     <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
                                     <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
                                     <td class="text-left v-inherit">{{(item.tongTien - item.tienDaTra)|number}}</td>
-                                    <td class="text-left v-inherit">{{item.paymentType == 1 ? "Trả trước" : item.paymentType == 2 ? "Trả sau" : "Công nợ"}}</td>
+                                    <td class="text-left v-inherit">{{item.tienDaTra != null && item.tienDaTra != '' ? "Đã thanh toán" :  "Chưa thanh toán"}}</td>
                                 </tr>
                                 </tbody>
                             </table>
