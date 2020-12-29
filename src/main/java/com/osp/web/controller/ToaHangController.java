@@ -5,20 +5,31 @@ import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
 import com.osp.model.VtGoodsReceipt;
+import com.osp.model.VtPartner;
+import com.osp.model.VtReceipt;
 import com.osp.model.VtReceiptDetail;
 import com.osp.model.VtToaHang;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.model.view.VtGoodsReceiptBO;
 import com.osp.web.dao.PhieuNhanHangDAO;
 import com.osp.web.dao.ToaHangDAO;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import net.sf.jett.transform.ExcelTransformer;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +47,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ToaHangController {
 
     SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
+    private final String templatePhieuBienNhan = "/fileTemplate/templatePhieuBienNhan.xlsx";
 
     @Autowired
     ToaHangDAO toaHangDAO;
@@ -129,6 +141,57 @@ public class ToaHangController {
             e.printStackTrace();
         }
         return new ResponseEntity<String>("1", HttpStatus.OK);
+    }
+    
+    
+    @GetMapping("/exportPhieuBienNhan")
+//    @Secured(ConstantAuthor.PublishAuctionTc.view)
+    public void exportExcel(HttpServletResponse response, HttpServletRequest request,
+                            @RequestParam(value = "idToaHang", required = false) Integer idToaHang) {
+        PagingResult page = new PagingResult();
+        page.setPageNumber(1);
+        VtReceipt phieuNhanHang = new VtReceipt();
+        VtPartner nguoiGui = new VtPartner();
+        VtPartner nguoiNhan = new VtPartner();
+        String typePayment = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getVTGoodsReceiptFormById(idToaHang);
+//            phieuNhanHang = bienNhanDAO.getById(giaoHangId);
+            if (phieuNhanHang.getPaymentType() == 1) {
+                typePayment = "Trả trước";
+            } else if (phieuNhanHang.getPaymentType() == 2) {
+                typePayment = "Trả sau";
+            } else {
+                typePayment = "Công nợ";
+            }
+//            nguoiGui = khachHangDAO.getById(phieuNhanHang.getDeliveryPartnerId());
+//            nguoiNhan = khachHangDAO.getById(phieuNhanHang.getReceivePartnerId());
+//            page.setItems(matHangDAO.getDsMatHang(giaoHangId));
+            Map<String, Object> beans = new HashMap<String, Object>();
+            if (phieuNhanHang.getDateReceipt() != null) {
+                beans.put("ngayNhanHang", sdf.format(phieuNhanHang.getDateReceipt()));
+            }
+            beans.put("phieuNhanHang", phieuNhanHang);
+            beans.put("nguoiGui", nguoiGui);
+            beans.put("loaiThanhToan", typePayment);
+            beans.put("nguoiNhan", nguoiNhan);
+            beans.put("page", page);
+            Resource resource = new ClassPathResource(templatePhieuBienNhan);
+            InputStream fileIn = resource.getInputStream();
+            ExcelTransformer transformer = new ExcelTransformer();
+            Workbook workbook = transformer.transform(fileIn, beans);
+
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-nhan-hang-" + phieuNhanHang.getReceiptCode() + ".xlsx");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

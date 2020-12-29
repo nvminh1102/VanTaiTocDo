@@ -9,32 +9,23 @@ var digitsAndSemicolon = /[1234567890;]/g;
 var digitsAndAsterisk = /[1234567890\\*]/g;
 var digitsAndSlash =/[1234567890/]/g;
 
-
-app.factory('popupBienNhan', function(){
-//     var listDataBN = [];
-//     var listDataHH = [];
-     var test = "";
+app.factory('popupPhieuNhanHang', function(){
+     var listDataBN = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
+     var listDataHH = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
     return {
-//        getListDataBN() {
-//            return listDataBN;
-//        },
-//        setListDataBN(items) {
-//            listDataBN = items;
-//        },
-//        getListDataHH() {
-//            return listDataHH;
-//        },
-//        setListDataHH(items) {
-//            listDataHH = items;
-//        },
         getListDataBN: function () {
-            return test;
+            return listDataBN;
         },
         setListDataBN: function (items) {
-            test = items;
+            listDataBN.items = items;
+        },
+        getListDataHH: function () {
+            return listDataHH;
+        },
+        setListDataHH: function (items) {
+            listDataHH.items = items;
         }
     };
-    
 });
 
 
