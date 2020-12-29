@@ -66,16 +66,17 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (bienSo != null && !bienSo.trim().equals("")) {
                 strWhere.append(" and upper(t.bien_so) = :bienSo");
             }
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payer,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan  "
-                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
-                    + " where t.status  = 1 ");
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payer,t.payment_type,t.tien_da_tra,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+                    + " c.MOBILE as mobile_nguoi_nhan,  "
+                    + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
+                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID left join vt_receipt_detail d on t.id = d.receipt_id "
+                    + " where 1=1 ");
             sqlBuffer.append(strWhere.toString());
             sqlBuffer.append(" order by t.GEN_DATE DESC");
 
             StringBuffer sqlBufferCount = new StringBuffer("SELECT count(t.id) "
-                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID"
-                    + " where t.status  = 1 ");
+                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID left join vt_receipt_detail d on t.id = d.receipt_id "
+                    + " where 1=1 ");
             sqlBufferCount.append(strWhere.toString());
 
             Query query = entityManager.createNativeQuery(sqlBuffer.toString(), VtReceiptView.class);
@@ -151,10 +152,11 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 strWhere.append(" and upper(t.bien_so) = :bienSo");
             }
 
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan  "
-                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
-                    + " where 1=1 ");
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payment_type,t.tien_da_tra,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+                    + " c.MOBILE as mobile_nguoi_nhan,  "
+                    + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
+                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID left join vt_receipt_detail d on t.id = d.receipt_id "
+                    + " where t.status  = 1 ");
             sqlBuffer.append(strWhere.toString());
             sqlBuffer.append(" order by t.GEN_DATE DESC");
 
