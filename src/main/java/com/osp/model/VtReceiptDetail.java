@@ -69,6 +69,15 @@ public class VtReceiptDetail implements Serializable {
 
     @Transient
     private String receiptCode;
+    @Transient
+    private String tenNguoiGui;
+    @Transient
+    private String tenNguoiNhan;
+    @Transient
+    private String sdtNguoiNhan;
+    @Transient
+    private String diaChiNguoiNhan;
+    
     public VtReceiptDetail() {
     }
 
@@ -241,6 +250,39 @@ public class VtReceiptDetail implements Serializable {
     public void setReceiptCode(String receiptCode) {
         this.receiptCode = receiptCode;
     }
+
+    public String getTenNguoiGui() {
+        return tenNguoiGui;
+    }
+
+    public void setTenNguoiGui(String tenNguoiGui) {
+        this.tenNguoiGui = tenNguoiGui;
+    }
+
+    public String getTenNguoiNhan() {
+        return tenNguoiNhan;
+    }
+
+    public void setTenNguoiNhan(String tenNguoiNhan) {
+        this.tenNguoiNhan = tenNguoiNhan;
+    }
+
+    public String getSdtNguoiNhan() {
+        return sdtNguoiNhan;
+    }
+
+    public void setSdtNguoiNhan(String sdtNguoiNhan) {
+        this.sdtNguoiNhan = sdtNguoiNhan;
+    }
+
+    public String getDiaChiNguoiNhan() {
+        return diaChiNguoiNhan;
+    }
+
+    public void setDiaChiNguoiNhan(String diaChiNguoiNhan) {
+        this.diaChiNguoiNhan = diaChiNguoiNhan;
+    }
+    
     
     
 }

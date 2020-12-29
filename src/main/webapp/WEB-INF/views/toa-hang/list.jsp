@@ -164,6 +164,9 @@
                                                         class="glyphicon glyphicon-cog"></i></button>
                                                 <ul class="dropdown-menu pull-left" style="width: 230px;">
                                                     <li>
+                                                        <a href="javascript:void(0)" ng-click="exportPhieuBienNhan(item.id)" >In Phiếu biên nhận</a>
+                                                    </li>
+                                                    <li>
                                                         <div class="line line-dashed m-b-none m-t-none"></div>
                                                         <a href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}">
                                                             Chỉnh sửa

@@ -12,6 +12,7 @@ public interface ToaHangDAO {
     Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user);
     Boolean delete(Integer id, User user, String ip);
     VTGoodsReceiptForm getVTGoodsReceiptFormById(Integer id);
+    VTGoodsReceiptForm getListBienNhan(Integer id);
     Integer getMaxId();
 
 }

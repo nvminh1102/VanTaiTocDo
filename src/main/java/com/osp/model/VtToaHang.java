@@ -38,6 +38,10 @@ public class VtToaHang implements Serializable {
     private String noiDi;
     @Column(name = "noi_den", length = 500)
     private String noiDen;
+    @Column(name = "nha_xe", length = 200)
+    private String nhaXe;
+    @Column(name = "loai_xe", length = 200)
+    private String loaiXe;
     @Column(name = "bien_so", length = 50)
     private String bienSo;
     @Column(name = "ten_lai_xe", length = 200)
@@ -63,6 +67,11 @@ public class VtToaHang implements Serializable {
     private Date fromGenDate;
     @Transient
     private Date toGenDate;
+    
+    @Transient
+    private Integer soLuong;
+    @Transient
+    private Integer tongTien;
 
     public VtToaHang() {
     }
@@ -215,6 +224,39 @@ public class VtToaHang implements Serializable {
     public void setToGenDate(Date toGenDate) {
         this.toGenDate = toGenDate;
     }
+
+    public String getNhaXe() {
+        return nhaXe;
+    }
+
+    public void setNhaXe(String nhaXe) {
+        this.nhaXe = nhaXe;
+    }
+
+    public String getLoaiXe() {
+        return loaiXe;
+    }
+
+    public void setLoaiXe(String loaiXe) {
+        this.loaiXe = loaiXe;
+    }
+
+    public Integer getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(Integer soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public Integer getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(Integer tongTien) {
+        this.tongTien = tongTien;
+    }
+    
     
     
 }

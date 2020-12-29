@@ -201,7 +201,7 @@ public class BienNhanController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        page = bienNhanDAO.page(page, item.getReceiptCode(), item.getNameStock(), item.getFromDeceipt(), item.getToDeceipt(), item.getLoaiXe(), item.getBienSo()).orElse(new PagingResult());
+        page = bienNhanDAO.search(page, item.getReceiptCode(), item.getNameStock(), item.getFromDeceipt(), item.getToDeceipt(), item.getLoaiXe(), item.getBienSo()).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
 

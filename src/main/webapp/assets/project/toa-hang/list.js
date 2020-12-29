@@ -86,11 +86,9 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                         toastr.error($("#_custum_error_500").html());
                     });
         };
-        $scope.export = function () {
-            window.location.href = preUrl + "/toa-hang/export?fullName=" + $scope.search.fullName + "&dispatchCode=" + $scope.search.dispatchCode
-                    + "&type=" + $scope.search.type
-                    + "&fromDateSign=" + $scope.search.fromDateSign + "&toDateSign=" + $scope.search.toDateSign;
-        };
+        $scope.exportPhieuBienNhan = function (toaHangId) {
+            window.open(preUrl + "/toa-hang/exportPhieuBienNhan?idToaHang=" + toaHangId, '_blank');
+        }
 
         $scope.preXoa = function (item) {
             $scope.delId = item.id;

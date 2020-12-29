@@ -42,6 +42,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-md-2 control-label text-dark">Nhà xe</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.nhaXe" maxlength="200" class="form-control input-sm" readonly/>
+                                    </div>
+                                    <label class="col-md-2 control-label text-dark">Loại xe</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.loaiXe" maxlength="200" class="form-control input-sm" readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label class="col-md-2 control-label text-dark">Tên lái xe</label>
                                     <div class="col-md-4">
                                         <input ng-model="toaHang.tenLaiXe" maxlength="200" class="form-control input-sm" readonly/>
