@@ -53,6 +53,55 @@ public class ConstantAuthor {
        public static final String delete="ROLE_SYSTEM_AUTHORITY_DELETE";
     }
 
+    public static class PHIEU_NHAN_HANG {
+        public static final String view="ROLE_XEM_PHIEU_NHAN_HANG_VIEW";
+        public static final String edit="ROLE_SUA_PHIEU_NHAN_HANG_EDIT";
+        public static final String add="ROLE_THEM_PHIEU_NHAN_HANG_ADD";
+        public static final String delete="ROLE_XOA_PHIEU_NHAN_HANG_DELETE";
+    }
+
+    public static class TOA_HANG {
+        public static final String view="ROLE_XEM_TOA_HANG_VIEW";
+        public static final String edit="ROLE_SUA_TOA_HANG_EDIT";
+        public static final String add="ROLE_THEM_TOA_HANG_ADD";
+        public static final String delete="ROLE_XOA_TOA_HANG_DELETE";
+    }
+
+    public static class PHIEU_THU {
+        public static final String view="ROLE_XEM_PHIEU_THU_VIEW";
+        public static final String edit="ROLE_SUA_PHIEU_THU_EDIT";
+        public static final String add="ROLE_THEM_PHIEU_THU_ADD";
+        public static final String delete="ROLE_XOA_PHIEU_THU_DELETE";
+    }
+
+    public static class GIAO_HANG {
+        public static final String view="ROLE_XEM_GIAO_HANG_VIEW";
+        public static final String edit="ROLE_SUA_GIAO_HANG_EDIT";
+        public static final String add="ROLE_THEM_GIAO_HANG_ADD";
+        public static final String delete="ROLE_XOA_GIAO_HANG_DELETE";
+    }
+
+    public static class KHACH_HANG {
+        public static final String view="ROLE_XEM_KHACH_HANG_VIEW";
+        public static final String edit="ROLE_SUA_KHACH_HANG_EDIT";
+        public static final String add="ROLE_THEM_KHACH_HANG_ADD";
+        public static final String delete="ROLE_XOA_KHACH_HANG_DELETE";
+    }
+
+    public static class NHA_XE {
+        public static final String view="ROLE_XEM_NHA_XE_VIEW";
+        public static final String edit="ROLE_SUA_NHA_XE_EDIT";
+        public static final String add="ROLE_THEM_NHA_XE_ADD";
+        public static final String delete="ROLE_XOA_NHA_XE_DELETE";
+    }
+
+    public static class THANH_TOAN {
+        public static final String view="ROLE_XEM_THANH_TOAN_VIEW";
+        public static final String edit="ROLE_SUA_THANH_TOAN_EDIT";
+        public static final String add="ROLE_THEM_THANH_TOAN_ADD";
+        public static final String delete="ROLE_XOA_THANH_TOAN_DELETE";
+    }
+
 
     public static boolean contain(String right) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -1,5 +1,7 @@
 package com.osp.web.controller;
 
+import com.osp.common.ConstantAuthor;
+import com.osp.common.ConstantAuthor.NHA_XE;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.NhaXe;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +29,13 @@ public class NhaXeController {
   NhaXeDAO nhaXeDAO;
 
   @GetMapping("/list")
+  @Secured(ConstantAuthor.NHA_XE.view)
   public String list() {
     return "nhaXe.list";
   }
 
   @GetMapping("/search")
+  @Secured(ConstantAuthor.NHA_XE.view)
   public ResponseEntity<PagingResult> parameterList(@RequestParam(value = "p", required = false, defaultValue = "1") int pageNumber,
       @RequestParam(value = "numberPerPage", required = false, defaultValue = "25") int numberPerPage,
       @RequestParam(value = "nhaXe", required = false, defaultValue = "") String nhaXe,
@@ -50,7 +55,7 @@ public class NhaXeController {
   }
 
   @PostMapping(value = "/delete")
-//    @Secured(ConstantAuthor.Parameter.update)
+  @Secured(ConstantAuthor.NHA_XE.delete)
   public ResponseEntity<String> delete(@RequestBody NhaXe nhaXe, HttpServletRequest request) {
     try {
       if (nhaXe.getId() == null) {
@@ -70,7 +75,7 @@ public class NhaXeController {
   }
 
   @PostMapping(value = "/them-moi-nha-xe")
-//    @Secured(ConstantAuthor.Parameter.update)
+  @Secured(ConstantAuthor.NHA_XE.add)
   public ResponseEntity<String> addKhachHang(@RequestBody NhaXe nhaXe, HttpServletRequest request) {
     try {
       User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

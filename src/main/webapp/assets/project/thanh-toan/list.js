@@ -105,8 +105,8 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       switch (Number(response.data)) {
         case 1:
           toastr.success("Thanh toán thành công!");
-          $scope.search();
-            $("#thanhToanModal").modal("hide");
+          $("#thanhToanModal").modal("hide");
+          $scope.loadPage(1);
           break;
         case 0:
           toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");
@@ -136,7 +136,5 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             "&nguoiGui=" + $scope.search.nguoiGui + "&typePayment=" + $scope.search.typePayment + "&isPayment=" + $scope.search.isPayment +
             "&fromGenDate=" + $scope.search.fromDateReceipt + "&toGenDate=" + $scope.search.toDateReceipt, '_blank');
     }
-    // window.open(preUrl+"/system/auction-info/listAuctionInfo/exportExcel?fullName=" +$scope.fullName+ "&propertyName=" + $scope.propertyName
-    //     + "&aucStatus=" + $scope.aucStatus + "&fromAucTime=" + $scope.fromAucTime + "&toAucTime=" + $scope.toAucTime  + "&publish2=" + $scope.publish2  + "&sensitiveWord=" + $scope.sensitiveWord, '_blank');
 
   }]);

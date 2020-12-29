@@ -100,7 +100,9 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a ng-click="preAddNhaXe()" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm mới nha xe</a>
+                                <sec:authorize access="hasRole('ROLE_THEM_NHA_XE_ADD')">
+                                    <a ng-click="preAddNhaXe()" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm mới nha xe</a>
+                                </sec:authorize>
                             </div>
                         </div>
 
@@ -132,23 +134,24 @@
                                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                     class="glyphicon glyphicon-cog"></i></button>
                                             <ul class="dropdown-menu pull-left" style="width: 230px;">
-                                                <%--<li>--%>
-                                                <%--<a href="javascript:void(0)" ng-click="onViewAuctionInfo(item)" >Xem chi tiết</a>--%>
-                                                <%--</li>--%>
+                                                <sec:authorize access="hasRole('ROLE_SUA_NHA_XE_EDIT')">
+                                                    <li>
+                                                        <div class="line line-dashed m-b-none m-t-none"></div>
+                                                        <a href="#" ng-click="preEdit(item)">
+                                                            Chỉnh sửa
+                                                        </a>
+                                                    </li>
+                                                </sec:authorize>
 
-                                                <li>
-                                                    <div class="line line-dashed m-b-none m-t-none"></div>
-                                                    <a href="#" ng-click="preEdit(item)">
-                                                        Chỉnh sửa
-                                                    </a>
-                                                </li>
+                                                <sec:authorize access="hasRole('ROLE_XOA_NHA_XE_DELETE')">
+                                                    <li>
+                                                        <div class="line line-dashed m-b-none m-t-none"></div>
+                                                        <a href="#" ng-click="preXoa(item)">
+                                                            Xóa
+                                                        </a>
+                                                    </li>
+                                                </sec:authorize>
 
-                                                <li>
-                                                    <div class="line line-dashed m-b-none m-t-none"></div>
-                                                    <a href="#" ng-click="preXoa(item)">
-                                                        Xóa
-                                                    </a>
-                                                </li>
                                             </ul>
                                         </div>
                                         <%--</sec:authorize>--%>
@@ -167,7 +170,7 @@
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="p-l-0 col-sm-6 text-left text-center-xs m-b-xs">
-                                    <button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i> Xuất excel</button>
+                                    <%--<button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i> Xuất excel</button>--%>
                                 </div>
                                 <div class="p-r-0 col-sm-6 text-right text-center-xs">
                                     <ul class="pagination pagination-sm m-t-none m-b-none">

@@ -1,5 +1,7 @@
 package com.osp.web.controller;
 
+import com.osp.common.ConstantAuthor;
+import com.osp.common.ConstantAuthor.THANH_TOAN;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.*;
@@ -27,6 +29,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +51,7 @@ public class ThanhToanController {
   private final String templateThanhToan = "/fileTemplate/templateCongNo.xlsx";
 
   @GetMapping("/list")
+  @Secured(ConstantAuthor.THANH_TOAN.view)
   public String listBn() {
     return "thanhToan.list";
   }
@@ -84,7 +88,7 @@ public class ThanhToanController {
   }
 
   @PostMapping(value = "/update-tien-da-tra")
-//  @Secured(ConstantAuthor.PublishAuctionTc.edit)
+  @Secured(ConstantAuthor.THANH_TOAN.edit)
   public ResponseEntity<String> updateTienDaTra(@RequestBody BienNhanForm item, HttpServletRequest request) {
     try {
       VtReceipt phieuNhanHang = bienNhanDAO.getById(item.getBienNhan().getId());
@@ -116,7 +120,7 @@ public class ThanhToanController {
   }
 
   @GetMapping("/exportExcelThanhToan")
-//    @Secured(ConstantAuthor.PublishAuctionTc.view)
+  @Secured(ConstantAuthor.THANH_TOAN.add)
   public void exportExcel(HttpServletResponse response, HttpServletRequest request,
                           @RequestParam(value = "soPhieuNhan", required = false) String soPhieuNhan,
                           @RequestParam(value = "nguoiGui", required = false) String nguoiGui,
