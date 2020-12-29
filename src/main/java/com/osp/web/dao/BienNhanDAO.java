@@ -11,7 +11,7 @@ public interface BienNhanDAO {
 
     VtReceipt add(VtReceipt item);
 
-    Optional<PagingResult> search(PagingResult page, String receiptCode, String nameStock, Date fromGenDate, Date toGenDate, String loaiXe, String bienSo);
+    Optional<PagingResult> search(PagingResult page, String receiptCode, String nameStock, Date fromGenDate, Date toGenDate, String loaiXe, String bienSo, Integer status);
     
     Optional<PagingResult> page(PagingResult page, String receiptCode, String nameStock, Date fromGenDate, Date toGenDate, String loaiXe, String bienSo);
 

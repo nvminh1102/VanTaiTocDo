@@ -27,6 +27,8 @@
     <class>com.osp.model.VtGoodsReceiptDetail</class>
     <class>com.osp.model.VtCongNo</class>
     <class>com.osp.model.VtReceiptDetail</class>
+    <class>com.osp.model.VtPhieuGiaoHangDetail</class>
+    <class>com.osp.model.VtPhieuGiaoHang</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/vantaitocdo?zeroDateTimeBehavior=convertToNull"/>

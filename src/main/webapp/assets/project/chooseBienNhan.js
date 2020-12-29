@@ -1,5 +1,5 @@
 app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHang', function ($scope, $http, $timeout, $q, popupPhieuNhanHang) {
-        $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: ""};
+        $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: "", status:"1"};
         $scope.listBienNhan = [];
         $scope.listHangHoa = [];
 
@@ -13,6 +13,8 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
         
         $scope.selectedItems = [];
         $scope.selectedItemsHH = [];
+        
+        $scope.searchBienNhan.status = "1";
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
         $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
                 .then(function (response) {
@@ -36,6 +38,7 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
 
         /*reload list*/
         $scope.loadListData = function () {
+            $scope.searchBienNhan.status = "1";
             var searchBienNhan = JSON.stringify($scope.searchBienNhan);
             $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan}})
                     .then(function (response) {

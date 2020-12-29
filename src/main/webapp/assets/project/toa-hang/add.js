@@ -91,7 +91,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
                         toastr.error('Chưa chọn danh sách biên nhận!');
                     }
                 } else {
-                    toastr.error('Chưa nhập mã phiếu nhận hàng!');
+                    toastr.error('Chưa nhập mã toa hàng!');
                 }
             }
         };

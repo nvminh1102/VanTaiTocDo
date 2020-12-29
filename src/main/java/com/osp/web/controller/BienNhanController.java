@@ -193,10 +193,13 @@ public class BienNhanController {
             if (searchObject.has("nameStock") && !StringUtils.isBlank(searchObject.get("nameStock").toString())) {
                 item.setNameStock(searchObject.get("nameStock").toString().trim());
             }
+            if (searchObject.has("status") && !StringUtils.isBlank(searchObject.get("status").toString())) {
+                item.setStatus(Integer.valueOf(searchObject.get("status").toString().trim()));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        page = bienNhanDAO.search(page, item.getReceiptCode(), item.getNameStock(), item.getFromDeceipt(), item.getToDeceipt(), item.getLoaiXe(), item.getBienSo()).orElse(new PagingResult());
+        page = bienNhanDAO.search(page, item.getReceiptCode(), item.getNameStock(), item.getFromDeceipt(), item.getToDeceipt(), item.getLoaiXe(), item.getBienSo(), item.getStatus()).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
 

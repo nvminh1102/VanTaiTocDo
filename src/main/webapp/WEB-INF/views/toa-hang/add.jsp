@@ -37,8 +37,6 @@
                                             <option value="" selected >-- Lựa chọn --</option>
                                             <option ng-repeat="item in nhaXeList track by $index" ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
                                         </select>
-
-                                        <input ng-model="toaHang.bienSo"  maxlength="50" class="form-control input-sm"/>
                                     </div>
                                 </div>
                                 <div class="form-group">

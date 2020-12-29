@@ -13,33 +13,19 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author THANH-LOI
+ * @author Admin
  */
 @Entity
-@Table(name = "vt_goods_delivery_detail")
+@Table(name = "vt_phieu_giao_hang_detail")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VtGoodsDeliveryDetail.findAll", query = "SELECT v FROM VtGoodsDeliveryDetail v")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findById", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.id = :id")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findByGoodsdeliveryid", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.goodsdeliveryid = :goodsdeliveryid")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findByReceiptId", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.receiptId = :receiptId")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findByFileAttach", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.fileAttach = :fileAttach")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findByGenDate", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.genDate = :genDate")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findByCreatedBy", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.createdBy = :createdBy")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findByLastUpdate", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.lastUpdate = :lastUpdate")
-    , @NamedQuery(name = "VtGoodsDeliveryDetail.findByUpdatedBy", query = "SELECT v FROM VtGoodsDeliveryDetail v WHERE v.updatedBy = :updatedBy")})
-public class VtGoodsDeliveryDetail implements Serializable {
+public class VtPhieuGiaoHangDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -47,12 +33,10 @@ public class VtGoodsDeliveryDetail implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "Goods_delivery_id")
-    private Integer goodsdeliveryid;
+    @Column(name = "phieu_giao_hang_id")
+    private Integer phieuGiaoHangId;
     @Column(name = "receipt_id")
     private Integer receiptId;
-    @Column(name = "file_attach", length = 200)
-    private String fileAttach;
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
@@ -64,16 +48,11 @@ public class VtGoodsDeliveryDetail implements Serializable {
     @Column(name = "updated_by", length = 200)
     private String updatedBy;
 
-    public VtGoodsDeliveryDetail() {
+    public VtPhieuGiaoHangDetail() {
     }
 
-    public VtGoodsDeliveryDetail(Integer id) {
+    public VtPhieuGiaoHangDetail(Integer id) {
         this.id = id;
-    }
-
-    public VtGoodsDeliveryDetail(Integer id, Date genDate) {
-        this.id = id;
-        this.genDate = genDate;
     }
 
     public Integer getId() {
@@ -84,12 +63,12 @@ public class VtGoodsDeliveryDetail implements Serializable {
         this.id = id;
     }
 
-    public Integer getGoodsdeliveryid() {
-        return goodsdeliveryid;
+    public Integer getPhieuGiaoHangId() {
+        return phieuGiaoHangId;
     }
 
-    public void setGoodsdeliveryid(Integer goodsdeliveryid) {
-        this.goodsdeliveryid = goodsdeliveryid;
+    public void setPhieuGiaoHangId(Integer phieuGiaoHangId) {
+        this.phieuGiaoHangId = phieuGiaoHangId;
     }
 
     public Integer getReceiptId() {
@@ -98,14 +77,6 @@ public class VtGoodsDeliveryDetail implements Serializable {
 
     public void setReceiptId(Integer receiptId) {
         this.receiptId = receiptId;
-    }
-
-    public String getFileAttach() {
-        return fileAttach;
-    }
-
-    public void setFileAttach(String fileAttach) {
-        this.fileAttach = fileAttach;
     }
 
     public Date getGenDate() {
@@ -150,10 +121,10 @@ public class VtGoodsDeliveryDetail implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof VtGoodsDeliveryDetail)) {
+        if (!(object instanceof VtPhieuGiaoHangDetail)) {
             return false;
         }
-        VtGoodsDeliveryDetail other = (VtGoodsDeliveryDetail) object;
+        VtPhieuGiaoHangDetail other = (VtPhieuGiaoHangDetail) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -162,7 +133,7 @@ public class VtGoodsDeliveryDetail implements Serializable {
 
     @Override
     public String toString() {
-        return "com.osp.model.VtGoodsDeliveryDetail[ id=" + id + " ]";
+        return "com.osp.model.VtPhieuGiaoHangDetail[ id=" + id + " ]";
     }
     
 }

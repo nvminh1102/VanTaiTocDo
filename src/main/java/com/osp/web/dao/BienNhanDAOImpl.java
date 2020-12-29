@@ -130,7 +130,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
 
     @Override
     public Optional<PagingResult> search(PagingResult page, String receiptCode, String nameStock,
-            Date fromGenDate, Date toGenDate, String loaiXe, String bienSo) {
+            Date fromGenDate, Date toGenDate, String loaiXe, String bienSo, Integer status) {
         try {
             StringBuffer strWhere = new StringBuffer();
             if (receiptCode != null && !"".equals(receiptCode)) {
@@ -151,12 +151,15 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (bienSo != null && !bienSo.trim().equals("")) {
                 strWhere.append(" and upper(t.bien_so) = :bienSo");
             }
+            if (status != null && status.compareTo(0)>=0) {
+                strWhere.append(" and t.status = :status");
+            }
 
             StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payment_type,t.tien_da_tra,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
                     + " c.MOBILE as mobile_nguoi_nhan, t.payer,  "
                     + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
                     + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID left join vt_receipt_detail d on t.id = d.receipt_id "
-                    + " where t.status  = 1 ");
+                    + " where 1=1 ");
             sqlBuffer.append(strWhere.toString());
             sqlBuffer.append(" order by t.GEN_DATE DESC");
 
@@ -179,6 +182,9 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             }
             if (bienSo != null && !bienSo.trim().equals("")) {
                 query.setParameter("bienSo", bienSo.trim().toUpperCase());
+            }
+            if (status != null && status.compareTo(0)>=0) {
+                query.setParameter("status", bienSo);
             }
 
             List<VtReceiptView> list = query.getResultList();

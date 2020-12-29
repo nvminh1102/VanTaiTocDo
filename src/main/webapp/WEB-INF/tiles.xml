@@ -88,6 +88,7 @@
         <put-attribute name="title" value="Thêm mới biên nhận"/>
         <put-attribute name="page" value="/WEB-INF/views/bien-nhan/add.jsp" />
     </definition>
+    <!--Toa hang-->
     <definition name="toahang.list" extends="default">
         <put-attribute name="title" value="Toa hàng"/>
         <put-attribute name="page" value="/WEB-INF/views/toa-hang/list.jsp" />
@@ -96,6 +97,7 @@
         <put-attribute name="title" value="Toa hàng"/>
         <put-attribute name="page" value="/WEB-INF/views/toa-hang/add.jsp" />
     </definition>
+    <!--end toa hang-->
     <definition name="phieuthu.list" extends="default">
         <put-attribute name="title" value="Phiếu thu"/>
         <put-attribute name="page" value="/WEB-INF/views/phieu-thu/list.jsp" />
@@ -124,4 +126,14 @@
         <put-attribute name="title" value="Quản lý thanh toán"/>
         <put-attribute name="page" value="/WEB-INF/views/thanh-toan/list.jsp" />
     </definition>
+    <!--phieu giao hang-->
+    <definition name="phieugiaohang.list" extends="default">
+        <put-attribute name="title" value="Phiếu giao hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/phieu-giao-hang/list.jsp" />
+    </definition>
+    <definition name="phieugiaohang.add" extends="default">
+        <put-attribute name="title" value="Phiếu giao hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/phieu-giao-hang/add.jsp" />
+    </definition>
+    <!--end phieu giao hang-->
 </tiles-definitions>
