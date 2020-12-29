@@ -34,6 +34,10 @@ public class VtReceiptView {
   private String diaChiNguoiNhan;
   @Column(name = "mobile_nguoi_nhan")
   private String mobileNguoiNhan;
+  @Column(name = "payment_type")
+  private int paymentType;
+  @Column(name = "tien_da_tra")
+  private Long tienDaTra;
 
   public Long getId() {
     return id;
@@ -137,5 +141,21 @@ public class VtReceiptView {
 
   public void setPayer(String payer) {
     this.payer = payer;
+  }
+
+  public int getPaymentType() {
+    return paymentType;
+  }
+
+  public void setPaymentType(int paymentType) {
+    this.paymentType = paymentType;
+  }
+
+  public Long getTienDaTra() {
+    return tienDaTra;
+  }
+
+  public void setTienDaTra(Long tienDaTra) {
+    this.tienDaTra = tienDaTra;
   }
 }

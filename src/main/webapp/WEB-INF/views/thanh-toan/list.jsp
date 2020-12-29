@@ -9,15 +9,15 @@
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </head>
 
-<script src="<%=request.getContextPath()%>/assets/project/bien-nhan/list.js" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/assets/project/thanh-toan/list.js" type="text/javascript"></script>
 
 <section id="content" ng-app="FrameworkBase"  ng-controller="frameworkCtrl">
     <section class="vbox background-white">
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="#">Phiếu nhận hàng</a></li>
-                <li><a href="#" id="title">Danh sách phiếu nhận hàng</a></li>
+                <li><a href="#">Thanh toán</a></li>
+                <li><a href="#" id="title">Danh sách thanh toán</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;">
                 <header class="panel-heading">
@@ -35,17 +35,46 @@
                                         <label class="control-label text-dark" style="padding: 0px">Số phiếu nhận</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input ng-model="search.receiptCode" class="form-control input-sm" placeholder="GH­2012­0036"/>
+                                        <input ng-model="search.soPhieuNhan" class="form-control input-sm" placeholder="GH­2012­36"/>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="col-md-4">
-                                        <label class="control-label text-dark">Kho nhận</label>
+                                        <label class="control-label text-dark">Khách hàng</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input ng-model="search.nameStock" class="form-control input-sm" placeholder="Kho nhận"/>
+                                        <input ng-model="search.nguoiGui" class="form-control input-sm" placeholder="Tên khách hàng"/>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label class="control-label text-dark" style="padding: 0px">Loại thanh toán</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select class="form-control" name="search.typePayment" id="search.typePayment" ng-model="search.typePayment">
+                                            <option value="" selected>Tất cả</option>
+                                            <option ng-value="1">Trả trước</option>
+                                            <option ng-value="2">Trả sau</option>
+                                            <option ng-value="3">Công nợ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-4">
+                                        <label class="control-label text-dark" style="padding: 0px">Thanh toán</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select class="form-control" name="search.isPayment" id="search.isPayment" ng-model="search.isPayment">
+                                            <option value="" selected>Tất cả</option>
+                                            <option ng-value="1">Đã thanh toán</option>
+                                            <option ng-value="2">Chưa thanh toán</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div class="row" style="margin-top:10px;">
@@ -83,7 +112,7 @@
             <section class="panel panel-default">
                 <header class="panel-heading">
                     <a href="javascript:void(0)"><h4 class="panel-title font-bold" data-toggle="collapse" data-target="#collapseTwo">
-                        DANH SÁCH PHIẾU NHẬN HÀNG
+                        DANH SÁCH THANH TOÁN
                     </h4></a>
                 </header>
                 <div id="collapseTwo" class="panel-collapse collapse in" aria-expanded="true">
@@ -99,9 +128,6 @@
                                     <option value="25">25</option>
                                 </select>
                             </div>
-                            <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/bienNhan/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
-                            </div>
                         </div>
 
                         <div class="table-responsive bg-white" style="overflow-x: auto;">
@@ -114,13 +140,14 @@
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Kho tiếp nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Nhân viên tiếp nhận</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Nhà xe</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Địa chỉ</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">địa chỉ</th>
+                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Nhà xe</th>--%>
+                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>--%>
+                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Địa chỉ</th>--%>
+                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>--%>
+                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">địa chỉ</th>--%>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Loại Thanh toán</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số tiền thanh toán</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Thanh toán</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Người thanh toán</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -137,21 +164,9 @@
                                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                     class="glyphicon glyphicon-cog"></i></button>
                                             <ul class="dropdown-menu pull-left" style="width: 230px;">
-                                                <li>
-                                                    <a href="javascript:void(0)" ng-click="exportPhieuNhanHang(item.id)" >In phiếu nhận hàng</a>
-                                                </li>
-
-                                                <li>
                                                     <div class="line line-dashed m-b-none m-t-none"></div>
-                                                    <a href="#" ng-click="preEdit(item.id)">
-                                                        Chỉnh sửa
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <div class="line line-dashed m-b-none m-t-none"></div>
-                                                    <a href="#" ng-click="preXoa(item)">
-                                                        Xóa
+                                                    <a href="#" ng-click="preThanhToan(item)">
+                                                        Thanh toán
                                                     </a>
                                                 </li>
                                             </ul>
@@ -162,14 +177,15 @@
                                     <td class="text-center v-inherit">{{item.dateReceipt|date:'dd/MM/yyyy'}}</td>
                                     <td class="text-left v-inherit">{{item.nameStock}}</td>
                                     <td class="text-left v-inherit">{{item.employee}}</td>
-                                    <td class="text-left v-inherit">{{item.nhaXe}}</td>
-                                    <%--<td class="text-left v-inherit">{{ item.bienSo}}</td>--%>
-                                    <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
-                                    <td class="text-left v-inherit">{{item.diaChiNguoiGui}}</td>
-                                    <td class="text-left v-inherit">{{item.tenNguoiNhan}}</td>
-                                    <td class="text-left v-inherit">{{item.diaChiNguoiNhan}}</td>
+                                    <%--<td class="text-left v-inherit">{{item.nhaXe}}</td>--%>
+                                    <%--<td class="text-left v-inherit">{{item.bienSo}}</td>--%>
+                                    <%--<td class="text-center v-inherit">{{item.tenNguoiGui}}</td>--%>
+                                    <%--<td class="text-left v-inherit">{{item.diaChiNguoiGui}}</td>--%>
+                                    <%--<td class="text-left v-inherit">{{item.tenNguoiNhan}}</td>--%>
+                                    <%--<td class="text-left v-inherit">{{item.diaChiNguoiNhan}}</td>--%>
                                     <td class="text-left v-inherit">{{item.paymentType == 1 ? "Trả trước" : item.paymentType == 2 ? "Trả sau" : "Công nợ"}}</td>
-                                    <td class="text-left v-inherit">{{item.payer}}</td>
+                                    <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
+                                    <td class="text-left v-inherit">{{item.tienDaTra != null && item.tienDaTra != '' ? "Đã thanh toán" : "Chưa thanh toán"}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -198,31 +214,127 @@
 
         </section>
     </section>
-    <div class="modal fade" id="xoaBienNhan" tabindex="-1" role="dialog"
-         aria-labelledby="xoaBienNhan" aria-hidden="true" aria-label="Close">
+    <div class="modal fade" id="thanhToanModal" tabindex="-1" role="dialog"
+         aria-labelledby="thanhToanModal" aria-hidden="true" aria-label="Close">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content" style="width: 940px;">
                 <div class="modal-header alert-info">
                     <button type="button" class="btn btn-default close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Xóa phiếu nhận hàng</h4>
+                    <h4 class="modal-title">Thanh toán phiếu nhận hàng</h4>
                 </div>
                 <div class="modal-body">
-                    <span>Bạn có chắc chắn muốn xóa phiếu nhận</span><br/>
-                    <span style="color: #3c763d">{{delReceiptCode}}</span> <span> hay không?</span>
-
+                    <input style="display: none" name="info.id" ng-value="info.id" ng-model="info.id" class="form-control"/>
+                    <div class="row">
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Số phiếu nhận hàng</label>
+                        <div class="col-sm-4">
+                            <input readonly name="info.soPhieuHang" id="info.soPhieuHang" ng-value="info.soPhieuHang" class="form-control"/>
+                        </div>
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Số tiền thanh toán <span style="color: red"> (*)</span></label>
+                        <div class="col-sm-4">
+                            <input name="info.tienDaTra" id="info.tienDaTra"  ng-model="info.tienDaTra" maxlength="20" class="form-control" data-type="currency"/>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="xoaBienNhan()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
+                    <div class="row" style="text-align: center">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="thanhToan()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
-    <form id="frmEdit" action="<%=request.getContextPath()%>/bienNhan/preEdit" method='POST'>
-        <input type="hidden" name='editId' id='editId' value="">
-    </form>
 </section>
 
 <script>
   showDropDownOnTable();
+
+  $("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() {
+      formatCurrency($(this), "blur");
+    }
+  });
+
+  function formatNumber(n) {
+    // format number 1000000 to 1,234,567
+    return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  }
+
+  function convertToNumber(currency) {
+    if (currency == '' || currency == null || currency == 'undefined') {
+      return "";
+    } else {
+      return Number(currency.replace(/[^0-9.-]+/g,""));
+    }
+  }
+  function formatCurrency(input, blur) {
+    // appends $ to value, validates decimal side
+    // and puts cursor back in right position.
+
+    // get input value
+    var input_val = input.val();
+
+    // don't validate empty input
+    if (input_val === "") { return; }
+
+    // original length
+    var original_len = input_val.length;
+
+    // initial caret position
+    var caret_pos = input.prop("selectionStart");
+
+    // check for decimal
+    if (input_val.indexOf(".") >= 0) {
+
+      // get position of first decimal
+      // this prevents multiple decimals from
+      // being entered
+      var decimal_pos = input_val.indexOf(".");
+
+      // split number by decimal point
+      var left_side = input_val.substring(0, decimal_pos);
+      var right_side = input_val.substring(decimal_pos);
+
+      // add commas to left side of number
+      left_side = formatNumber(left_side);
+
+      // validate right side
+      right_side = formatNumber(right_side);
+
+      // On blur make sure 2 numbers after decimal
+      if (blur === "blur") {
+        right_side += "";
+      }
+
+      // Limit decimal to only 2 digits
+      right_side = right_side.substring(0, 2);
+
+      // join number by .
+      input_val = "" + left_side + "." + right_side;
+
+    } else {
+      // no decimal entered
+      // add commas to number
+      // remove all non-digits
+      input_val = formatNumber(input_val);
+      input_val = "" + input_val;
+
+      // final formatting
+      if (blur === "blur") {
+        input_val += "";
+      }
+    }
+
+    // send updated string to input
+    input.val(input_val);
+
+    // put caret back in the right position
+    var updated_len = input_val.length;
+    caret_pos = updated_len - original_len + caret_pos;
+    input[0].setSelectionRange(caret_pos, caret_pos);
+  }
 </script>
