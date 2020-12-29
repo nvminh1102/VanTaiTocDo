@@ -76,9 +76,9 @@
                                         <b class="bg-warning"></b>
                                     </i>
                                     <span class="pull-right">
-                          <i class="fa fa-angle-down text"></i>
-                          <i class="fa fa-angle-up text-active"></i>
-                         </span>
+                                      <i class="fa fa-angle-down text"></i>
+                                      <i class="fa fa-angle-up text-active"></i>
+                                    </span>
                                     <span><spring:message code="label.system.manager"></spring:message></span>
                                 </a>
                                 <ul class="nav lt">
@@ -115,56 +115,68 @@
                             </li>
                         </sec:authorize>
 
-                        <li class="<%= isActive(request.getContextPath() + "/bienNhan", request) ? "active" : ""%>">
-                            <a href="#" class=""> <i class="fa fa-credit-card icon"> <b class="bg-warning"></b> </i> <span
-                                    class="pull-right"> <i class="fa fa-angle-down text"></i> <i
-                                    class="fa fa-angle-up text-active"></i> </span> <span>Quản lý vận chuyển</span> </a>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/danh-sach", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/bienNhan/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Phiếu nhận hàng</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/toa-hang/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/toa-hang/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Toa hàng</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/phieu-thu/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/phieu-thu/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Phiếu thu tiền</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Công nợ</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Toa hàng</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Phiêu giao hàng</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/khach-hang/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/bienNhan/khach-hang/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Khách hàng</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/nha-xe/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/bienNhan/nha-xe/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Nhà xe</span> </a></li>
-                            </ul>
-                            <ul class="nav lt">
-                                <li class="<%= isActive(request.getContextPath() + "/bienNhan/thanh-toan/list", request) ? "active" : ""%>">
-                                    <a href="<%=request.getContextPath()%>/bienNhan/thanh-toan/list" class=""> <i
-                                            class="fa fa-angle-right"></i> <span>Thanh toán</span> </a></li>
-                            </ul>
-                        </li>
+                        <sec:authorize access="hasAnyRole('ROLE_XEM_PHIEU_NHAN_HANG_VIEW','ROLE_XEM_TOA_HANG_VIEW','ROLE_XEM_PHIEU_THU_VIEW','ROLE_XEM_GIAO_HANG_VIEW','ROLE_XEM_KHACH_HANG_VIEW','ROLE_XEM_NHA_XE_VIEW','ROLE_XEM_THANH_TOAN_VIEW')">
+                            <li class="<%= isActive(request.getContextPath() + "/bienNhan", request) ? "active" : ""%>">
+                                <a href="#" class=""> <i class="fa fa-credit-card icon"> <b class="bg-warning"></b> </i> <span
+                                        class="pull-right"> <i class="fa fa-angle-down text"></i> <i
+                                        class="fa fa-angle-up text-active"></i> </span> <span>Quản lý vận chuyển</span> </a>
+                                <sec:authorize access="hasRole('ROLE_XEM_PHIEU_NHAN_HANG_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/bienNhan/danh-sach", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/bienNhan/list" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Phiếu nhận hàng</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_XEM_TOA_HANG_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/toa-hang/list", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/toa-hang/list" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Toa hàng</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_XEM_PHIEU_THU_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/phieu-thu/list", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/phieu-thu/list" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Phiếu thu tiền</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_XEM_GIAO_HANG_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Phiêu giao hàng</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_XEM_KHACH_HANG_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/bienNhan/khach-hang/list", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/bienNhan/khach-hang/list" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Khách hàng</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_XEM_NHA_XE_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/bienNhan/nha-xe/list", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/bienNhan/nha-xe/list" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Nhà xe</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_XEM_THANH_TOAN_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/bienNhan/thanh-toan/list", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/bienNhan/thanh-toan/list" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Thanh toán</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
+                            </li>
+                        </sec:authorize>
 
                         <li>
                             <a href="<%=request.getContextPath()%>/history">

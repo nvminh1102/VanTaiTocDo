@@ -1,17 +1,18 @@
 package com.osp.web.controller;
 
+import com.osp.common.ConstantAuthor;
+import com.osp.common.ConstantAuthor.KHACH_HANG;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
 import com.osp.model.VtPartner;
-import com.osp.model.VtReceipt;
 import com.osp.web.dao.KhachHangDAO;
-import java.sql.Timestamp;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,11 +28,13 @@ public class KhachHangController {
   KhachHangDAO khachHangDAO;
 
   @GetMapping("/list")
+  @Secured(ConstantAuthor.KHACH_HANG.view)
   public String list() {
     return "khachHang.list";
   }
 
   @GetMapping("/search")
+  @Secured(ConstantAuthor.KHACH_HANG.view)
   public ResponseEntity<PagingResult> parameterList(@RequestParam(value = "p", required = false, defaultValue = "1") int pageNumber,
       @RequestParam(value = "numberPerPage", required = false, defaultValue = "25") int numberPerPage,
       @RequestParam(value = "fullName", required = false, defaultValue = "") String fullName,
@@ -52,7 +55,7 @@ public class KhachHangController {
   }
 
   @PostMapping(value = "/delete")
-//    @Secured(ConstantAuthor.Parameter.update)
+  @Secured(ConstantAuthor.KHACH_HANG.delete)
   public ResponseEntity<String> delete(@RequestBody VtPartner vtPartner, HttpServletRequest request) {
     try {
       if (vtPartner.getId() == null) {
@@ -73,7 +76,7 @@ public class KhachHangController {
   }
 
   @PostMapping(value = "/them-moi-khach-hang")
-//    @Secured(ConstantAuthor.Parameter.update)
+  @Secured(ConstantAuthor.KHACH_HANG.add)
   public ResponseEntity<String> addKhachHang(@RequestBody VtPartner vtPartner, HttpServletRequest request) {
     try {
       User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

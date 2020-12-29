@@ -1,6 +1,8 @@
 package com.osp.web.controller;
 
 import com.osp.common.ConstantAuthor;
+import com.osp.common.ConstantAuthor.NHA_XE;
+import com.osp.common.ConstantAuthor.PHIEU_NHAN_HANG;
 import com.osp.common.Constants;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
@@ -19,6 +21,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,6 +52,7 @@ public class BienNhanController {
     NhaXeDAO nhaXeDAO;
 
     @GetMapping("/preAdd")
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.add)
     public String list(Model model) {
         Integer maxId = bienNhanDAO.getMaxId();
         String receiptCode = "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
@@ -57,7 +61,7 @@ public class BienNhanController {
     }
 
     @PostMapping(value = "/them-moi-bien-nhan")
-//  @Secured(ConstantAuthor.PublishAuctionTc.edit)
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.add)
     public ResponseEntity<String> addAucInfo(@RequestBody BienNhanForm item, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
@@ -172,6 +176,7 @@ public class BienNhanController {
     }
 
     @RequestMapping(value = "/list-bien-nhan", method = RequestMethod.GET)
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.view)
     public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String searchBienNhan, HttpServletRequest request) {
         VtReceipt item = new VtReceipt();
         PagingResult page = new PagingResult();
@@ -201,11 +206,13 @@ public class BienNhanController {
     }
 
     @GetMapping("/list")
+    @Secured(PHIEU_NHAN_HANG.view)
     public String listBn() {
         return "bienNhan.list";
     }
 
     @GetMapping("/search")
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.view)
     public ResponseEntity<PagingResult> parameterList(@RequestParam(value = "p", required = false, defaultValue = "1") int pageNumber,
         @RequestParam(value = "numberPerPage", required = false, defaultValue = "25") int numberPerPage,
         @RequestParam(value = "receiptCode", required = false, defaultValue = "") String receiptCode,
@@ -235,7 +242,7 @@ public class BienNhanController {
     }
 
     @PostMapping(value = "/delete")
-//    @Secured(ConstantAuthor.Parameter.update)
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.delete)
     public ResponseEntity<String> delete(@RequestBody VtReceipt vtReceipt, HttpServletRequest request) {
         try {
             if (vtReceipt.getId() == null) {
@@ -256,7 +263,7 @@ public class BienNhanController {
     }
 
     @PostMapping("/preEdit")
-    //    @Secured(ConstantAuthor.Parameter.update)
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.edit)
     public String preEdit(Model model, @RequestParam(value = "editId", required = false) Long editId) {
         model.addAttribute("receiptId", editId);
         return "bienNhan.edit";
@@ -294,6 +301,7 @@ public class BienNhanController {
     }
 
     @GetMapping("/deleteProperty")
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.delete)
     public ResponseEntity<String> deleteProperty(
             @RequestParam(value = "arrIdDelete", required = true) int[] arrIdDelete,
             HttpServletRequest request) {
@@ -309,6 +317,7 @@ public class BienNhanController {
     }
 
     @PostMapping(value = "/chinh-sua-bien-nhan")
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.edit)
     public ResponseEntity<String> editAuctionInfo(@RequestBody BienNhanForm item, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         VtReceipt bienNhanCu = bienNhanDAO.getById(item.getBienNhan().getId());
@@ -439,11 +448,13 @@ public class BienNhanController {
     }
 
     @GetMapping("/danhSachNhaXe")
+    @Secured(ConstantAuthor.NHA_XE.view)
     public ResponseEntity<List> danhSachNhaXe() {
         return new ResponseEntity<>(nhaXeDAO.danhSachNhaXe(), HttpStatus.OK);
     }
 
     @GetMapping("/thongTinNhaXe")
+    @Secured(NHA_XE.view)
     public ResponseEntity<NhaXe> thongTinNhaXe(@RequestParam(value = "bienSo", required = true) String bienSo,
                                                HttpServletRequest request) {
         NhaXe nhaXe = new NhaXe();
@@ -456,7 +467,7 @@ public class BienNhanController {
     }
 
     @GetMapping("/exportExcelPhieuNhan")
-//    @Secured(ConstantAuthor.PublishAuctionTc.view)
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.export)
     public void exportExcel(HttpServletResponse response, HttpServletRequest request,
                             @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
         PagingResult page = new PagingResult();
