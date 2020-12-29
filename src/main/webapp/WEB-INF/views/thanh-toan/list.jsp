@@ -131,23 +131,19 @@
                         </div>
 
                         <div class="table-responsive bg-white" style="overflow-x: auto;">
-                            <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;table-layout: fixed;" ng-switch on="listData.rowCount">
+                            <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;table-layout: fixed;" ng-switch on="page.rowCount">
                                 <thead class="bg-gray">
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tên khách hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận hàng</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày nhận</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Kho tiếp nhận</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Nhân viên tiếp nhận</th>
-                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Nhà xe</th>--%>
-                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>--%>
-                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Địa chỉ</th>--%>
-                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>--%>
-                                    <%--<th class="text-center v-inherit text-dark" style="width: 10%;">địa chỉ</th>--%>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Loại Thanh toán</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số tiền thanh toán</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Thanh toán</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số tiền</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Trả trước</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Trả sau</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Công nợ</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số còn phải thu</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -160,10 +156,10 @@
                                     <td class="text-center v-inherit" >{{(page.pageNumber - 1) * page.numberPerPage + $index + 1}}</td>
                                     <td class="text-center">
                                         <%--<sec:authorize access="hasAnyRole('ROLE_SYSTEM_PUBLISH_AUCTION_VIEW', 'ROLE_SYSTEM_PUBLISH_AUCTION_EDIT')">--%>
-                                        <div class="btn-group">
+                                        <div class="btn-group"  ng-click="checkShowThanhToan(item)">
                                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                     class="glyphicon glyphicon-cog"></i></button>
-                                            <ul class="dropdown-menu pull-left" style="width: 230px;">
+                                            <ul class="dropdown-menu pull-left" style="width: 230px;" ng-show="item.tienDaTra == null || tienPhaiTra < item.tienDaTra">
                                                     <div class="line line-dashed m-b-none m-t-none"></div>
                                                     <a href="#" ng-click="preThanhToan(item)">
                                                         Thanh toán
@@ -173,19 +169,15 @@
                                         </div>
                                         <%--</sec:authorize>--%>
                                     </td>
+                                    <td class="text-left v-inherit">{{item.tenNguoiGui}}</td>
                                     <td class="text-left v-inherit">{{item.receiptCode}}</td>
-                                    <td class="text-center v-inherit">{{item.dateReceipt|date:'dd/MM/yyyy'}}</td>
+                                    <td class="text-center v-inherit">{{item.tongTien}}</td>
                                     <td class="text-left v-inherit">{{item.nameStock}}</td>
-                                    <td class="text-left v-inherit">{{item.employee}}</td>
-                                    <%--<td class="text-left v-inherit">{{item.nhaXe}}</td>--%>
-                                    <%--<td class="text-left v-inherit">{{item.bienSo}}</td>--%>
-                                    <%--<td class="text-center v-inherit">{{item.tenNguoiGui}}</td>--%>
-                                    <%--<td class="text-left v-inherit">{{item.diaChiNguoiGui}}</td>--%>
-                                    <%--<td class="text-left v-inherit">{{item.tenNguoiNhan}}</td>--%>
-                                    <%--<td class="text-left v-inherit">{{item.diaChiNguoiNhan}}</td>--%>
-                                    <td class="text-left v-inherit">{{item.paymentType == 1 ? "Trả trước" : item.paymentType == 2 ? "Trả sau" : "Công nợ"}}</td>
                                     <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
-                                    <td class="text-left v-inherit">{{item.tienDaTra != null && item.tienDaTra != '' ? "Đã thanh toán" : "Chưa thanh toán"}}</td>
+                                    <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
+                                    <td class="text-left v-inherit">{{item.tienDaTra|number}}</td>
+                                    <td class="text-left v-inherit">{{(item.tongTien - item.tienDaTra)|number}}</td>
+                                    <td class="text-left v-inherit">{{item.paymentType == 1 ? "Trả trước" : item.paymentType == 2 ? "Trả sau" : "Công nợ"}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -237,7 +229,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="row" style="text-align: center">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="thanhToan()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
+                        <button class="btn btn-primary" ng-click="thanhToan()" style="text-transform: none;"><i class="fa fa-check"></i> <spring:message code="label.button.ok"/></button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Hủy bỏ</button>
                     </div>
 

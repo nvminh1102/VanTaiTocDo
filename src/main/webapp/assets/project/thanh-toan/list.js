@@ -108,6 +108,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         case 1:
           toastr.success("Thanh toán thành công!");
           $scope.search();
+            $("#thanhToanModal").modal("hide");
           break;
         case 0:
           toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");
@@ -117,5 +118,16 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     });
 
   }
+
+    $scope.checkShowThanhToan = function (item) {
+        $http.get(preUrl + "/bienNhan/thanh-toan/tong-tien-mat-hang", {params: {id: item.id}})
+            .then(function (response) {
+               $scope.tienPhaiTra = response.data;
+            });
+    };
+
+    $scope.xuatPhieuCongNo = function (item) {
+        window.open(preUrl+"/bienNhan/thanh-toan/exportExcelCongNo?giaoHangId=" + item.id , '_blank');
+    }
 
   }]);

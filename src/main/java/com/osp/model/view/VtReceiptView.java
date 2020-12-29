@@ -38,6 +38,8 @@ public class VtReceiptView {
   private int paymentType;
   @Column(name = "tien_da_tra")
   private Long tienDaTra;
+  @Column(name = "tong_tien")
+  private Long tongTien;
 
   public Long getId() {
     return id;
@@ -157,5 +159,13 @@ public class VtReceiptView {
 
   public void setTienDaTra(Long tienDaTra) {
     this.tienDaTra = tienDaTra;
+  }
+
+  public Long getTongTien() {
+    return tongTien;
+  }
+
+  public void setTongTien(Long tongTien) {
+    this.tongTien = tongTien;
   }
 }

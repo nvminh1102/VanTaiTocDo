@@ -146,7 +146,9 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
                         document.getElementById("btnSaveAuctionInfo").disabled = false;
                         toastr.success("Thêm mới phiếu nhận hàng thành công!");
                         $scope.info ={};
-                        $('#info.bienNhan.bienSo').select2("val", "");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 2000);
                         break;
                     case 0:
                         toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");
