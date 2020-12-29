@@ -123,6 +123,10 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             toastr.error("Tên người nhận không được để trống!");
             document.getElementById("nguoiNhan.fullName").focus();
             return false;
+        } else if ($scope.info.property.length == 0) {
+            toastr.error("Bạn chưa nhập mặt hàng!");
+            $("#addPropertyInfo").modal('show');
+            return false;
         }
         document.getElementById("btnSaveAuctionInfo").disabled = true;
         if ($scope.info.nguoiGui.dateReceipt != '') {

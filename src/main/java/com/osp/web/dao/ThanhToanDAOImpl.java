@@ -1,8 +1,11 @@
 package com.osp.web.dao;
 
 import com.osp.common.PagingResult;
+import com.osp.model.VtCongNo;
+import com.osp.model.VtCongNoDetail;
 import com.osp.model.view.VtReceiptView;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +25,7 @@ public class ThanhToanDAOImpl implements  ThanhToanDAO{
 
   @Override
   public Optional<PagingResult> page(PagingResult page, String soPhieuNhan, String nguoiGui,
-      Long typePayment, Long isPayment, Date fromGenDate, Date toGenDate) {
+      Long typePayment, Long isPayment, Date fromGenDate, Date toGenDate, boolean isThanhToan) {
     try {
       int offset = 0;
       if (page.getPageNumber() > 0) {
@@ -30,7 +33,7 @@ public class ThanhToanDAOImpl implements  ThanhToanDAO{
       }
       StringBuffer strWhere = new StringBuffer();
       if (soPhieuNhan != null && !"".equals(soPhieuNhan)) {
-        strWhere.append(" and UPPER(t.receipt_code) = :soPhieuNhan");
+        strWhere.append(" and UPPER(t.receipt_code) = :receiptCode");
       }
       if (nguoiGui != null && !"".equals(nguoiGui)) {
         strWhere.append(" and UPPER(b.FULL_NAME) like :nguoiGui");
@@ -79,8 +82,13 @@ public class ThanhToanDAOImpl implements  ThanhToanDAO{
       if (toGenDate != null) {
         query.setParameter("toGenDate", toGenDate);
       }
+      List<VtReceiptView> list = new ArrayList<>();
+      if (isThanhToan) {
+       list = query.getResultList();
+      } else {
+        list = query.setFirstResult(offset).setMaxResults(page.getNumberPerPage()).getResultList();
+      }
 
-      List<VtReceiptView> list = query.setFirstResult(offset).setMaxResults(page.getNumberPerPage()).getResultList();
       if (list != null && list.size() > 0) {
         page.setItems(list);
       }
@@ -115,11 +123,35 @@ public class ThanhToanDAOImpl implements  ThanhToanDAO{
   public Integer getMaxId() {
     Integer maxId = 0;
     try {
-      Query query = entityManager.createQuery(" select max(r.id) from VtReceipt r ");
+      Query query = entityManager.createQuery(" select max(r.id) from VtCongNo r ");
       maxId = (Integer) query.getSingleResult();
     } catch (Exception e) {
       e.printStackTrace();
     }
     return maxId;
+  }
+
+  @Override
+  public VtCongNo addCongNo(VtCongNo item) {
+    try {
+      entityManager.persist(item);
+      entityManager.flush();
+      return item;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  @Override
+  public VtCongNoDetail addCongNoDetail(VtCongNoDetail item) {
+    try {
+      entityManager.persist(item);
+      entityManager.flush();
+      return item;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
   }
 }

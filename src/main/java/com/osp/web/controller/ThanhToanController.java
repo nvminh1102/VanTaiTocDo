@@ -2,11 +2,9 @@ package com.osp.web.controller;
 
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
-import com.osp.model.User;
-import com.osp.model.VtPartner;
-import com.osp.model.VtReceipt;
-import com.osp.model.VtReceiptDetail;
+import com.osp.model.*;
 import com.osp.model.view.BienNhanForm;
+import com.osp.model.view.VtReceiptView;
 import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.MatHangDAO;
 import com.osp.web.dao.ThanhToanDAO;
@@ -47,6 +45,7 @@ public class ThanhToanController {
   BienNhanDAO bienNhanDAO;
   @Autowired
   MatHangDAO matHangDAO;
+  private final String templateThanhToan = "/fileTemplate/templateCongNo.xlsx";
 
   @GetMapping("/list")
   public String listBn() {
@@ -77,7 +76,7 @@ public class ThanhToanController {
         String strTdate = toDateReceipt + " 23:59:59";
         toDate = sdf.parse(strTdate);
       }
-      page = thanhToanDAO.page(page, Utils.trim(soPhieuNhan), Utils.trim(nguoiGui), typePayment, isPayment, fromDate, toDate).orElse(new PagingResult());
+      page = thanhToanDAO.page(page, Utils.trim(soPhieuNhan), Utils.trim(nguoiGui), typePayment, isPayment, fromDate, toDate, true).orElse(new PagingResult());
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -87,7 +86,6 @@ public class ThanhToanController {
   @PostMapping(value = "/update-tien-da-tra")
 //  @Secured(ConstantAuthor.PublishAuctionTc.edit)
   public ResponseEntity<String> updateTienDaTra(@RequestBody BienNhanForm item, HttpServletRequest request) {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     try {
       VtReceipt phieuNhanHang = bienNhanDAO.getById(item.getBienNhan().getId());
       phieuNhanHang.setTienDaTra(item.getBienNhan().getTienDaTra());
@@ -117,53 +115,117 @@ public class ThanhToanController {
     return new ResponseEntity<Integer>(tongTien, HttpStatus.OK);
   }
 
-  @GetMapping("/exportExcelCongNo")
+  @GetMapping("/exportExcelThanhToan")
 //    @Secured(ConstantAuthor.PublishAuctionTc.view)
   public void exportExcel(HttpServletResponse response, HttpServletRequest request,
-                          @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
+                          @RequestParam(value = "soPhieuNhan", required = false) String soPhieuNhan,
+                          @RequestParam(value = "nguoiGui", required = false) String nguoiGui,
+                          @RequestParam(value = "typePayment", required = false) Long typePayment,
+                          @RequestParam(value = "isPayment", required = false) Long isPayment,
+                          @RequestParam(value = "fromGenDate", required = false) String fromGenDate,
+                          @RequestParam(value = "toGenDate", required = false) String toGenDate) {
     PagingResult page = new PagingResult();
     page.setPageNumber(1);
-    VtReceipt phieuNhanHang = new VtReceipt();
-    VtPartner nguoiGui = new VtPartner();
-    VtPartner nguoiNhan = new VtPartner();
-    String typePayment = "";
+    page.setNumberPerPage(25);
+    Date fromDate = null;
+    Date toDate = null;
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat yyyy = new SimpleDateFormat("yyyy");
+    SimpleDateFormat ddMMyyyy = new SimpleDateFormat("ddMMyyyy");
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     try {
-//            Calendar cal = Calendar.getInstance();
-//            int day = cal.get(Calendar.DATE);
-//            int month = cal.get(Calendar.MONTH) + 1;
-//            int year = cal.get(Calendar.YEAR);
-//      phieuNhanHang = bienNhanDAO.getById(giaoHangId);
-//      if (phieuNhanHang.getPaymentType() == 1) {
-//        typePayment = "Trả trước";
-//      } else if (phieuNhanHang.getPaymentType() == 2) {
-//        typePayment = "Trả sau";
-//      } else {
-//        typePayment = "Công nợ";
-//      }
-//      nguoiGui = khachHangDAO.getById(phieuNhanHang.getDeliveryPartnerId());
-//      nguoiNhan = khachHangDAO.getById(phieuNhanHang.getReceivePartnerId());
-//      page.setItems(matHangDAO.getDsMatHang(giaoHangId));
-//      Map<String, Object> beans = new HashMap<String, Object>();
-//      if (phieuNhanHang.getDateReceipt() != null) {
-//        beans.put("ngayNhanHang", sdf.format(phieuNhanHang.getDateReceipt()));
-//      }
-//      beans.put("phieuNhanHang", phieuNhanHang);
-//      beans.put("nguoiGui", nguoiGui);
-//      beans.put("loaiThanhToan", typePayment);
-//      beans.put("nguoiNhan", nguoiNhan);
-//      beans.put("page", page);
-//      Resource resource = new ClassPathResource(templatePhieuNhanHang);
-//      InputStream fileIn = resource.getInputStream();
-//      ExcelTransformer transformer = new ExcelTransformer();
-//      Workbook workbook = transformer.transform(fileIn, beans);
-//
-//      response.setContentType("application/vnd.ms-excel");
-//      response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-nhan-hang-" + phieuNhanHang.getReceiptCode() + ".xlsx");
-//      ServletOutputStream out = response.getOutputStream();
-//      workbook.write(out);
-//      out.flush();
-//      out.close();
+      if (fromGenDate != null && !"".equals(fromGenDate)) {
+        String strFdate = fromGenDate + " 00:00:00";
+        fromDate  = new Timestamp(sdf2.parse(strFdate).getTime());
+      }
+      if (toGenDate != null && !"".equals(toGenDate)) {
+        String strTdate = toGenDate + " 23:59:59";
+        toDate = sdf2.parse(strTdate);
+      }
+      Integer maxId = thanhToanDAO.getMaxId();
+      String congNoCode = "CN-" + yyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
+      // Thêm mới công nợ
+      VtCongNo congNo = new VtCongNo();
+      congNo.setCongNoCode(congNoCode);
+      congNo.setDateCongNo(new Date());
+      congNo.setCreatedBy(user.getUsername());
+      congNo.setGenDate(new Date());
+      congNo.setLastUpdate(new Date());
+      congNo.setUpdatedBy(user.getUsername());
+      VtCongNo rsCongNo = thanhToanDAO.addCongNo(congNo);
+      Long tongTienAll = 0L;
+      Long tongTienTraTruoc = 0L;
+      Long tongTienTraSau = 0L;
+      Long tongTienCongNo = 0L;
+      Long tongConPhaiThu = 0L;
+
+      page = thanhToanDAO.page(page, Utils.trim(soPhieuNhan), Utils.trim(nguoiGui), typePayment, isPayment, fromDate, toDate, true).orElse(new PagingResult());
+      List<VtReceiptView> viewList = (List<VtReceiptView>) page.getItems();
+      for (int i = 0; i < viewList.size(); i++) {
+        // Thêm mới công nợ detail
+        VtCongNoDetail congNoDetail = new VtCongNoDetail();
+        congNoDetail.setCongNoId(rsCongNo.getId());
+        congNoDetail.setCreatedBy(user.getUsername());
+        congNoDetail.setReceiptId(viewList.get(i).getId().intValue());
+        congNoDetail.setGenDate(new Date());
+        congNoDetail.setLastUpdate(new Date());
+        congNoDetail.setUpdatedBy(user.getUsername());
+        thanhToanDAO.addCongNoDetail(congNoDetail);
+
+        if (viewList.get(i).getTienDaTra() != null && viewList.get(i).getPaymentType() == 1) {
+          viewList.get(i).setTienTraTruoc(viewList.get(i).getTienDaTra());
+          tongTienTraTruoc += viewList.get(i).getTienDaTra();
+        } else
+        if (viewList.get(i).getTienDaTra() != null && viewList.get(i).getPaymentType() == 2) {
+          viewList.get(i).setTienTraSau(viewList.get(i).getTienDaTra());
+          tongTienTraSau += viewList.get(i).getTienDaTra();
+        } else
+        if (viewList.get(i).getTienDaTra() != null && viewList.get(i).getPaymentType() == 3) {
+          viewList.get(i).setTienCongNo(viewList.get(i).getTienDaTra());
+          tongTienCongNo += viewList.get(i).getTienDaTra();
+        }
+        if (viewList.get(i).getTienDaTra() != null && viewList.get(i).getTongTien() != null) {
+          viewList.get(i).setTienConPhaiThu(viewList.get(i).getTongTien() - viewList.get(i).getTienDaTra());
+          tongConPhaiThu +=  viewList.get(i).getTienConPhaiThu();
+        }
+        if (viewList.get(i).getTienDaTra() == null && viewList.get(i).getTongTien() != null) {
+          viewList.get(i).setTienConPhaiThu(viewList.get(i).getTongTien());
+          tongConPhaiThu +=  viewList.get(i).getTienConPhaiThu();
+        }
+        if (viewList.get(i).getTongTien() != null) {
+          tongTienAll +=  viewList.get(i).getTongTien();
+        }
+        if (viewList.get(i).getTienDaTra() != null && viewList.get(i).getTienDaTra() > 0) {
+          viewList.get(i).setDaThanhToan("Đã thanh toán");
+        } else {
+          viewList.get(i).setDaThanhToan("Chưa thanh toán");
+        }
+      }
+      page.setItems(viewList);
+
+      Map<String, Object> beans = new HashMap<String, Object>();
+      beans.put("tongTienAll", tongTienAll);
+      beans.put("tongTienTraTruoc", tongTienTraTruoc);
+      beans.put("tongTienTraSau", tongTienTraSau);
+      beans.put("tongTienCongNo", tongTienCongNo);
+      beans.put("tongConPhaiThu", tongConPhaiThu);
+      beans.put("fromGenDate", fromGenDate);
+      beans.put("toGenDate", toGenDate);
+      beans.put("congNo", congNo);
+      beans.put("page", page);
+      beans.put("date", sdf.format(new Date()));
+      Resource resource = new ClassPathResource(templateThanhToan);
+      InputStream fileIn = resource.getInputStream();
+      ExcelTransformer transformer = new ExcelTransformer();
+      Workbook workbook = transformer.transform(fileIn, beans);
+
+      response.setContentType("application/vnd.ms-excel");
+      response.setHeader("Content-Disposition", "attachment; filename=" + "Danh-sach-phieu-thanh-toan-" + ddMMyyyy.format(new Date()) + ".xlsx");
+      ServletOutputStream out = response.getOutputStream();
+      workbook.write(out);
+      out.flush();
+      out.close();
 
     } catch (Exception e) {
       e.printStackTrace();
