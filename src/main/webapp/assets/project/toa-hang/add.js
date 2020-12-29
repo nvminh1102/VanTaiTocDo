@@ -3,8 +3,10 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupBienNhan', 
         $scope.listHangHoa = [];
         $scope.toaHang = {toaHangCode: "", noiDi: "", noiDen: "", bienSo: "", tenLaiXe: "", sdtLaiXe: "", nguoiNhan: "", noiNhan:""};
         $scope.numberPerPage = "5";
-        $scope.listBienNhanDaChon = popupBienNhan.getListDataBN();
-        $scope.listHangHoa = popupBienNhan.getListDataHH();
+        $scope.abc = "1";
+//        $scope.listBienNhanDaChon = popupBienNhan.getListDataBN();
+//        $scope.listHangHoa = popupBienNhan.getListDataHH();
+        $scope.abc = popupBienNhan.getListDataBN();
         
         // load DL nhà xe
         $http.get(preUrl + "/getListPartner", {params: {typePartner: 4}})

@@ -45,10 +45,11 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupBie
         };
 
         $scope.addListBienNhan = function () {
+            popupBienNhan.setListDataBN("11111");
             console.log("-----------------------------------");
             console.log($scope.selectedItems);
-            popupBienNhan.setListDataBN($scope.selectedItems);
-            popupBienNhan.setListDataHH($scope.selectedItemsHH);
+//            popupBienNhan.setListDataBN($scope.selectedItems);
+//            popupBienNhan.setListDataHH($scope.selectedItemsHH);
         };
 
 

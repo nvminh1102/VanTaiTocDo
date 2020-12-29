@@ -67,7 +67,11 @@
                                     </div>
                                 </div>
                                 <div class="row" style="margin: 0px;">
-                                    <div class="p-r-0 p-l-0 col-md-12">
+                                    <div class="p-r-0 p-l-0 col-md-6">
+                                        <label class="input-sm">Số bản ghi: </label>
+                                        <label style="color: red;">{{abc}}</label>
+                                    </div>
+                                    <div class="p-r-0 p-l-0 col-md-6">
                                         <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chonPhieuNhanHang"><i class="fa fa-plus"></i> Chọn phiếu nhận hàng</button>
                                     </div>
                                 </div>

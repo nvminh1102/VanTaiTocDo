@@ -11,22 +11,30 @@ var digitsAndSlash =/[1234567890/]/g;
 
 
 app.factory('popupBienNhan', function(){
-     var listDataBN = [];
-     var listDataHH = [];
+//     var listDataBN = [];
+//     var listDataHH = [];
+     var test = "";
     return {
+//        getListDataBN() {
+//            return listDataBN;
+//        },
+//        setListDataBN(items) {
+//            listDataBN = items;
+//        },
+//        getListDataHH() {
+//            return listDataHH;
+//        },
+//        setListDataHH(items) {
+//            listDataHH = items;
+//        },
         getListDataBN: function () {
-            return listDataBN;
+            return test;
         },
         setListDataBN: function (items) {
-            listDataBN = items;
-        },
-        getListDataHH: function () {
-            return listDataHH;
-        },
-        setListDataHH: function (items) {
-            listDataHH = items;
+            test = items;
         }
     };
+    
 });
 
 
