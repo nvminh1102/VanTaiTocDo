@@ -120,7 +120,7 @@ public class ThanhToanController {
   }
 
   @GetMapping("/exportExcelThanhToan")
-  @Secured(ConstantAuthor.THANH_TOAN.export)
+  @Secured(ConstantAuthor.THANH_TOAN.add)
   public void exportExcel(HttpServletResponse response, HttpServletRequest request,
                           @RequestParam(value = "soPhieuNhan", required = false) String soPhieuNhan,
                           @RequestParam(value = "nguoiGui", required = false) String nguoiGui,

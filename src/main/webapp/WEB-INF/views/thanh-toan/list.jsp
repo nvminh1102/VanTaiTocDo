@@ -160,11 +160,14 @@
                                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                     class="glyphicon glyphicon-cog"></i></button>
                                             <ul class="dropdown-menu pull-left" style="width: 230px;" ng-show="item.tienDaTra == null || tienPhaiTra < item.tienDaTra">
+                                            <sec:authorize access="hasRole('ROLE_THEM_THANH_TOAN_ADD')">
+                                                <li>
                                                     <div class="line line-dashed m-b-none m-t-none"></div>
                                                     <a href="#" ng-click="preThanhToan(item)">
                                                         Thanh toán
                                                     </a>
                                                 </li>
+                                            </sec:authorize>
                                             </ul>
                                         </div>
                                         <%--</sec:authorize>--%>
@@ -185,7 +188,9 @@
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="p-l-0 col-sm-6 text-left text-center-xs m-b-xs">
-                                    <button class="btn btn-info btn-s-sm" ng-click="xuatPhieuThanhToan();"><i class="fa fa-file-excel-o"></i> Xuất phiếu thanh toán</button>
+                                    <sec:authorize access="hasRole('ROLE_THEM_THANH_TOAN_ADD')">
+                                        <button class="btn btn-info btn-s-sm" ng-click="xuatPhieuThanhToan();"><i class="fa fa-file-excel-o"></i> Xuất phiếu thanh toán</button>
+                                    </sec:authorize>
                                 </div>
                                 <div class="p-r-0 col-sm-6 text-right text-center-xs">
                                     <ul class="pagination pagination-sm m-t-none m-b-none">

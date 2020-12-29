@@ -467,7 +467,7 @@ public class BienNhanController {
     }
 
     @GetMapping("/exportExcelPhieuNhan")
-    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.export)
+    @Secured(ConstantAuthor.PHIEU_NHAN_HANG.add)
     public void exportExcel(HttpServletResponse response, HttpServletRequest request,
                             @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
         PagingResult page = new PagingResult();
