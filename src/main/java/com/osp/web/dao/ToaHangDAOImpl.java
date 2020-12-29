@@ -79,7 +79,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 Long count = (Long) resultList.get(0);
                 if (count != null && count.compareTo(0L) > 0) {
                     List<VtToaHang> list = new ArrayList<>();
-                    Query queryAll = entityManager.createQuery("select * from VtToaHang r where 1=1 " + strWhere + " order by r.genDate desc ", VtToaHang.class);
+                    Query queryAll = entityManager.createQuery("select r from VtToaHang r where 1=1 " + strWhere + " order by r.genDate desc ", VtToaHang.class);
                     if (vtToaHang.getToaHangCode() != null && !vtToaHang.getToaHangCode().trim().equals("")) {
                         queryAll.setParameter("toaHangCode", "%" + vtToaHang.getToaHangCode().trim().toUpperCase() + "%");
                     }
@@ -121,6 +121,8 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 query.executeUpdate();
                 entityManager.merge(vtToaHang);
             } else {
+                vtToaHang.setGenDate(new Date());
+                vtToaHang.setCreatedBy(user.getUsername());
                 entityManager.persist(vtToaHang);
             }
             List<VtReceiptDetail> vtReceiptDetails = vTGoodsReceiptForm.getVtReceiptDetail();
@@ -129,6 +131,8 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 vtToaHangDetail.setToaHangId(vtToaHang.getId());
                 vtToaHangDetail.setCreatedBy(vtToaHang.getCreatedBy());
                 vtToaHangDetail.setUpdatedBy(vtToaHang.getUpdatedBy());
+                vtToaHangDetail.setLastUpdate(vtToaHang.getLastUpdate());
+                vtToaHangDetail.setGenDate(vtToaHang.getGenDate());
                 vtToaHangDetail.setReceiptId(bo.getReceiptId());
                 vtToaHangDetail.setVtReceiptDetailId(bo.getId());
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status =2 WHERE a.id=:id").setParameter("id", bo.getId());
@@ -138,8 +142,8 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             for (VtReceiptView vtReceiptView : vtReceiptViews) {
                 // update các bản ghi VtReceipt trạng thái =2 với DK: status = 1 và ko có bản ghi VtReceiptDetail nào có trạng thái =1
-                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status =2 WHERE a.id=:receiptId and status = 1 "
-                        + " and id not in (select receiptId from VtReceiptDetail where status = 1 and receiptId = :receiptId )").setParameter("receiptId", vtReceiptView.getId());
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 2 ,  a.createdBy = :createdBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:receiptId and status = 1 "
+                        + " and id not in (select receiptId from VtReceiptDetail where status = 1 and receiptId = :receiptId )").setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue())).setParameter("createdBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
             }
             entityManager.flush();
@@ -181,7 +185,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             VtToaHang vtToaHang = (VtToaHang) queryAll.getSingleResult();
             vTGoodsReceiptForm.setVtToaHang(vtToaHang);
             String sqlBuffer = "SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan  "
+                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra "
                     + "from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
                     + " where thd.toa_hang_id = :toahangid ";
 

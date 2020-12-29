@@ -1,4 +1,4 @@
-app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $timeout, $q, popupBienNhan) {
+app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHang', function ($scope, $http, $timeout, $q, popupPhieuNhanHang) {
         $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: ""};
         $scope.listBienNhan = [];
         $scope.listHangHoa = [];
@@ -6,11 +6,11 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupBie
         $scope.idSelected = "";
         $scope.checkLoadData = false;
         $scope.numberPerPage = "5";
-
         $scope.checked = [];
         $scope.checkedHH = [];
         $scope.checkAll = false;
         $scope.checkAllHH = false;
+        
         $scope.selectedItems = [];
         $scope.selectedItemsHH = [];
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
@@ -45,11 +45,10 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupBie
         };
 
         $scope.addListBienNhan = function () {
-            popupBienNhan.setListDataBN("11111");
-            console.log("-----------------------------------");
-            console.log($scope.selectedItems);
-//            popupBienNhan.setListDataBN($scope.selectedItems);
-//            popupBienNhan.setListDataHH($scope.selectedItemsHH);
+            popupPhieuNhanHang.setListDataBN($scope.selectedItems);
+            popupPhieuNhanHang.setListDataHH($scope.selectedItemsHH);
+//            console.log($scope.listBienNhanDaChon.items.length);
+//            popupPhieuNhanHang.setListDataHH($scope.selectedItemsHH);
         };
 
 
@@ -81,6 +80,8 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupBie
                         list_.push($scope.selectedItems[i]);
                     }
                 }
+                $scope.selectedItems = list_;
+                
                 var list2_ = [];
                 for (var i = 0; i < $scope.listHangHoa.length; i++) {
                     if ($scope.listHangHoa[i].receiptId != idRemove) {

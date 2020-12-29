@@ -31,29 +31,34 @@
                                     <div class="col-md-4">
                                         <input ng-model="toaHang.toaHangCode"  data-parsley-required="true"  data-parsley-error-message="Số phiều bắt buộc nhập!!" maxlength="200" class="form-control input-sm"/>
                                     </div>
-                                    <label class="col-md-2 control-label text-dark">Nơi đi</label>
-                                    <div class="col-md-4">
-                                        <input ng-model="toaHang.noiDi"  maxlength="500" class="form-control input-sm"/>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label text-dark">Nơi đến</label>
-                                    <div class="col-md-4">
-                                        <input ng-model="toaHang.noiDen"  maxlength="500" class="form-control input-sm"/>
-                                    </div>
                                     <label class="col-md-2 control-label text-dark">Biển số</label>
                                     <div class="col-md-4">
+                                        <select ng-model="toaHang.bienSo" id="bienNhan.bienSo" name ="toaHang.bienSo" class="select2" style="width: 100%" ng-change="onChangeBienSo()">
+                                            <option value="" selected >-- Lựa chọn --</option>
+                                            <option ng-repeat="item in nhaXeList track by $index" ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
+                                        </select>
+
                                         <input ng-model="toaHang.bienSo"  maxlength="50" class="form-control input-sm"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-md-2 control-label text-dark">Tên lái xe</label>
                                     <div class="col-md-4">
-                                        <input ng-model="toaHang.tenLaiXe" maxlength="200" class="form-control input-sm"/>
+                                        <input ng-model="toaHang.tenLaiXe" maxlength="200" class="form-control input-sm" readonly/>
                                     </div>
                                     <label class="col-md-2 control-label text-dark">Số điện thoại lái xe</label>
                                     <div class="col-md-4">
-                                        <input ng-model="toaHang.sdtLaiXe" maxlength="20" class="form-control input-sm"/>
+                                        <input ng-model="toaHang.sdtLaiXe" maxlength="20" class="form-control input-sm" readonly/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label text-dark">Nơi đi</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.noiDi"  maxlength="500" class="form-control input-sm"/>
+                                    </div>
+                                    <label class="col-md-2 control-label text-dark">Nơi đến</label>
+                                    <div class="col-md-4">
+                                        <input ng-model="toaHang.noiDen"  maxlength="500" class="form-control input-sm"/>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -69,14 +74,14 @@
                                 <div class="row" style="margin: 0px;">
                                     <div class="p-r-0 p-l-0 col-md-6">
                                         <label class="input-sm">Số bản ghi: </label>
-                                        <label style="color: red;">{{abc}}</label>
+                                        <label style="color: red;">{{listBienNhanDaChon.items.length}} - {{listHangHoa.items.length}}</label>
                                     </div>
                                     <div class="p-r-0 p-l-0 col-md-6">
                                         <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chonPhieuNhanHang"><i class="fa fa-plus"></i> Chọn phiếu nhận hàng</button>
                                     </div>
                                 </div>
                                 <div class="table-responsive bg-white" style="margin-bottom: 10px;">
-                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.length">
+                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.items.length">
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark">STT</th>
@@ -98,7 +103,7 @@
                                                     Không có dữ liệu
                                                 </td>
                                             </tr>
-                                            <tr ng-switch-default ng-repeat="item in listBienNhanDaChon track by $index">
+                                            <tr ng-switch-default ng-repeat="item in listBienNhanDaChon.items track by $index">
                                                 <td class="text-center v-inherit" >{{$index + 1}}</td>
                                                 <td class="text-center v-inherit">{{item.receiptCode}}</td>
                                                 <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
@@ -110,6 +115,7 @@
                                                 <td class="text-center v-inherit">{{item.numbers}}</td>
                                                 <td class="text-center v-inherit">{{item.note}}</td>
                                                 <td class="text-center v-inherit">
+                                                    <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonBienNhan(item)"><i class="fa fa-edit"></i>xóa</a>
                                                     <!--<input type="radio" name="notarySelect" ng-click="changeIdSelected(item.idNotaryInfo);">-->
                                                 </td>
                                             </tr>

@@ -159,26 +159,26 @@
                                     <tr ng-switch-default ng-repeat="item in listData.items track by $index">
                                         <td class="text-center v-inherit" >{{(listData.pageNumber > 0 ? (listData.pageNumber - 1): 0) * listData.numberPerPage + $index + 1}}</td>
                                         <td class="text-center">
-                                        <div class="btn-group">
-                                            <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
-                                                    class="glyphicon glyphicon-cog"></i></button>
-                                            <ul class="dropdown-menu pull-left" style="width: 230px;">
-                                                <li>
-                                                    <div class="line line-dashed m-b-none m-t-none"></div>
-                                                    <a href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}">
-                                                        Chỉnh sửa
-                                                    </a>
-                                                </li>
+                                            <div class="btn-group">
+                                                <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
+                                                        class="glyphicon glyphicon-cog"></i></button>
+                                                <ul class="dropdown-menu pull-left" style="width: 230px;">
+                                                    <li>
+                                                        <div class="line line-dashed m-b-none m-t-none"></div>
+                                                        <a href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}">
+                                                            Chỉnh sửa
+                                                        </a>
+                                                    </li>
 
-                                                <li>
-                                                    <div class="line line-dashed m-b-none m-t-none"></div>
-                                                    <a href="#" ng-click="preXoa(item)">
-                                                        Xóa
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
+                                                    <li>
+                                                        <div class="line line-dashed m-b-none m-t-none"></div>
+                                                        <a href="#" ng-click="preXoa(item)">
+                                                            Xóa
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
                                         <td class="text-left v-inherit">{{item.toaHangCode}}</td>
                                         <td class="text-center v-inherit">{{item.genDate|date:'dd/MM/yyyy'}}</td>
                                         <td class="text-left v-inherit">{{item.noiDen}}</td>
@@ -237,3 +237,6 @@
         </div>
     </div>
 </section>
+<script>
+    showDropDownOnTable();
+</script>

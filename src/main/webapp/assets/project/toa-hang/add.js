@@ -1,18 +1,30 @@
-app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupBienNhan', function ($scope, $http, $timeout, $q, popupBienNhan) {
-        $scope.listBienNhanDaChon = [];
-        $scope.listHangHoa = [];
-        $scope.toaHang = {toaHangCode: "", noiDi: "", noiDen: "", bienSo: "", tenLaiXe: "", sdtLaiXe: "", nguoiNhan: "", noiNhan:""};
+app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHang', function ($scope, $http, $timeout, $q, popupPhieuNhanHang) {
+        $scope.listBienNhanDaChon = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
+        $scope.listHangHoa = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
+        $scope.toaHang = {toaHangCode: "", noiDi: "", noiDen: "", bienSo: "", tenLaiXe: "", sdtLaiXe: "", nguoiNhan: "", noiNhan: ""};
         $scope.numberPerPage = "5";
-        $scope.abc = "1";
-//        $scope.listBienNhanDaChon = popupBienNhan.getListDataBN();
-//        $scope.listHangHoa = popupBienNhan.getListDataHH();
-        $scope.abc = popupBienNhan.getListDataBN();
-        
+        $scope.listBienNhanDaChon = popupPhieuNhanHang.getListDataBN();
+        $scope.listHangHoa = popupPhieuNhanHang.getListDataHH();
+
         // load DL nhà xe
         $http.get(preUrl + "/getListPartner", {params: {typePartner: 4}})
                 .then(function (response) {
                     $scope.vtPartners = response.data;
                 });
+
+        $http.get(preUrl + "/bienNhan/danhSachNhaXe")
+                .then(function (response) {
+                    $scope.nhaXeList = response.data;
+                });
+
+        $scope.onChangeBienSo = function () {
+            $http.get(preUrl + "/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.toaHang.bienSo}})
+                    .then(function (response) {
+                        $scope.toaHang.tenLaiXe = response.data.tenLaiXe;
+                        $scope.toaHang.sdtLaiXe = response.data.sdtLaiXe;
+                    });
+        }
+
         if (toaHangCode != null && toaHangCode != '') {
             $scope.toaHang.toaHangCode = toaHangCode;
         }
@@ -22,23 +34,42 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupBienNhan', 
                     .then(function (response) {
                         $scope.toaHang = response.data.vtToaHang;
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
-                            $scope.listBienNhanDaChon = response.data.vtReceiptViews;
+                            $scope.listBienNhanDaChon.items = response.data.vtReceiptViews;
                         }
                     });
         }
 
+        $scope.boChonBienNhan = function (item) {
+            var idRemove = item.id;
+            var list_ = [];
+            for (var i = 0; i < $scope.listBienNhanDaChon.items.length; i++) {
+                if ($scope.listBienNhanDaChon.items[i].id != idRemove) {
+                    list_.push($scope.listBienNhanDaChon.items[i]);
+                }
+            }
+            $scope.listBienNhanDaChon.items = list_;
+
+            var list2_ = [];
+            for (var i = 0; i < $scope.listHangHoa.items.length; i++) {
+                if ($scope.listHangHoa.items[i].receiptId != idRemove) {
+                    list2_.push($scope.listHangHoa.items[i]);
+                }
+            }
+            $scope.listHangHoa.items = list2_;
+        }
         $scope.saveToaHang = function () {
             if ($("#formAdd").parsley().validate()) {
                 if (typeof $scope.toaHang != "undefined" && typeof $scope.toaHang.toaHangCode != 'undefined') {
                     console.log($scope.listBienNhanDaChon);
-                    if (typeof $scope.listBienNhanDaChon != "undefined" && $scope.listBienNhanDaChon.length>0 && typeof $scope.listHangHoa != "undefined" && $scope.listHangHoa.length>0) {
+                    if (typeof $scope.listBienNhanDaChon != "undefined" && typeof $scope.listBienNhanDaChon.items != "undefined" && $scope.listBienNhanDaChon.items.length > 0
+                            && typeof $scope.listHangHoa != "undefined" && typeof $scope.listHangHoa.items != "undefined" && $scope.listHangHoa.items.length > 0) {
                         if (id != null && id != '') {
                             $scope.toaHang.id = id;
                         }
                         $scope.call = {
                             vtToaHang: angular.copy($scope.toaHang),
-                            vtReceiptViews: angular.copy($scope.listBienNhanDaChon),
-                            vtReceiptDetail: angular.copy($scope.listHangHoa)
+                            vtReceiptViews: angular.copy($scope.listBienNhanDaChon.items),
+                            vtReceiptDetail: angular.copy($scope.listHangHoa.items)
                         };
                         var vTGoodsReceiptForm = JSON.stringify($scope.call);
                         console.log(vTGoodsReceiptForm);

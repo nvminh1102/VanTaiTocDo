@@ -1,4 +1,4 @@
-app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload', '$timeout', '$q', function ($scope, $http, $filter, $window, fileUpload, $timeout, $q) {
+app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $timeout, $q) {
 
         $scope.search = {toaHangCode: "", bienSo: "", noiDen: "", noiDi: "", fromGenDate: "", toGenDate: ""};
         var search = JSON.stringify($scope.search);
