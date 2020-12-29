@@ -153,10 +153,11 @@ public class ToaHangController {
         VtToaHang vtToaHang = new VtToaHang();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getVTGoodsReceiptFormById(idToaHang);
+            VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getListBienNhan(idToaHang);
             vtToaHang = vTGoodsReceiptForm.getVtToaHang();
-            page.setItems(vTGoodsReceiptForm.getVtReceiptViews());
+            page.setItems(vTGoodsReceiptForm.getVtReceiptDetail());
             Map<String, Object> beans = new HashMap<String, Object>();
+            beans.put("strGenDate", sdf.format(vtToaHang.getGenDate()));
             beans.put("vtToaHang", vtToaHang);
             beans.put("ngayLap", sdf.format(new Date()));
             beans.put("page", page);

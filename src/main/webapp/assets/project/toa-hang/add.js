@@ -20,6 +20,8 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
         $scope.onChangeBienSo = function () {
             $http.get(preUrl + "/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.toaHang.bienSo}})
                     .then(function (response) {
+                        $scope.toaHang.nhaXe = response.data.nhaXe;
+                        $scope.toaHang.loaiXe = response.data.loaiXe;
                         $scope.toaHang.tenLaiXe = response.data.tenLaiXe;
                         $scope.toaHang.sdtLaiXe = response.data.sdtLaiXe;
                     });
