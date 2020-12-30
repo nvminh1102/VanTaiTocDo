@@ -50,6 +50,7 @@ public class PhieuGiaoHangController {
 
     SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
     private final String templatePhieuGiaoHang = "/fileTemplate/templatePhieuGiaoHang.xlsx";
+    private final String templatePhieuThu = "/fileTemplate/templatePhieuThu.xlsx";
 
     @Autowired
     PhieuGiaoHangDAO phieuGiaoHangDAO;
@@ -149,9 +150,9 @@ public class PhieuGiaoHangController {
         VtPhieuGiaoHang vtPhieuGiaoHang = new VtPhieuGiaoHang();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         try {
-            VTGoodsReceiptForm vTGoodsReceiptForm = phieuGiaoHangDAO.getVTGoodsReceiptFormById(idPhieu);
+            VTGoodsReceiptForm vTGoodsReceiptForm = phieuGiaoHangDAO.getExportById(idPhieu);
             vtPhieuGiaoHang = vTGoodsReceiptForm.getVtPhieuGiaoHang();
-            page.setItems(vTGoodsReceiptForm.getVtReceiptDetail());
+            page.setItems(vTGoodsReceiptForm.getVtReceiptViews());
             Map<String, Object> beans = new HashMap<String, Object>();
             beans.put("strGenDate", sdf.format(vtPhieuGiaoHang.getGenDate()));
             beans.put("vtPhieuGiaoHang", vtPhieuGiaoHang);
@@ -164,6 +165,42 @@ public class PhieuGiaoHangController {
 
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-giao-hang-" + vtPhieuGiaoHang.getMaPhieuGiao()+ "-" + sdf.format(new Date())+ ".xlsx");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    @GetMapping("/exportPhieuThu")
+//    @Secured(ConstantAuthor.PublishAuctionTc.view)
+    public void exportPhieuThu(HttpServletResponse response, HttpServletRequest request,
+                            @RequestParam(value = "idPhieuThu", required = false) Integer idPhieuThu) {
+        PagingResult page = new PagingResult();
+        page.setPageNumber(1);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy");
+        try {
+            List<VtReceiptDetail> vtReceiptDetails = phieuGiaoHangDAO.getPhieuNhanHang(idPhieuThu);
+            VtReceiptDetail vtReceiptDetail = (vtReceiptDetails!=null ? vtReceiptDetails.get(0): new VtReceiptDetail());
+            page.setItems(vtReceiptDetails);
+            Map<String, Object> beans = new HashMap<String, Object>();
+            beans.put("vtReceiptDetail", vtReceiptDetail);
+            beans.put("maPhieuThu", "PT-" + sdf2.format(new Date())+ "-" +(vtReceiptDetail!=null ? vtReceiptDetail.getId(): 0));
+            beans.put("ngayLap", sdf.format(new Date()));
+            beans.put("page", page);
+            Resource resource = new ClassPathResource(templatePhieuThu);
+            InputStream fileIn = resource.getInputStream();
+            ExcelTransformer transformer = new ExcelTransformer();
+            Workbook workbook = transformer.transform(fileIn, beans);
+
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-thu-" + (vtReceiptDetails!=null ? vtReceiptDetails.get(0).getReceiptCode() + "-":"")+ sdf.format(new Date())+ ".xlsx");
             ServletOutputStream out = response.getOutputStream();
             workbook.write(out);
             out.flush();

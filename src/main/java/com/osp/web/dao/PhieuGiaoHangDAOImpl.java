@@ -5,6 +5,7 @@ import com.osp.common.PagingResult;
 import com.osp.model.User;
 import com.osp.model.VtPhieuGiaoHang;
 import com.osp.model.VtPhieuGiaoHangDetail;
+import com.osp.model.VtReceipt;
 import com.osp.model.VtReceiptDetail;
 import com.osp.model.VtToaHang;
 import com.osp.model.VtToaHangDetail;
@@ -69,7 +70,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 Long count = (Long) resultList.get(0);
                 if (count != null && count.compareTo(0L) > 0) {
                     List<VtPhieuGiaoHang> list = new ArrayList<>();
-                    Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHang r where 1=1 " + strWhere + " order by r.genDate desc ", VtToaHang.class);
+                    Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHang r where 1=1 " + strWhere + " order by r.genDate desc ", VtPhieuGiaoHang.class);
                     if (vtPhieuGiaoHang.getMaPhieuGiao() != null && !vtPhieuGiaoHang.getMaPhieuGiao().trim().equals("")) {
                         queryCount.setParameter("maPhieuGiao", "%" + vtPhieuGiaoHang.getMaPhieuGiao().trim().toUpperCase() + "%");
                     }
@@ -111,7 +112,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             }
             List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             for (VtReceiptView bo : vtReceiptViews) {
-                VtPhieuGiaoHangDetail vtPhieuGiaoHangDetail  = new VtPhieuGiaoHangDetail();
+                VtPhieuGiaoHangDetail vtPhieuGiaoHangDetail = new VtPhieuGiaoHangDetail();
                 vtPhieuGiaoHangDetail.setPhieuGiaoHangId(vtPhieuGiaoHang.getId());
                 vtPhieuGiaoHangDetail.setCreatedBy(vtPhieuGiaoHang.getCreatedBy());
                 vtPhieuGiaoHangDetail.setUpdatedBy(vtPhieuGiaoHang.getUpdatedBy());
@@ -156,15 +157,16 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
         VTGoodsReceiptForm vTGoodsReceiptForm = new VTGoodsReceiptForm();
         List<Object[]> db = new ArrayList<>();
         List<VtReceiptView> vtReceiptViews = new ArrayList<>();
+        Integer soLuong = 0;
+        Integer tongTien = 0;
         try {
             Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHang r where r.id = :id ");
             queryAll.setParameter("id", id);
 
             VtPhieuGiaoHang vtPhieuGiaoHang = (VtPhieuGiaoHang) queryAll.getSingleResult();
-            vTGoodsReceiptForm.setVtPhieuGiaoHang(vtPhieuGiaoHang);
             String sqlBuffer = "SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
-                    + " from VtPhieuGiaoHangDetail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
+                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien , (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong "
+                    + " from Vt_Phieu_Giao_Hang_Detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID   "
                     + " where thd.phieu_giao_hang_id = :phieuGiaoHangId ";
 
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
@@ -189,9 +191,81 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
+                row.setSoLuong(record[16] == null ? null : Integer.valueOf(record[16].toString()));
                 vtReceiptViews.add(row);
             });
+            for (VtReceiptView vtReceiptView : vtReceiptViews) {
+                soLuong = soLuong + vtReceiptView.getSoLuong();
+                tongTien = tongTien + ((vtReceiptView.getTongTien() != null ? vtReceiptView.getTongTien().intValue() : 0) - (vtReceiptView.getTienDaTra() != null ? vtReceiptView.getTienDaTra().intValue() : 0));
+            }
+            vtPhieuGiaoHang.setSoLuong(soLuong);
+            vtPhieuGiaoHang.setTongTien(tongTien);
+            vTGoodsReceiptForm.setVtPhieuGiaoHang(vtPhieuGiaoHang);
+            vTGoodsReceiptForm.setVtReceiptViews(vtReceiptViews);
+            return vTGoodsReceiptForm;
+        } catch (Exception e) {
+            e.printStackTrace();
+            entityManager.getTransaction().rollback();
+            return null;
+        }
+    }
+    
+    
+    @Override
+    public VTGoodsReceiptForm getExportById(Integer id) {
+        VTGoodsReceiptForm vTGoodsReceiptForm = new VTGoodsReceiptForm();
+        List<Object[]> db = new ArrayList<>();
+        List<VtReceiptView> vtReceiptViews = new ArrayList<>();
+        Integer soLuong = 0;
+        Integer tongTien = 0;
+        try {
+            Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHang r where r.id = :id ");
+            queryAll.setParameter("id", id);
 
+            VtPhieuGiaoHang vtPhieuGiaoHang = (VtPhieuGiaoHang) queryAll.getSingleResult();
+            String sqlBuffer = " SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan,  "
+                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , rd.cost AS thanh_tien , rd.numbers AS so_luong , rd.name, rd.note  "
+                    + "  from Vt_Phieu_Giao_Hang_Detail thd  "
+                    + " inner join vt_receipt t on thd.receipt_Id = t.id  "
+                    + " inner join vt_receipt_detail rd on t.id = rd.receipt_Id   "
+                    + " left join vt_partner b on t.delivery_partner_id = b.ID   "
+                    + " left join vt_partner c on t.receive_partner_id = c.ID  "
+                    + " where thd.phieu_giao_hang_id = :phieuGiaoHangId ";
+
+            Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
+            queryDetail.setParameter("phieuGiaoHangId", id);
+            db = queryDetail.getResultList();
+
+            db.stream().forEach((record) -> {
+                VtReceiptView row = new VtReceiptView();
+                row.setId(record[0] == null ? null : Long.valueOf(record[0].toString()));
+                row.setReceiptCode(record[1] == null ? null : (String) record[1]);
+                row.setDateReceipt(record[2] == null ? null : (Date) record[2]);
+                row.setNameStock(record[3] == null ? null : (String) record[3]);
+                row.setNhaXe(record[4] == null ? null : (String) record[4]);
+                row.setBienSo(record[5] == null ? null : (String) record[5]);
+                row.setEmployee(record[6] == null ? null : (String) record[6]);
+                row.setTenNguoiGui(record[7] == null ? null : (String) record[7]);
+                row.setDiaChiNguoiGui(record[8] == null ? null : (String) record[8]);
+                row.setTenNguoiNhan(record[9] == null ? null : (String) record[9]);
+                row.setDiaChiNguoiNhan(record[10] == null ? null : (String) record[10]);
+                row.setMobileNguoiNhan(record[11] == null ? null : (String) record[11]);
+                row.setPayer(record[12] == null ? null : (String) record[12]);
+                row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
+                row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
+                row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
+                row.setSoLuong(record[16] == null ? null : Integer.valueOf(record[16].toString()));
+                row.setName(record[17] == null ? null : (String)record[17]);
+                row.setNote(record[18] == null ? null : (String)record[18]);
+                vtReceiptViews.add(row);
+            });
+            for (VtReceiptView vtReceiptView : vtReceiptViews) {
+                soLuong = soLuong + vtReceiptView.getSoLuong();
+                tongTien = tongTien + ((vtReceiptView.getTongTien() != null ? vtReceiptView.getTongTien().intValue() : 0) - (vtReceiptView.getTienDaTra() != null ? vtReceiptView.getTienDaTra().intValue() : 0));
+            }
+            vtPhieuGiaoHang.setSoLuong(soLuong);
+            vtPhieuGiaoHang.setTongTien(tongTien);
+            vTGoodsReceiptForm.setVtPhieuGiaoHang(vtPhieuGiaoHang);
             vTGoodsReceiptForm.setVtReceiptViews(vtReceiptViews);
             return vTGoodsReceiptForm;
         } catch (Exception e) {
@@ -202,22 +276,16 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
     }
 
     @Override
-    public VTGoodsReceiptForm getListBienNhan(Integer id) {
-        VTGoodsReceiptForm vTGoodsReceiptForm = new VTGoodsReceiptForm();
+    public List<VtReceiptDetail> getPhieuNhanHang(Integer id) {
         List<Object[]> db = new ArrayList<>();
         List<VtReceiptDetail> items = new ArrayList<>();
-        Integer soLuong = 0;
-        Integer tongTien = 0;
         try {
-            Query queryAll = entityManager.createQuery("select r from VtToaHang r where r.id = :id ");
-            queryAll.setParameter("id", id);
-
-            VtToaHang vtToaHang = (VtToaHang) queryAll.getSingleResult();
-            String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost  "
-                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id  inner join vt_receipt_detail td on thd.vt_receipt_detail_id = td.id left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
-                    + " where thd.toa_hang_id = :toahangid order by thd.id, t.id, td.id ";
+            String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui,  c.FULL_NAME as ten_nguoi_nhan, "
+                    + " c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost , td.sizes, td.weight, td.note , t.payer, b.address as diaChiGui, b.MOBILE as sdtGui, DATE_FORMAT(t.gen_date, '%d-%m-%Y') as strGenDate, t.name_Stock "
+                    + " from vt_receipt t inner join vt_receipt_detail td on t.id = td.receipt_id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID  "
+                    + " where t.id = :id order by t.id, td.id ";
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
-            queryDetail.setParameter("toahangid", id);
+            queryDetail.setParameter("id", id);
             db = queryDetail.getResultList();
 
             db.stream().forEach((record) -> {
@@ -231,17 +299,17 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
+                row.setSizes(record[9] == null ? null : Integer.valueOf(record[9].toString()));
+                row.setWeight(record[10] == null ? null : Integer.valueOf(record[10].toString()));
+                row.setNote(record[11] == null ? null : (String) record[11]);
+                row.setNguoiThanhToan(record[12] == null ? null : (String) record[12]);
+                row.setDiaChiNguoiGui(record[13] == null ? null : (String) record[13]);
+                row.setSdtNguoiGui(record[14] == null ? null : (String) record[14]);
+                row.setStrGenDate(record[15] == null ? null : (String) record[15]);
+                row.setStockName(record[16] == null ? null : (String) record[16]);
                 items.add(row);
             });
-            for (VtReceiptDetail vtReceiptDetail : items) {
-                soLuong = soLuong + vtReceiptDetail.getNumbers();
-                tongTien = tongTien + vtReceiptDetail.getCost();
-            }
-            vtToaHang.setSoLuong(soLuong);
-            vtToaHang.setTongTien(tongTien);
-            vTGoodsReceiptForm.setVtToaHang(vtToaHang);
-            vTGoodsReceiptForm.setVtReceiptDetail(items);
-            return vTGoodsReceiptForm;
+            return items;
         } catch (Exception e) {
             e.printStackTrace();
             entityManager.getTransaction().rollback();

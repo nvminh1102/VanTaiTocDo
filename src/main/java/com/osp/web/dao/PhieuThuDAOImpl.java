@@ -76,7 +76,7 @@ public class PhieuThuDAOImpl implements PhieuThuDAO {
                             + " pt.date_push_Stock, pt.payer, pt.employee, pt.status, pt.gen_date, pt.created_by, pt.last_update, pt.updated_by,"
                             + " b.USER_NAME as ten_nguoi_gui, b.MOBILE as mobile_nguoi_Gui, b.address as dia_chi_nguoi_gui, "
                             + " c.USER_NAME as ten_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, c.address as dia_chi_nguoi_nhan "
-                            + " from vt_phieu_thu pt left join vt_partner b on pt.delivery_partner_id = b.ID left join vt_partner c on pt.receive_partner_id = c.ID " + strWhere + " order by pt.date_push_Stock desc ", VtPhieuThuView.class);
+                            + " from vt_phieu_thu pt left join vt_partner b on pt.delivery_partner_id = b.ID  left join vt_partner c on pt.receive_partner_id = c.ID  " + strWhere + " order by pt.date_push_Stock desc ", VtPhieuThuView.class);
                     if (item.getReceiptCode() != null && !item.getReceiptCode().trim().equals("")) {
                         queryAll.setParameter("receiptCode", "%" + item.getReceiptCode().trim().toUpperCase() + "%");
                     }
@@ -183,12 +183,12 @@ public class PhieuThuDAOImpl implements PhieuThuDAO {
 
             VtPhieuThuView vtPhieuThuView = (VtPhieuThuView) queryAll.getSingleResult();
             vTGoodsReceiptForm.setVtPhieuThuView(vtPhieuThuView);
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+            String sqlBuffer = "SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
                     + " c.MOBILE as mobile_nguoi_nhan  "
-                    + "from Vt_Goods_Receipt_Detail grd inner join vt_receipt t on grd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
-                    + " where grd.goods_receipt_id = :goodsreceiptid ");
+                    + "from Vt_Goods_Receipt_Detail grd inner join vt_receipt t on grd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  "
+                    + " where grd.goods_receipt_id = :goodsreceiptid ";
 
-            Query queryDetail = entityManager.createNativeQuery(sqlBuffer.toString(), VtReceiptView.class);
+            Query queryDetail = entityManager.createNativeQuery(sqlBuffer, VtReceiptView.class);
             queryDetail.setParameter("goodsreceiptid", id);
             List<VtReceiptView> vtReceiptViews = queryDetail.getResultList();
             vTGoodsReceiptForm.setVtReceiptViews(vtReceiptViews);

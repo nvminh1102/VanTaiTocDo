@@ -188,7 +188,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             vTGoodsReceiptForm.setVtToaHang(vtToaHang);
             String sqlBuffer = "SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
                     + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
-                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
+                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  "
                     + " where thd.toa_hang_id = :toahangid ";
 
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
@@ -238,7 +238,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
 
             VtToaHang vtToaHang = (VtToaHang) queryAll.getSingleResult();
             String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost  "
-                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id  inner join vt_receipt_detail td on thd.vt_receipt_detail_id = td.id left join vt_partner b on t.delivery_partner_id = b.ID left join vt_partner c on t.receive_partner_id = c.ID "
+                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id  inner join vt_receipt_detail td on thd.vt_receipt_detail_id = td.id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID   "
                     + " where thd.toa_hang_id = :toahangid order by thd.id, t.id, td.id ";
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
             queryDetail.setParameter("toahangid", id);

@@ -17,6 +17,11 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 $('#toGenDate').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
             }, 0);
         };
+        
+        $http.get(preUrl + "/bienNhan/danhSachNhaXe")
+                .then(function (response) {
+                    $scope.nhaXeList = response.data;
+                });
 
         $http.get(preUrl + "/phieu-giao-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                 .then(function (response) {
@@ -81,7 +86,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                         toastr.error($("#_custum_error_500").html());
                     });
         };
-        $scope.exportPhieuBienNhan = function (idPhieu) {
+        $scope.exportPhieu = function (idPhieu) {
             window.open(preUrl + "/phieu-giao-hang/exportPhieu?idPhieu=" + idPhieu, '_blank');
         }
 

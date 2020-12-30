@@ -146,8 +146,8 @@
 
                                 <sec:authorize access="hasRole('ROLE_XEM_GIAO_HANG_VIEW')">
                                     <ul class="nav lt">
-                                        <li class="<%= isActive(request.getContextPath() + "/phieu-nhan-hang/list", request) ? "active" : ""%>">
-                                            <a href="<%=request.getContextPath()%>/phieu-nhan-hang/list" class=""> <i
+                                        <li class="<%= isActive(request.getContextPath() + "/phieu-giao-hang/list", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/phieu-giao-hang/list" class=""> <i
                                                     class="fa fa-angle-right"></i> <span>Phiêu giao hàng</span> </a></li>
                                     </ul>
                                 </sec:authorize>

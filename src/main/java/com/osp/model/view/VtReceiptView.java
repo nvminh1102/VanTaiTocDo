@@ -52,6 +52,12 @@ public class VtReceiptView {
   private Long tienConPhaiThu;
   @Transient
   private String daThanhToan;
+  @Transient
+  private Integer soLuong;
+  @Transient
+  private String name;
+  @Transient
+  private String note;
 
 
   public Long getId() {
@@ -221,4 +227,30 @@ public class VtReceiptView {
   public void setDaThanhToan(String daThanhToan) {
     this.daThanhToan = daThanhToan;
   }
+
+    public Integer getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(Integer soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+  
+  
 }

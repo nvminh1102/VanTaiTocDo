@@ -62,6 +62,13 @@ public class VtPhieuGiaoHang implements Serializable {
     @Transient
     private Date toGenDate;
 
+    
+    @Transient
+    private Integer soLuong;
+    @Transient
+    private Integer tongTien;
+    
+    
     public VtPhieuGiaoHang() {
     }
 
@@ -196,6 +203,22 @@ public class VtPhieuGiaoHang implements Serializable {
 
     public void setToGenDate(Date toGenDate) {
         this.toGenDate = toGenDate;
+    }
+
+    public Integer getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(Integer soLuong) {
+        this.soLuong = soLuong;
+    }
+
+    public Integer getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(Integer tongTien) {
+        this.tongTien = tongTien;
     }
     
     

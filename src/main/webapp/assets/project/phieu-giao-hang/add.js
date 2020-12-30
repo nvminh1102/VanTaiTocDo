@@ -1,15 +1,15 @@
 app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $timeout, $q) {
-        $scope.listBienNhanDaChon = {items: "", rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
+        $scope.listBienNhanDaChon = {items: [], rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
         $scope.phieuGiao = {maPhieuGiao: "", nhaXe: "", loaiXe: "", bienSo: "", tenLaiXe: "", sdtLaiXe: ""};
-        
+
         $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: "", status: "2"};
         $scope.listBienNhan = [];
         $scope.idSelected = "";
         $scope.checkLoadData = false;
         $scope.checked = [];
         $scope.checkAll = false;
-        
-        
+
+
         $scope.searchBienNhan.status = "2";
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
         $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
@@ -31,7 +31,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 $('#toDeceipt').data("DateTimePicker").minDate(moment("01/01/100", "DD-MM-YYYY").toDate());
             }, 0);
         };
-        
+
         $scope.loadListData = function () {
             $scope.searchBienNhan.status = "2";
             var searchBienNhan = JSON.stringify($scope.searchBienNhan);
@@ -42,6 +42,10 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                     });
         };
         
+        $scope.exportPhieuThu = function (idPhieuThu) {
+            window.open(preUrl + "/phieu-giao-hang/exportPhieuThu?idPhieuThu=" + idPhieuThu, '_blank');
+        }
+
         $scope.chooseBienNhan = function (objectBienNhan, check) {
             if (check == true) {
                 $scope.listBienNhanDaChon.items.push(objectBienNhan);
@@ -49,9 +53,12 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 var idRemove = objectBienNhan.id;
                 var list_ = [];
                 for (var i = 0; i < $scope.listBienNhanDaChon.items.length; i++) {
+                    console.log($scope.listBienNhanDaChon.items.length);
                     if ($scope.listBienNhanDaChon.items[i].id != idRemove) {
+                        console.log("add các id:" + $scope.listBienNhanDaChon.items[i]);
                         list_.push($scope.listBienNhanDaChon.items[i]);
                     }
+                    console.log("i:" + i + " - " + $scope.listBienNhanDaChon.items[i])
                 }
                 $scope.listBienNhanDaChon.items = list_;
             }
@@ -63,7 +70,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 $("#select_allBN").prop('checked', false);
             }
         };
-        
+
         $scope.selectAll = function (checkAll) {
             $scope.listBienNhanDaChon.items = [];
             if (checkAll) {
@@ -77,7 +84,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 }
             }
         };
-        
+
         $http.get(preUrl + "/bienNhan/danhSachNhaXe")
                 .then(function (response) {
                     $scope.nhaXeList = response.data;
@@ -100,7 +107,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         if (id != null && id != '') {
             $http.get(preUrl + "/phieu-giao-hang/loadDataEdit", {params: {id: id}})
                     .then(function (response) {
-                        $scope.phieuGiao = response.data.vtToaHang;
+                        $scope.phieuGiao = response.data.vtPhieuGiaoHang;
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
                             $scope.listBienNhanDaChon.items = response.data.vtReceiptViews;
                         }
@@ -117,13 +124,12 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
             }
             $scope.listBienNhanDaChon.items = list_;
         }
-        
+
         $scope.savePhieu = function () {
             if ($("#formAdd").parsley().validate()) {
                 if (typeof $scope.phieuGiao != "undefined" && typeof $scope.phieuGiao.maPhieuGiao != 'undefined') {
                     console.log($scope.listBienNhanDaChon);
-                    if (typeof $scope.listBienNhanDaChon != "undefined" && typeof $scope.listBienNhanDaChon.items != "undefined" && $scope.listBienNhanDaChon.items.length > 0
-                            && typeof $scope.listHangHoa != "undefined" && typeof $scope.listHangHoa.items != "undefined" && $scope.listHangHoa.items.length > 0) {
+                    if (typeof $scope.listBienNhanDaChon != "undefined" && typeof $scope.listBienNhanDaChon.items != "undefined" && $scope.listBienNhanDaChon.items.length > 0) {
                         if (id != null && id != '') {
                             $scope.phieuGiao.id = id;
                         }
@@ -137,7 +143,9 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                                 .then(function (response) {
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
                                         toastr.success(response.data.messageError);
-                                        window.location.href = preUrl + "/phieu-giao-hang/list";
+                                        $timeout(function () {
+                                            window.location.href = preUrl + "/phieu-giao-hang/list";
+                                        }, 2000);
                                     } else {
                                         toastr.success(response.data.messageError);
                                     }
@@ -196,5 +204,5 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 }
             });
         });
-        
+
     }]);

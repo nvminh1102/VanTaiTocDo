@@ -72,11 +72,21 @@ public class VtReceiptDetail implements Serializable {
     @Transient
     private String tenNguoiGui;
     @Transient
+    private String sdtNguoiGui;
+    @Transient
+    private String diaChiNguoiGui;
+    @Transient
     private String tenNguoiNhan;
     @Transient
     private String sdtNguoiNhan;
     @Transient
     private String diaChiNguoiNhan;
+    @Transient
+    private String nguoiThanhToan;
+    @Transient
+    private String strGenDate;
+    @Transient
+    private String stockName;
     
     public VtReceiptDetail() {
     }
@@ -281,6 +291,46 @@ public class VtReceiptDetail implements Serializable {
 
     public void setDiaChiNguoiNhan(String diaChiNguoiNhan) {
         this.diaChiNguoiNhan = diaChiNguoiNhan;
+    }
+
+    public String getSdtNguoiGui() {
+        return sdtNguoiGui;
+    }
+
+    public void setSdtNguoiGui(String sdtNguoiGui) {
+        this.sdtNguoiGui = sdtNguoiGui;
+    }
+
+    public String getDiaChiNguoiGui() {
+        return diaChiNguoiGui;
+    }
+
+    public void setDiaChiNguoiGui(String diaChiNguoiGui) {
+        this.diaChiNguoiGui = diaChiNguoiGui;
+    }
+
+    public String getNguoiThanhToan() {
+        return nguoiThanhToan;
+    }
+
+    public void setNguoiThanhToan(String nguoiThanhToan) {
+        this.nguoiThanhToan = nguoiThanhToan;
+    }
+
+    public String getStrGenDate() {
+        return strGenDate;
+    }
+
+    public void setStrGenDate(String strGenDate) {
+        this.strGenDate = strGenDate;
+    }
+
+    public String getStockName() {
+        return stockName;
+    }
+
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
     }
     
     

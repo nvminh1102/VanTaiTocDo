@@ -85,6 +85,8 @@ public class VtReceipt implements Serializable {
     private Date fromDeceipt;
     @Transient
     private Date toDeceipt;
+    @Transient
+    private Integer tongTien;
     
     public VtReceipt() {
     }
@@ -309,4 +311,13 @@ public class VtReceipt implements Serializable {
     public void setTienDaTra(Integer tienDaTra) {
         this.tienDaTra = tienDaTra;
     }
+
+    public Integer getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(Integer tongTien) {
+        this.tongTien = tongTien;
+    }
+    
 }

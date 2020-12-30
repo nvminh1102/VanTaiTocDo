@@ -32,9 +32,9 @@
                                     </div>
                                     <label class="col-md-2 control-label text-dark">Biển số</label>
                                     <div class="col-md-4">
-                                        <select ng-model="phieuGiao.bienSo" id="bienNphieuGiaoan.bienSo" name ="phieuGiao.bienSo" class="select2" style="width: 100%" ng-change="onChangeBienSo()">
+                                        <select ng-model="phieuGiao.bienSo" id="phieuGiao.bienSo" name ="phieuGiao.bienSo"  class="select2" style="width: 100%" ng-change="onChangeBienSo()">
                                             <option value="" selected >-- Lựa chọn --</option>
-                                            <option ng-repeat="item in nhaXeList track by $index" ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
+                                            <option ng-repeat="item in nhaXeList track by $index"  ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -103,6 +103,7 @@
                                                 <td class="text-center v-inherit">{{item.note}}</td>
                                                 <td class="text-center v-inherit">
                                                     <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonBienNhan(item)"><i class="fa fa-edit"></i>xóa</a>
+                                                    <a  class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuThu(item.id)"><i class="fa fa-edit"></i>In phiếu thu</a>
                                                 </td>
                                             </tr>
                                         </tbody>

@@ -146,6 +146,9 @@
                                                         class="glyphicon glyphicon-cog"></i></button>
                                                 <ul class="dropdown-menu pull-left" style="width: 230px;">
                                                     <li>
+                                                        <a href="javascript:void(0)" ng-click="exportPhieu(item.id)" >In phiếu giao hàng</a>
+                                                    </li>
+                                                    <li>
                                                         <div class="line line-dashed m-b-none m-t-none"></div>
                                                         <a href="<%=request.getContextPath()%>/phieu-giao-hang/preEdit/{{item.id}}">
                                                             Chỉnh sửa
@@ -176,7 +179,6 @@
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="p-l-0 col-sm-6 text-left text-center-xs m-b-xs">
-                                    <button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i>Xuất phiếu</button>
                                 </div>
                                 <div class="p-r-0 col-sm-6 text-right text-center-xs">
                                     <ul class="pagination pagination-sm m-t-none m-b-none">
