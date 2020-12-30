@@ -1,5 +1,6 @@
 package com.osp.web.controller;
 
+import com.osp.common.ConstantAuthor;
 import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
@@ -32,6 +33,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,11 +57,13 @@ public class ToaHangController {
 //    LogAccessDAO logAccessDao;
 
     @GetMapping("/list")
+    @Secured(ConstantAuthor.TOA_HANG.view)
     public String list() {
         return "toahang.list";
     }
 
     @RequestMapping(value = "/load-list", method = RequestMethod.GET)
+    @Secured(ConstantAuthor.TOA_HANG.view)
     public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String search, @RequestParam @Valid final int offset, @RequestParam @Valid final int number, HttpServletRequest request) {
         VtToaHang vtToaHang = new VtToaHang();
         PagingResult page = new PagingResult();
@@ -94,6 +98,7 @@ public class ToaHangController {
     }
 
     @GetMapping("/preAdd")
+    @Secured(ConstantAuthor.TOA_HANG.add)
     public String preAdd(HttpServletRequest request) {
         Integer maxId = toaHangDAO.getMaxId();
         String toaHangCode = "TOA-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
@@ -102,18 +107,21 @@ public class ToaHangController {
     }
 
     @GetMapping("/preEdit/{id}")
+    @Secured(ConstantAuthor.TOA_HANG.edit)
     public String preEdit(@PathVariable("id") Integer id, HttpServletRequest request) {
         request.setAttribute("id", id);
         return "toahang.add";
     }
 
     @RequestMapping(value = "/loadDataEdit", method = RequestMethod.GET)
+    @Secured(ConstantAuthor.TOA_HANG.edit)
     public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
         VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getVTGoodsReceiptFormById(id);
         return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
     }
     
     @PostMapping("/add")
+    @Secured(ConstantAuthor.TOA_HANG.add)
     public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
@@ -127,6 +135,7 @@ public class ToaHangController {
     }
 
     @PostMapping("/delete")
+    @Secured(ConstantAuthor.TOA_HANG.delete)
     public ResponseEntity<String> delete(@RequestBody @Valid final VtToaHang vtToaHang, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
@@ -146,6 +155,7 @@ public class ToaHangController {
     
     @GetMapping("/exportPhieuBienNhan")
 //    @Secured(ConstantAuthor.PublishAuctionTc.view)
+    @Secured(ConstantAuthor.TOA_HANG.export)
     public void exportExcel(HttpServletResponse response, HttpServletRequest request,
                             @RequestParam(value = "idToaHang", required = false) Integer idToaHang) {
         PagingResult page = new PagingResult();

@@ -61,6 +61,7 @@ public class ConstantAuthor {
     }
 
     public static class TOA_HANG {
+        public static final String export="ROLE_EXPORT_BIEN_NHAN_VIEW";
         public static final String view="ROLE_XEM_TOA_HANG_VIEW";
         public static final String edit="ROLE_SUA_TOA_HANG_EDIT";
         public static final String add="ROLE_THEM_TOA_HANG_ADD";
@@ -75,6 +76,8 @@ public class ConstantAuthor {
     }
 
     public static class GIAO_HANG {
+        public static final String exportPhieu="ROLE_EXPORT_PHIEU_VIEW";
+        public static final String exportPhieuGiao="ROLE_EXPORT_PHIEU_GIAO_VIEW";
         public static final String view="ROLE_XEM_GIAO_HANG_VIEW";
         public static final String edit="ROLE_SUA_GIAO_HANG_EDIT";
         public static final String add="ROLE_THEM_GIAO_HANG_ADD";

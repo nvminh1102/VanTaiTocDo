@@ -81,10 +81,11 @@
                                 <div class="row" style="margin-top:30px;margin-bottom: 10px;">
                                     <div class="col-md-12" style="text-align: center;">
                                         <img class="hidden _custum_searchSuccess" src="<%=request.getContextPath()%>/assets/images/loading.gif" />
-
-                                    <button ng-disabled="_custum_searchSuccess" ng-init="_custum_searchSuccess = false;" type="button" class="btn btn-info btn-s-sm" ng-click="searchSelect($event);">
-                                        <i class="fa fa-search"></i>Tìm kiếm
-                                    </button>
+                                    <sec:authorize access="hasRole('ROLE_XEM_GIAO_HANG_VIEW')">
+                                        <button ng-disabled="_custum_searchSuccess" ng-init="_custum_searchSuccess = false;" type="button" class="btn btn-info btn-s-sm" ng-click="searchSelect($event);">
+                                            <i class="fa fa-search"></i>Tìm kiếm
+                                        </button>
+                                    </sec:authorize>
                                     <button style="margin-left: 10px;" type="button" class="btn btn-gray btn-s-sm" ng-click="clear();">Xóa điều kiện</button>
                                 </div>
                             </div>
@@ -139,28 +140,34 @@
                                         </td>
                                     </tr>
                                     <tr ng-switch-default ng-repeat="item in listData.items track by $index">
-                                        <td class="text-center v-inherit" >{{(listData.pageNumber > 0 ? (listData.pageNumber - 1): 0) * listData.numberPerPage + $index + 1}}</td>
+                                        <td class="text-center v-inherit" >{{(listData.pageNumber > 0 ? (listData.pageNumber - 1) : 0) * listData.numberPerPage + $index + 1}}</td>
                                         <td class="text-center">
                                             <div class="btn-group">
                                                 <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                         class="glyphicon glyphicon-cog"></i></button>
                                                 <ul class="dropdown-menu pull-left" style="width: 230px;">
+                                                    <sec:authorize access="hasRole('ROLE_EXPORT_PHIEU_GIAO_VIEW')">
                                                     <li>
                                                         <a href="javascript:void(0)" ng-click="exportPhieu(item.id)" >In phiếu giao hàng</a>
                                                     </li>
-                                                    <li>
-                                                        <div class="line line-dashed m-b-none m-t-none"></div>
-                                                        <a href="<%=request.getContextPath()%>/phieu-giao-hang/preEdit/{{item.id}}">
-                                                            Chỉnh sửa
-                                                        </a>
-                                                    </li>
+                                                    </sec:authorize>
+                                                    <sec:authorize access="hasRole('ROLE_SUA_GIAO_HANG_EDIT')">
+                                                        <li>
+                                                            <div class="line line-dashed m-b-none m-t-none"></div>
+                                                            <a href="<%=request.getContextPath()%>/phieu-giao-hang/preEdit/{{item.id}}">
+                                                                Chỉnh sửa
+                                                            </a>
+                                                        </li>
+                                                    </sec:authorize>
 
+                                                    <sec:authorize access="hasRole('ROLE_XOA_GIAO_HANG_DELETE')">
                                                     <li>
                                                         <div class="line line-dashed m-b-none m-t-none"></div>
                                                         <a href="#" ng-click="preXoa(item)">
                                                             Xóa
                                                         </a>
                                                     </li>
+                                                    </sec:authorize>
                                                 </ul>
                                             </div>
                                         </td>

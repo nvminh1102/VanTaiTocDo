@@ -97,10 +97,11 @@
                                 <div class="row" style="margin-top:30px;margin-bottom: 10px;">
                                     <div class="col-md-12" style="text-align: center;">
                                         <img class="hidden _custum_searchSuccess" src="<%=request.getContextPath()%>/assets/images/loading.gif" />
-
-                                    <button ng-disabled="_custum_searchSuccess" ng-init="_custum_searchSuccess = false;" type="button" class="btn btn-info btn-s-sm" ng-click="searchSelect($event);">
-                                        <i class="fa fa-search"></i>Tìm kiếm
-                                    </button>
+                                    <sec:authorize access="hasRole('ROLE_XEM_TOA_HANG_VIEW')">
+                                        <button ng-disabled="_custum_searchSuccess" ng-init="_custum_searchSuccess = false;" type="button" class="btn btn-info btn-s-sm" ng-click="searchSelect($event);">
+                                            <i class="fa fa-search"></i>Tìm kiếm
+                                        </button>
+                                    </sec:authorize>
                                     <button style="margin-left: 10px;" type="button" class="btn btn-gray btn-s-sm" ng-click="clear();">Xóa điều kiện</button>
                                 </div>
                             </div>
@@ -128,9 +129,11 @@
                                     <option value="25">25</option>
                                 </select>
                             </div>
+                            <sec:authorize access="hasRole('ROLE_THEM_TOA_HANG_ADD')">
                             <div class="p-r-0 p-l-0 col-md-6">
                                 <a href="<%=request.getContextPath()%>/toa-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm toa hàng</a>
                             </div>
+                            </sec:authorize>
                         </div>
 
                         <div class="table-responsive bg-white" style="overflow-x: auto;">
@@ -163,22 +166,28 @@
                                                 <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                         class="glyphicon glyphicon-cog"></i></button>
                                                 <ul class="dropdown-menu pull-left" style="width: 230px;">
+                                                    <sec:authorize access="hasRole('ROLE_EXPORT_BIEN_NHAN_VIEW')">
                                                     <li>
                                                         <a href="javascript:void(0)" ng-click="exportPhieuBienNhan(item.id)" >In Phiếu biên nhận</a>
                                                     </li>
-                                                    <li>
-                                                        <div class="line line-dashed m-b-none m-t-none"></div>
-                                                        <a href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}">
-                                                            Chỉnh sửa
-                                                        </a>
-                                                    </li>
+                                                    </sec:authorize>
+                                                    <sec:authorize access="hasRole('ROLE_SUA_TOA_HANG_EDIT')">
+                                                        <li>
+                                                            <div class="line line-dashed m-b-none m-t-none"></div>
+                                                            <a href="<%=request.getContextPath()%>/toa-hang/preEdit/{{item.id}}">
+                                                                Chỉnh sửa
+                                                            </a>
+                                                        </li>
+                                                    </sec:authorize>
 
+                                                    <sec:authorize access="hasRole('ROLE_XOA_TOA_HANG_DELETE')">
                                                     <li>
                                                         <div class="line line-dashed m-b-none m-t-none"></div>
                                                         <a href="#" ng-click="preXoa(item)">
                                                             Xóa
                                                         </a>
                                                     </li>
+                                                    </sec:authorize>
                                                 </ul>
                                             </div>
                                         </td>
@@ -199,7 +208,7 @@
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="p-l-0 col-sm-6 text-left text-center-xs m-b-xs">
-                                    <button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i> Xuất excel</button>
+                                    <!--<button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i> Xuất excel</button>-->
                                 </div>
                                 <div class="p-r-0 col-sm-6 text-right text-center-xs">
                                     <ul class="pagination pagination-sm m-t-none m-b-none">

@@ -1,5 +1,6 @@
 package com.osp.web.controller;
 
+import com.osp.common.ConstantAuthor;
 import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
@@ -34,6 +35,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -58,11 +60,13 @@ public class PhieuGiaoHangController {
 //    LogAccessDAO logAccessDao;
 
     @GetMapping("/list")
+    @Secured(ConstantAuthor.GIAO_HANG.view)
     public String list() {
         return "phieugiaohang.list";
     }
 
     @RequestMapping(value = "/load-list", method = RequestMethod.GET)
+    @Secured(ConstantAuthor.GIAO_HANG.view)
     public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String search, @RequestParam @Valid final int offset, @RequestParam @Valid final int number, HttpServletRequest request) {
         VtPhieuGiaoHang vtPhieuGiaoHang  = new VtPhieuGiaoHang();
         PagingResult page = new PagingResult();
@@ -91,6 +95,7 @@ public class PhieuGiaoHangController {
     }
 
     @GetMapping("/preAdd")
+    @Secured(ConstantAuthor.GIAO_HANG.add)
     public String preAdd(HttpServletRequest request) {
         Integer maxId = phieuGiaoHangDAO.getMaxId();
         String maPhieuGiao = "GH-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
@@ -99,18 +104,21 @@ public class PhieuGiaoHangController {
     }
 
     @GetMapping("/preEdit/{id}")
+    @Secured(ConstantAuthor.GIAO_HANG.edit)
     public String preEdit(@PathVariable("id") Integer id, HttpServletRequest request) {
         request.setAttribute("id", id);
         return "phieugiaohang.add";
     }
 
     @RequestMapping(value = "/loadDataEdit", method = RequestMethod.GET)
+    @Secured(ConstantAuthor.GIAO_HANG.edit)
     public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
         VTGoodsReceiptForm vTGoodsReceiptForm = phieuGiaoHangDAO.getVTGoodsReceiptFormById(id);
         return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
     }
     
     @PostMapping("/add")
+    @Secured(ConstantAuthor.GIAO_HANG.add)
     public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
@@ -124,6 +132,7 @@ public class PhieuGiaoHangController {
     }
 
     @PostMapping("/delete")
+    @Secured(ConstantAuthor.GIAO_HANG.delete)
     public ResponseEntity<String> delete(@RequestBody @Valid final VtPhieuGiaoHang vtPhieuGiaoHang, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
@@ -142,7 +151,7 @@ public class PhieuGiaoHangController {
     
     
     @GetMapping("/exportPhieu")
-//    @Secured(ConstantAuthor.PublishAuctionTc.view)
+    @Secured(ConstantAuthor.GIAO_HANG.exportPhieuGiao)
     public void exportExcel(HttpServletResponse response, HttpServletRequest request,
                             @RequestParam(value = "idPhieu", required = false) Integer idPhieu) {
         PagingResult page = new PagingResult();
@@ -178,7 +187,7 @@ public class PhieuGiaoHangController {
     
     
     @GetMapping("/exportPhieuThu")
-//    @Secured(ConstantAuthor.PublishAuctionTc.view)
+    @Secured(ConstantAuthor.GIAO_HANG.exportPhieuGiao)
     public void exportPhieuThu(HttpServletResponse response, HttpServletRequest request,
                             @RequestParam(value = "idPhieuThu", required = false) Integer idPhieuThu) {
         PagingResult page = new PagingResult();

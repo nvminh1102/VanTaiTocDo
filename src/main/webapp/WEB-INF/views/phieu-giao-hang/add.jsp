@@ -64,7 +64,9 @@
                                         <label style="color: red;">{{listBienNhanDaChon.items.length}} - {{listHangHoa.items.length}}</label>
                                     </div>
                                     <div class="p-r-0 p-l-0 col-md-6">
-                                        <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chonPhieuNhanHang"><i class="fa fa-plus"></i> Chọn phiếu nhận hàng</button>
+                                        <sec:authorize access="hasRole('ROLE_THEM_GIAO_HANG_ADD')">
+                                            <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chonPhieuNhanHang"><i class="fa fa-plus"></i> Chọn phiếu nhận hàng</button>
+                                        </sec:authorize>
                                     </div>
                                 </div>
                                 <div class="table-responsive bg-white" style="margin-bottom: 10px;">
@@ -103,15 +105,19 @@
                                                 <td class="text-center v-inherit">{{item.note}}</td>
                                                 <td class="text-center v-inherit">
                                                     <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonBienNhan(item)"><i class="fa fa-edit"></i>xóa</a>
-                                                    <a  class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuThu(item.id)"><i class="fa fa-edit"></i>In phiếu thu</a>
-                                                </td>
-                                            </tr>
+                                        <sec:authorize access="hasRole('ROLE_EXPORT_PHIEU_VIEW')">
+                                            <a  class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuThu(item.id)"><i class="fa fa-edit"></i>In phiếu thu</a>
+                                        </sec:authorize>
+                                        </td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieu()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
+                                        <sec:authorize access="hasRole('ROLE_THEM_GIAO_HANG_ADD')">
+                                            <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieu()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
+                                        </sec:authorize>
                                         <a href="<%=request.getContextPath()%>/phieu-giao-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>

@@ -132,7 +132,9 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="saveToaHang()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
+                                        <sec:authorize access="hasRole('ROLE_THEM_TOA_HANG_ADD')">
+                                            <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="saveToaHang()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
+                                        </sec:authorize>
                                         <a href="<%=request.getContextPath()%>/toa-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>
