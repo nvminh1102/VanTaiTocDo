@@ -299,8 +299,8 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
-                row.setSizes(record[9] == null ? null : Integer.valueOf(record[9].toString()));
-                row.setWeight(record[10] == null ? null : Integer.valueOf(record[10].toString()));
+                row.setSizes(record[9] == null ? null : (String)record[9]);
+                row.setWeight(record[10] == null ? null : (String)record[10]);
                 row.setNote(record[11] == null ? null : (String) record[11]);
                 row.setNguoiThanhToan(record[12] == null ? null : (String) record[12]);
                 row.setDiaChiNguoiGui(record[13] == null ? null : (String) record[13]);
