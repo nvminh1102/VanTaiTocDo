@@ -108,7 +108,9 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/phieu-thu/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu thu</a>
+                                <sec:authorize access="hasRole('ROLE_THEM_PHIEU_THU_ADD')">
+                                    <a href="<%=request.getContextPath()%>/phieu-thu/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu thu</a>
+                                </sec:authorize>
                             </div>
                         </div>
 
@@ -139,7 +141,9 @@
                                         <td class="text-left v-inherit">{{item.tenNguoiGui}}</td>
                                         <td class="text-left v-inherit">{{item.tenNguoiNhan}}</td>
                                         <td class="text-left v-inherit">{{item.diaChiNguoiNhan}}</td>
-                                        <td class="text-center v-inherit"><a href="<%=request.getContextPath()%>/phieu-thu/preEdit/{{item.id}}"><i class="fa-hover fa fa-eye" style="color: blue;font-size: 15px"></i></a></td>
+                                        <sec:authorize access="hasRole('ROLE_SUA_PHIEU_THU_EDIT')">
+                                            <td class="text-center v-inherit"><a href="<%=request.getContextPath()%>/phieu-thu/preEdit/{{item.id}}"><i class="fa-hover fa fa-eye" style="color: blue;font-size: 15px"></i></a></td>
+                                        </sec:authorize>
                                     </tr>
                                 </tbody>
                             </table>
@@ -148,7 +152,9 @@
                         <footer class="panel-footer">
                             <div class="row">
                                 <div class="p-l-0 col-sm-6 text-left text-center-xs m-b-xs">
-                                    <button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i> Xuất excel</button>
+                                    <sec:authorize access="hasRole('ROLE_THEM_PHIEU_THU_ADD')">
+                                     <button class="btn btn-info btn-s-sm" ng-click="export();"><i class="fa fa-file-excel-o"></i> Xuất excel</button>
+                                    </sec:authorize>
                                 </div>
                                 <div class="p-r-0 col-sm-6 text-right text-center-xs">
                                     <ul class="pagination pagination-sm m-t-none m-b-none">

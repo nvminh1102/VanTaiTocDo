@@ -1,5 +1,6 @@
 package com.osp.web.controller;
 
+import com.osp.common.ConstantAuthor;
 import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,11 +43,13 @@ public class PhieuThuController {
 //    LogAccessDAO logAccessDao;
 
     @GetMapping("/list")
+    @Secured(ConstantAuthor.PHIEU_THU.view)
     public String list() {
         return "phieuthu.list";
     }
 
     @RequestMapping(value = "/load-list", method = RequestMethod.GET)
+    @Secured(ConstantAuthor.PHIEU_THU.view)
     public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String search, @RequestParam @Valid final int offset, @RequestParam @Valid final int number, HttpServletRequest request) {
         VtPhieuThuView item = new VtPhieuThuView();
         PagingResult page = new PagingResult();
@@ -74,6 +78,7 @@ public class PhieuThuController {
     }
 
     @GetMapping("/preAdd")
+    @Secured(ConstantAuthor.PHIEU_THU.add)
     public String preAdd(HttpServletRequest request) {
         Integer maxId = phieuThuDAO.getMaxId();
         String receiptCode = "PT-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
@@ -82,6 +87,7 @@ public class PhieuThuController {
     }
 
     @GetMapping("/preEdit/{id}")
+    @Secured(ConstantAuthor.PHIEU_THU.edit)
     public String preEdit(@PathVariable("id") Integer id, HttpServletRequest request) {
         request.setAttribute("id", id);
         return "phieuthu.add";
@@ -94,6 +100,7 @@ public class PhieuThuController {
     }
 
     @PostMapping("/add")
+    @Secured(ConstantAuthor.PHIEU_THU.add)
     public ResponseEntity<MessReponse> add(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
@@ -107,6 +114,7 @@ public class PhieuThuController {
     }
 
     @PostMapping("/delete")
+    @Secured(ConstantAuthor.PHIEU_THU.delete)
     public ResponseEntity<String> delete(@RequestBody @Valid final VtPhieuThuView vtPhieuThuView, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
