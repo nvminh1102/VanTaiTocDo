@@ -155,7 +155,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 strWhere.append(" and t.status = :status");
             }
 
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payment_type,t.tien_da_tra,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payment_type,t.tien_da_tra,t.status,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
                     + " c.MOBILE as mobile_nguoi_nhan, t.payer,  "
                     + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
                     + "from vt_receipt t left join vt_partner b  on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID "
