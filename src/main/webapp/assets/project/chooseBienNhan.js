@@ -1,5 +1,5 @@
 app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHang', function ($scope, $http, $timeout, $q, popupPhieuNhanHang) {
-        $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: "", status:"1"};
+        $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: "", status: "1"};
         $scope.listBienNhan = [];
         $scope.listHangHoa = [];
 
@@ -10,10 +10,10 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
         $scope.checkedHH = [];
         $scope.checkAll = false;
         $scope.checkAllHH = false;
-        
+
         $scope.selectedItems = [];
         $scope.selectedItemsHH = [];
-        
+
         $scope.searchBienNhan.status = "1";
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
         $http.get(preUrl + "/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
@@ -64,14 +64,17 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
                             console.log("response.data:");
                             console.log(response.data);
                             if (response.data !== "undefined" && response.data !== "[]") {
-//                                var list_ = [];
                                 for (var i = 0; i < response.data.length; i++) {
-//                                    list_.push(response.data[i].id);
                                     $scope.listHangHoa.push(response.data[i]);
-                                    $scope.selectedItemsHH.push(response.data[i]);
+                                }
+                                $scope.selectedItemsHH = [];
+                                for (var i = 0; i < $scope.listHangHoa.length; i++) {
+                                    console.log("listHangHoa:" + $scope.listHangHoa[i]);
+                                    $scope.selectedItemsHH.push($scope.listHangHoa[i]);
+                                    console.log("checkedHH:" + i);
+                                    $scope.checkedHH[i] = true;
                                 }
                             }
-                            $scope.selectAllHH(true);
                         });
 
                 $scope.selectedItems.push(objectBienNhan);
@@ -84,7 +87,7 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
                     }
                 }
                 $scope.selectedItems = list_;
-                
+
                 var list2_ = [];
                 for (var i = 0; i < $scope.listHangHoa.length; i++) {
                     if ($scope.listHangHoa[i].receiptId != idRemove) {
