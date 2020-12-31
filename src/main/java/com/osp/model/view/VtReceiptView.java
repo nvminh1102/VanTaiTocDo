@@ -41,6 +41,8 @@ public class VtReceiptView {
   private Long tienDaTra;
   @Column(name = "tong_tien")
   private Long tongTien;
+  @Column(name = "status")
+  private Long status;
 
   @Transient
   private Long tienTraTruoc;
@@ -251,6 +253,12 @@ public class VtReceiptView {
     public void setNote(String note) {
         this.note = note;
     }
-  
-  
+
+  public Long getStatus() {
+    return status;
+  }
+
+  public void setStatus(Long status) {
+    this.status = status;
+  }
 }

@@ -113,6 +113,7 @@
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận hàng</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Trạng thái</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Kho tiếp nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Nhân viên tiếp nhận</th>
@@ -168,6 +169,7 @@
                                         <%--</sec:authorize>--%>
                                     </td>
                                     <td class="text-left v-inherit">{{item.receiptCode}}</td>
+                                    <td class="text-left v-inherit">{{item.status == 1 ? "Nhận hàng" : item.status == 2 ? "Lên toa" : item.status == 3 ? "Đã giao" : ""}}</td>
                                     <td class="text-center v-inherit">{{item.dateReceipt|date:'dd/MM/yyyy'}}</td>
                                     <td class="text-left v-inherit">{{item.nameStock}}</td>
                                     <td class="text-left v-inherit">{{item.employee}}</td>
