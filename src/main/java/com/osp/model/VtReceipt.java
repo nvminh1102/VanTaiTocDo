@@ -53,8 +53,6 @@ public class VtReceipt implements Serializable {
     private Integer paymentType;
     @Column(name = "payer", length = 200)
     private String payer;
-    @Column(name = "tax_code", length = 200)
-    private String taxCode;
     @Column(name = "nha_xe", length = 200)
     private String nhaXe;
     @Column(name = "loai_xe", length = 200)
@@ -172,14 +170,6 @@ public class VtReceipt implements Serializable {
 
     public void setPayer(String payer) {
         this.payer = payer;
-    }
-
-    public String getTaxCode() {
-        return taxCode;
-    }
-
-    public void setTaxCode(String taxCode) {
-        this.taxCode = taxCode;
     }
 
     public String getNhaXe() {

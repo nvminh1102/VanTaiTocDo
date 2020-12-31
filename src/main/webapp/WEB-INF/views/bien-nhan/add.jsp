@@ -352,12 +352,12 @@
 
                         <div class="form-group">
                             Trọng lượng
-                            <input ng-model="property.weight" name="weight" id="weight" maxlength="15" style="width:95%; height: 60%" class="form-control"/>
+                            <input ng-model="property.weight" name="weight" id="weight" maxlength="200" style="width:95%; height: 60%" class="form-control"/>
                         </div>
 
                         <div class="form-group">
                             Kích thước
-                            <input ng-model="property.sizes" name="sizes" id="sizes" maxlength="15" style="width:95%; height: 60%" class="form-control"/>
+                            <input ng-model="property.sizes" name="sizes" id="sizes" maxlength="200" style="width:95%; height: 60%" class="form-control"/>
                         </div>
 
                         <div class="form-group">

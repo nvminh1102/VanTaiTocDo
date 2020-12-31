@@ -120,7 +120,7 @@ public class BienNhanController {
             // 1 trả trước, 2 trả sau, 3 công nợ
             bienNhan.setPaymentType(item.getBienNhan().getPaymentType());
             bienNhan.setPayer(item.getBienNhan().getPayer());
-            bienNhan.setTaxCode(item.getBienNhan().getTaxCode());
+//            bienNhan.setTaxCode(item.getBienNhan().getTaxCode());
             bienNhan.setNhaXe(item.getBienNhan().getNhaXe());
             bienNhan.setBienSo(item.getBienNhan().getBienSo());
             bienNhan.setLoaiXe(item.getBienNhan().getLoaiXe());

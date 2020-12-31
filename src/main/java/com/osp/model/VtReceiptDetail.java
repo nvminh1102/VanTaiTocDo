@@ -43,9 +43,9 @@ public class VtReceiptDetail implements Serializable {
     @Column(name = "numbers")
     private Integer numbers;
     @Column(name = "weight")
-    private Integer weight;
+    private String weight;
     @Column(name = "sizes")
-    private Integer sizes;
+    private String sizes;
     @Column(name = "cost")
     private Integer cost;
     @Column(name = "debt")
@@ -140,19 +140,19 @@ public class VtReceiptDetail implements Serializable {
         this.numbers = numbers;
     }
 
-    public Integer getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 
-    public Integer getSizes() {
+    public String getSizes() {
         return sizes;
     }
 
-    public void setSizes(Integer sizes) {
+    public void setSizes(String sizes) {
         this.sizes = sizes;
     }
 
