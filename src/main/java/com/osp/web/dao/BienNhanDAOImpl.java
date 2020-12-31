@@ -75,7 +75,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             sqlBuffer.append(" order by t.GEN_DATE DESC");
 
             StringBuffer sqlBufferCount = new StringBuffer("SELECT count(t.id) "
-                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID and  left join vt_receipt_detail d on t.id = d.receipt_id  "
+                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID left join vt_receipt_detail d on t.id = d.receipt_id  "
                     + " where 1=1 ");
             sqlBufferCount.append(strWhere.toString());
 

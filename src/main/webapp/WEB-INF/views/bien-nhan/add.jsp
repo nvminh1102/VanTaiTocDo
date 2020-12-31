@@ -285,7 +285,7 @@
                                             <th style="text-align: center">Trọng lượng</th>
                                             <th style="text-align: center">Kích thước</th>
                                             <th style="text-align: center">Thành tiền</th>
-                                            <th style="text-align: center">Giấy tờ kèm theo</th>
+                                            <%--<th style="text-align: center">Giấy tờ kèm theo</th>--%>
                                             <th style="text-align: center">Ghi chú</th>
                                             <th style="text-align: center">Tools</th>
                                         </tr>
@@ -299,7 +299,7 @@
                                             <td style="text-align: center; font-weight: normal">{{item.weight}}</td>
                                             <td style="text-align: center; font-weight: normal">{{item.sizes}}</td>
                                             <td style="text-align: center; font-weight: normal">{{item.cost > 0 ? item.cost : null|number}}</td>
-                                            <td style="text-align: center; font-weight: normal">file đính kèm</td>
+                                            <%--<td style="text-align: center; font-weight: normal">file đính kèm</td>--%>
                                             <td style="text-align: center; font-weight: normal">{{item.note}}</td>
                                             <td style="text-align: center; font-weight: normal">
                                                         <span ng-click="editProperty($index)">
@@ -365,9 +365,9 @@
                             <input ng-model="property.cost" name="cost" id="cost" maxlength="15" style="width:95%; height: 60%" class="form-control" data-type="currency" />
                         </div>
 
-                        <div class="form-group">
-                            File đính kèm
-                        </div>
+                        <%--<div class="form-group">--%>
+                            <%--File đính kèm--%>
+                        <%--</div>--%>
 
                         <div class="form-group">
                             Ghi chú
