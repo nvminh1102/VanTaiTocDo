@@ -49,7 +49,7 @@
 </section>-->
 <section id="content">
     <section class="vbox">
-        <section class="scrollable padder">
+<!--        <section class="scrollable padder">
             <ul class="breadcrumb no-border no-radius b-b b-light pull-in">
                 <li><a href="index.html"><i class="fa fa-home"></i> Home</a></li>
                 <li class="active">Workset</li>
@@ -312,7 +312,7 @@
                             <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi id neque quam.</div>
                         </section>
                     </article>
-                    <!-- .comment-reply -->
+                     .comment-reply 
                     <article id="comment-id-2" class="comment-reply">
                         <article class="comment-item">
                             <a class="pull-left thumb-sm">
@@ -343,7 +343,7 @@
                             </section>
                         </article>
                     </article>
-                    <!-- / .comment-reply -->
+                     / .comment-reply 
                     <article id="comment-id-2" class="comment-item">
                     <span class="fa-stack pull-left m-l-xs">
                       <i class="fa fa-circle text-danger fa-stack-2x"></i>
@@ -377,7 +377,7 @@
                 </section>
                 <a href="#" class="btn btn-default btn-sm m-b"><i class="fa fa-plus icon-muted"></i> more</a>
             </div>
-        </section>
+        </section>-->
     </section>
     <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen, open" data-target="#nav,html"></a>
 </section>

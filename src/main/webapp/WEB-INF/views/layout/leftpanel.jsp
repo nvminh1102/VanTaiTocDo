@@ -137,11 +137,11 @@
                                 </sec:authorize>
 
                                 <sec:authorize access="hasRole('ROLE_XEM_PHIEU_THU_VIEW')">
-                                    <ul class="nav lt">
+                                    <!--ul class="nav lt">
                                         <li class="<%= isActive(request.getContextPath() + "/phieu-thu/list", request) ? "active" : ""%>">
                                             <a href="<%=request.getContextPath()%>/phieu-thu/list" class=""> <i
                                                     class="fa fa-angle-right"></i> <span>Phiếu thu tiền</span> </a></li>
-                                    </ul>
+                                    </ul-->
                                 </sec:authorize>
 
                                 <sec:authorize access="hasRole('ROLE_XEM_GIAO_HANG_VIEW')">
