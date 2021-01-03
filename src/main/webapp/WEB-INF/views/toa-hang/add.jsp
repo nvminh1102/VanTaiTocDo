@@ -70,11 +70,11 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label text-dark">Người nhận</label>
+                                    <label class="col-md-2 control-label text-dark">Người phụ trách</label>
                                     <div class="col-md-4">
                                         <input ng-model="toaHang.nguoiNhan" maxlength="200" class="form-control input-sm"/>
                                     </div>
-                                    <label class="col-md-2 control-label text-dark">Nơi nhận</label>
+                                    <label class="col-md-2 control-label text-dark">Địa điểm</label>
                                     <div class="col-md-4">
                                         <input ng-model="toaHang.noiNhan" maxlength="500" class="form-control input-sm"/>
                                     </div>
@@ -100,7 +100,7 @@
                                                 <th class="text-center v-inherit text-dark">Địa chỉ</th>
                                                 <th class="text-center v-inherit text-dark">Số thùng</th>
                                                 <th class="text-center v-inherit text-dark">Số HD</th>
-                                                <th class="text-center v-inherit text-dark">GTN</th>
+                                                <th class="text-center v-inherit text-dark">Phiếu thu số</th>
                                                 <th class="text-center v-inherit text-dark">Ghi chú</th>
                                                 <th class="text-center v-inherit text-dark">Tool</th>
                                             </tr>
@@ -118,9 +118,9 @@
                                                 <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>
                                                 <td class="text-center v-inherit">{{item.mobileNguoiNhan}}</td>
                                                 <td class="text-center v-inherit">{{item.diaChiNguoiNhan}}</td>
-                                                <td class="text-center v-inherit">{{item.numbers}}</td>
-                                                <td class="text-center v-inherit">{{item.numbers}}</td>
-                                                <td class="text-center v-inherit">{{item.numbers}}</td>
+                                                <td class="text-center v-inherit">{{item.soLuong}}</td>
+                                                <td class="text-center v-inherit">{{item.soHopDong}}</td>
+                                                <td class="text-center v-inherit">{{item.maPhieuThu}}</td>
                                                 <td class="text-center v-inherit">{{item.note}}</td>
                                                 <td class="text-center v-inherit">
                                                     <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonBienNhan(item)"><i class="fa fa-edit"></i>xóa</a>

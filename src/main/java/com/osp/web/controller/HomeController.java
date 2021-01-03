@@ -3,8 +3,8 @@ package com.osp.web.controller;
 import com.osp.common.PagingResult;
 import com.osp.model.User;
 import com.osp.model.VtPartner;
+import com.osp.web.dao.KhachHangDAO;
 import com.osp.web.dao.LogAccessDAO;
-import com.osp.web.dao.ParameterDAO;
 import com.osp.web.dao.UserDAO;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +31,7 @@ public class HomeController {
     @Autowired
     UserDAO userDAO;
     @Autowired
-    ParameterDAO parameterDAO;
+    KhachHangDAO khachHangDAO;
 
     @GetMapping("/login")
     public String login(Model model, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout) {
@@ -92,7 +92,7 @@ public class HomeController {
     
     @GetMapping("/getListPartner")
     public ResponseEntity<List<VtPartner>> getOrgNotaryInfo(@RequestParam(value = "typePartner", required = false) Integer typePartner, HttpServletRequest request) {
-        List<VtPartner> list = parameterDAO.getListByType(typePartner);
+        List<VtPartner> list = khachHangDAO.getListByType(typePartner);
         return new ResponseEntity<List<VtPartner>>(list, HttpStatus.OK);
     }
     

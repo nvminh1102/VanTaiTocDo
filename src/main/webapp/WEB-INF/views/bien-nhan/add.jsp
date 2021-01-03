@@ -125,14 +125,18 @@
                                         <option ng-value="3">Công nợ</option>
                                     </select>
                                 </div>
-
                                 <div class="col-sm-2" style="text-align: right">
-                                    <label>Người thanh toán</label>
+                                    <label>Người thanh toán<span style="color: red">*</span></label>
                                 </div>
-                                <div class="col-sm-4">
-                                    <input ng-model="info.bienNhan.payer" name="info.bienNhan.payer" id="info.bienNhan.payer" maxlength="250"
-                                           class="input-sm form-control"/>
+                                <div class="col-md-4">
+                                    <select ng-model="info.bienNhan.nguoiThanhToanId" id="info.bienNhan.nguoiThanhToanId" name ="info.bienNhan.nguoiThanhToanId"  class="select2" style="width: 100%">
+                                        <option value="" selected >-- Lựa chọn --</option>
+                                        <option ng-value="-2">Người gửi</option>
+                                        <option ng-value="-3">Người nhận</option>
+                                        <option ng-repeat="item in khachHangList track by $index"  ng-value="item.id">{{item.fullName}}</option>
+                                    </select>
                                 </div>
+
                             </div>
                         </div>
 
@@ -176,6 +180,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Số hợp đồng</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.nguoiGui.sohopdong" name="nguoiGui.sohopdong" id="nguoiGui.sohopdong" maxlength="200"
+                                           class="input-sm form-control"/>
+                                </div>
+                            </div>
+                        </div>
 
                         <%--người nhận--%>
 
@@ -215,6 +230,17 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.nguoiNhan.address" name="nguoiNhan.address" id="nguoiNhan.address" maxlength="500"
+                                           class="input-sm form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Số hợp đồng</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.nguoiNhan.sohopdong" name="nguoiNhan.sohopdong" id="nguoiNhan.sohopdong" maxlength="200"
                                            class="input-sm form-control"/>
                                 </div>
                             </div>
@@ -277,39 +303,39 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <table id="tblAsset" class="table table-striped table-hover m-b-none">
                                         <thead>
-                                        <tr>
-                                            <th style="text-align: center">STT</th>
-                                            <th style="text-align: center">Mặt hàng</th>
-                                            <th style="text-align: center">Đơn vị tính</th>
-                                            <th style="text-align: center">Số lượng</th>
-                                            <th style="text-align: center">Trọng lượng</th>
-                                            <th style="text-align: center">Kích thước</th>
-                                            <th style="text-align: center">Thành tiền</th>
-                                            <%--<th style="text-align: center">Giấy tờ kèm theo</th>--%>
-                                            <th style="text-align: center">Ghi chú</th>
-                                            <th style="text-align: center">Tools</th>
-                                        </tr>
+                                            <tr>
+                                                <th style="text-align: center">STT</th>
+                                                <th style="text-align: center">Mặt hàng</th>
+                                                <th style="text-align: center">Đơn vị tính</th>
+                                                <th style="text-align: center">Số lượng</th>
+                                                <th style="text-align: center">Trọng lượng</th>
+                                                <th style="text-align: center">Kích thước</th>
+                                                <th style="text-align: center">Thành tiền</th>
+                                                    <%--<th style="text-align: center">Giấy tờ kèm theo</th>--%>
+                                                <th style="text-align: center">Ghi chú</th>
+                                                <th style="text-align: center">Tools</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="item in info.property track by $index">
-                                            <td style="text-align: center; font-weight: normal">{{$index + 1}}</td>
-                                            <td style="text-align: center; font-weight: normal">{{item.name}}</td>
-                                            <td style="text-align: center; font-weight: normal">{{item.unit}}</td>
-                                            <td style="text-align: center; font-weight: normal">{{item.numbers}}</td>
-                                            <td style="text-align: center; font-weight: normal">{{item.weight}}</td>
-                                            <td style="text-align: center; font-weight: normal">{{item.sizes}}</td>
-                                            <td style="text-align: center; font-weight: normal">{{item.cost > 0 ? item.cost : null|number}}</td>
-                                            <%--<td style="text-align: center; font-weight: normal">file đính kèm</td>--%>
-                                            <td style="text-align: center; font-weight: normal">{{item.note}}</td>
-                                            <td style="text-align: center; font-weight: normal">
-                                                        <span ng-click="editProperty($index)">
-                                                            <i title="Chỉnh sửa" class="fa fa-pencil-square-o" style="color:#428bca" id="icnEditProperty"></i>
-                                                        </span>
-                                                <span ng-click="deleteProperty($index)">
-                                                            <i title="Xóa"  class="fa fa-times" style="color:red"></i>
-                                                        </span>
-                                            </td>
-                                        </tr>
+                                            <tr ng-repeat="item in info.property track by $index">
+                                                <td style="text-align: center; font-weight: normal">{{$index + 1}}</td>
+                                                <td style="text-align: center; font-weight: normal">{{item.name}}</td>
+                                                <td style="text-align: center; font-weight: normal">{{item.unit}}</td>
+                                                <td style="text-align: center; font-weight: normal">{{item.numbers}}</td>
+                                                <td style="text-align: center; font-weight: normal">{{item.weight}}</td>
+                                                <td style="text-align: center; font-weight: normal">{{item.sizes}}</td>
+                                                <td style="text-align: center; font-weight: normal">{{item.cost > 0 ? item.cost : null|number}}</td>
+                                                <%--<td style="text-align: center; font-weight: normal">file đính kèm</td>--%>
+                                                <td style="text-align: center; font-weight: normal">{{item.note}}</td>
+                                                <td style="text-align: center; font-weight: normal">
+                                                    <span ng-click="editProperty($index)">
+                                                        <i title="Chỉnh sửa" class="fa fa-pencil-square-o" style="color:#428bca" id="icnEditProperty"></i>
+                                                    </span>
+                                                    <span ng-click="deleteProperty($index)">
+                                                        <i title="Xóa"  class="fa fa-times" style="color:red"></i>
+                                                    </span>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -366,7 +392,7 @@
                         </div>
 
                         <%--<div class="form-group">--%>
-                            <%--File đính kèm--%>
+                        <%--File đính kèm--%>
                         <%--</div>--%>
 
                         <div class="form-group">
@@ -408,7 +434,7 @@
 
 <script>
     var receiptCode = '${receiptCode}';
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#startDate1').datetimepicker({
             format: 'DD/MM/YYYY',
             sideBySide: true
@@ -416,10 +442,10 @@
     });
 
     $("input[data-type='currency']").on({
-        keyup: function() {
+        keyup: function () {
             formatCurrency($(this));
         },
-        blur: function() {
+        blur: function () {
             formatCurrency($(this), "blur");
         }
     });
@@ -433,7 +459,7 @@
         if (currency == '' || currency == null || currency == 'undefined') {
             return "";
         } else {
-            return Number(currency.replace(/[^0-9.-]+/g,""));
+            return Number(currency.replace(/[^0-9.-]+/g, ""));
         }
     }
     function formatCurrency(input, blur) {
@@ -444,7 +470,9 @@
         var input_val = input.val();
 
         // don't validate empty input
-        if (input_val === "") { return; }
+        if (input_val === "") {
+            return;
+        }
 
         // original length
         var original_len = input_val.length;

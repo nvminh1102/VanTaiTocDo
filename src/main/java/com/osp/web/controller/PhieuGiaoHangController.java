@@ -5,17 +5,12 @@ import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
-import com.osp.model.VtGoodsReceipt;
-import com.osp.model.VtPartner;
+import com.osp.model.VtInPhieuThu;
 import com.osp.model.VtPhieuGiaoHang;
-import com.osp.model.VtReceipt;
 import com.osp.model.VtReceiptDetail;
-import com.osp.model.VtToaHang;
 import com.osp.model.view.VTGoodsReceiptForm;
-import com.osp.model.view.VtGoodsReceiptBO;
+import com.osp.web.dao.InPhieuThuDAO;
 import com.osp.web.dao.PhieuGiaoHangDAO;
-import com.osp.web.dao.PhieuNhanHangDAO;
-import com.osp.web.dao.ToaHangDAO;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,6 +51,10 @@ public class PhieuGiaoHangController {
 
     @Autowired
     PhieuGiaoHangDAO phieuGiaoHangDAO;
+    
+    @Autowired
+    InPhieuThuDAO inPhieuThuDAO;
+    
 //    @Autowired
 //    LogAccessDAO logAccessDao;
 
@@ -190,6 +189,7 @@ public class PhieuGiaoHangController {
     @Secured(ConstantAuthor.GIAO_HANG.exportPhieuGiao)
     public void exportPhieuThu(HttpServletResponse response, HttpServletRequest request,
                             @RequestParam(value = "idPhieuThu", required = false) Integer idPhieuThu) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PagingResult page = new PagingResult();
         page.setPageNumber(1);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -198,11 +198,20 @@ public class PhieuGiaoHangController {
             List<VtReceiptDetail> vtReceiptDetails = phieuGiaoHangDAO.getPhieuNhanHang(idPhieuThu);
             VtReceiptDetail vtReceiptDetail = (vtReceiptDetails!=null ? vtReceiptDetails.get(0): new VtReceiptDetail());
             page.setItems(vtReceiptDetails);
+            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + (inPhieuThuDAO.getMaxId()+1);
+            
             Map<String, Object> beans = new HashMap<String, Object>();
             beans.put("vtReceiptDetail", vtReceiptDetail);
-            beans.put("maPhieuThu", "PT-" + sdf2.format(new Date())+ "-" +(vtReceiptDetail!=null ? vtReceiptDetail.getId(): 0));
+            beans.put("maPhieuThu", maPhieuThu);
             beans.put("ngayLap", sdf.format(new Date()));
             beans.put("page", page);
+            if(vtReceiptDetails!=null && vtReceiptDetails.size()>0){
+                VtInPhieuThu vtInPhieuThu = new VtInPhieuThu();
+                vtInPhieuThu.setMaPhieuThu(maPhieuThu);
+                vtInPhieuThu.setReceiptId(vtReceiptDetails.get(0).getId());
+                vtInPhieuThu.setTypes(1); // 1: phieu thu trả trước; 2: phiếu thu trả sau
+                inPhieuThuDAO.add(vtInPhieuThu, user);
+            }
             Resource resource = new ClassPathResource(templatePhieuThu);
             InputStream fileIn = resource.getInputStream();
             ExcelTransformer transformer = new ExcelTransformer();

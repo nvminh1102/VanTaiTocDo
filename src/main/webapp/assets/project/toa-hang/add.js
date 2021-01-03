@@ -6,12 +6,6 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
         $scope.listBienNhanDaChon = popupPhieuNhanHang.getListDataBN();
         $scope.listHangHoa = popupPhieuNhanHang.getListDataHH();
 
-        // load DL nhà xe
-        $http.get(preUrl + "/getListPartner", {params: {typePartner: 4}})
-                .then(function (response) {
-                    $scope.vtPartners = response.data;
-                });
-
         $http.get(preUrl + "/bienNhan/danhSachNhaXe")
                 .then(function (response) {
                     $scope.nhaXeList = response.data;

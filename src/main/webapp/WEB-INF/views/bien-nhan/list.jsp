@@ -145,6 +145,11 @@
                                                         <a href="javascript:void(0)" ng-click="exportPhieuNhanHang(item.id)" >In phiếu nhận hàng</a>
                                                     </li>
                                                 </sec:authorize>
+                                                <sec:authorize access="hasRole('ROLE_THEM_PHIEU_NHAN_HANG_ADD')">
+                                                    <li>
+                                                        <a href="javascript:void(0)" ng-click="exportPhieuThu(item.id)" >In phiếu thu</a>
+                                                    </li>
+                                                </sec:authorize>
 
                                                 <sec:authorize access="hasRole('ROLE_SUA_PHIEU_NHAN_HANG_EDIT')">
                                                     <li>

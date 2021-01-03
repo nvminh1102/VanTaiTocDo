@@ -1,12 +1,10 @@
 package com.osp.web.dao;
 
-import com.osp.common.DateUtils;
 import com.osp.common.PagingResult;
 import com.osp.model.VtPartner;
-import com.osp.model.VtReceipt;
 import com.osp.model.view.VtReceiptView;
 import java.math.BigInteger;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
@@ -37,9 +35,9 @@ public class KhachHangDAOImpl implements KhachHangDAO {
   @Override
   public VtPartner getByCMND(String taxCode,int typePartner) {
     try {
-      String sql = " select * from vt_partner where tax_code=:taxCode and type_partner =:typePartner";
-      Query query = entityManager.createNativeQuery(sql, VtPartner.class);
-      query.setParameter("taxCode", taxCode.trim());
+      String sql = " select p from VtPartner p where upper(p.taxCode)=:taxCode and p.typePartner =:typePartner";
+      Query query = entityManager.createQuery(sql, VtPartner.class);
+      query.setParameter("taxCode", taxCode.trim().toUpperCase());
       query.setParameter("typePartner", typePartner);
       List<VtPartner> partners = query.getResultList();
       if (partners.size() > 0) {
@@ -87,33 +85,33 @@ public class KhachHangDAOImpl implements KhachHangDAO {
       }
       StringBuffer strWhere = new StringBuffer();
       if (fullName != null && !"".equals(fullName)) {
-        strWhere.append(" and UPPER(t.FULL_NAME) like :fullName");
+        strWhere.append(" and UPPER(t.fullName) like :fullName");
       }
       if (taxCode != null && !"".equals(taxCode)) {
-        strWhere.append(" and UPPER(t.tax_code) like :taxCode");
+        strWhere.append(" and UPPER(t.taxCode) like :taxCode");
       }
       if (mobile != null && !"".equals(mobile)) {
-        strWhere.append(" and UPPER(t.MOBILE) like :mobile");
+        strWhere.append(" and UPPER(t.mobile) like :mobile");
       }
       if (address != null && !"".equals(address)) {
         strWhere.append(" and UPPER(t.address) like :address");
       }
       if (typePartner != null) {
-        strWhere.append(" and t.type_partner = :typePartner");
+        strWhere.append(" and t.typePartner = :typePartner");
       }
 
-      StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.USER_NAME,t.FULL_NAME,t.address,t.tax_code,t.MOBILE,t.EMAIL,t.type_partner,t.gen_date,t.created_by,t.last_update,t.updated_by "
-          + "from vt_partner t "
+      StringBuffer sqlBuffer = new StringBuffer("SELECT t "
+          + " from VtPartner t "
           + " where 1=1 ");
       sqlBuffer.append(strWhere.toString());
-      sqlBuffer.append(" order by t.GEN_DATE DESC");
+      sqlBuffer.append(" order by t.genDate DESC");
 
       StringBuffer sqlBufferCount = new StringBuffer("SELECT count(t.id) "
-          + "from vt_partner t "
+          + "from VtPartner t "
           + " where 1=1 ");
       sqlBufferCount.append(strWhere.toString());
 
-      Query query = entityManager.createNativeQuery(sqlBuffer.toString(), VtPartner.class);
+      Query query = entityManager.createQuery(sqlBuffer.toString(), VtPartner.class);
       if (fullName != null && !"".equals(fullName)) {
         query.setParameter("fullName", "%" +fullName.trim().toUpperCase()+ "%");
       }
@@ -134,7 +132,7 @@ public class KhachHangDAOImpl implements KhachHangDAO {
       if (list != null && list.size() > 0) {
         page.setItems(list);
       }
-      Query queryCount = entityManager.createNativeQuery(sqlBufferCount.toString());
+      Query queryCount = entityManager.createQuery(sqlBufferCount.toString());
       if (fullName != null && !"".equals(fullName)) {
         queryCount.setParameter("fullName", "%" +fullName.trim().toUpperCase()+ "%");
       }
@@ -164,8 +162,8 @@ public class KhachHangDAOImpl implements KhachHangDAO {
   @Override
   public boolean delete(int id) {
     try {
-      String sql = "delete from vt_partner where ID = :id";
-      Query query = entityManager.createNativeQuery(sql).setParameter("id", id);
+      String sql = "delete from VtPartner where ID = :id";
+      Query query = entityManager.createQuery(sql).setParameter("id", id);
       query.executeUpdate();
       return true;
     } catch (Exception e) {
@@ -173,5 +171,25 @@ public class KhachHangDAOImpl implements KhachHangDAO {
     }
     return false;
   }
+  
+  
+  @Override
+    public List<VtPartner> getListByType(Integer typePartner) {
+        List<VtPartner> vtPartners = new ArrayList<>();
+        try {
+            String sql = "select p from VtPartner p ";
+            if(typePartner!=null && typePartner.intValue()>0){
+                sql = sql + "  where typePartner = :typePartner  ";
+            }
+            Query queryAll = entityManager.createQuery(sql);
+            if(typePartner!=null && typePartner.intValue()>0){
+                queryAll.setParameter("typePartner", typePartner);
+            }
+            vtPartners = queryAll.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return vtPartners;
+    }
 
 }

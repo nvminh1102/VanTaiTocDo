@@ -87,6 +87,14 @@ public class VtReceiptDetail implements Serializable {
     private String strGenDate;
     @Transient
     private String stockName;
+    @Transient
+    private String soTienPhaiThu;
+    @Transient
+    private String soHopDong;
+    @Transient
+    private Integer paymentType;
+    @Transient
+    private String maPhieuThu;
     
     public VtReceiptDetail() {
     }
@@ -332,7 +340,37 @@ public class VtReceiptDetail implements Serializable {
     public void setStockName(String stockName) {
         this.stockName = stockName;
     }
-    
-    
+
+    public String getSoTienPhaiThu() {
+        return soTienPhaiThu;
+    }
+
+    public void setSoTienPhaiThu(String soTienPhaiThu) {
+        this.soTienPhaiThu = soTienPhaiThu;
+    }
+
+    public String getSoHopDong() {
+        return soHopDong;
+    }
+
+    public void setSoHopDong(String soHopDong) {
+        this.soHopDong = soHopDong;
+    }
+
+    public Integer getPaymentType() {
+        return paymentType;
+    }
+
+    public void setPaymentType(Integer paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public String getMaPhieuThu() {
+        return maPhieuThu;
+    }
+
+    public void setMaPhieuThu(String maPhieuThu) {
+        this.maPhieuThu = maPhieuThu;
+    }
     
 }

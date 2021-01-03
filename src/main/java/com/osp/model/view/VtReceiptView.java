@@ -60,6 +60,10 @@ public class VtReceiptView {
   private String name;
   @Transient
   private String note;
+  @Transient
+  private String soHopDong;
+  @Transient
+  private String maPhieuThu;
 
 
   public Long getId() {
@@ -261,4 +265,22 @@ public class VtReceiptView {
   public void setStatus(Long status) {
     this.status = status;
   }
+
+    public String getSoHopDong() {
+        return soHopDong;
+    }
+
+    public void setSoHopDong(String soHopDong) {
+        this.soHopDong = soHopDong;
+    }
+
+    public String getMaPhieuThu() {
+        return maPhieuThu;
+    }
+
+    public void setMaPhieuThu(String maPhieuThu) {
+        this.maPhieuThu = maPhieuThu;
+    }
+  
+  
 }

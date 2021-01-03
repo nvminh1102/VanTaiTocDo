@@ -107,7 +107,7 @@ public class NhaXeController {
         return new ResponseEntity<String>("0", HttpStatus.OK);
       } else {
         saveObj.setNhaXe(nhaXe.getNhaXe().trim());
-        saveObj.setLoaiXe(nhaXe.getNhaXe().trim());
+        saveObj.setLoaiXe(nhaXe.getLoaiXe().trim());
         saveObj.setBienSo(nhaXe.getBienSo().trim());
         if (nhaXe.getTenLaiXe() != null && !"".equals(nhaXe.getTenLaiXe())) {
           saveObj.setTenLaiXe(nhaXe.getTenLaiXe().trim());

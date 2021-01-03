@@ -85,6 +85,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     $scope.info.fullName = '';
     $scope.info.mobile = '';
     $scope.info.address = '';
+    $scope.info.soHopDong = '';
     $scope.info.typePartner = 2;
     $scope.info.email = '';
   };
@@ -96,6 +97,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       fullName: '',
       mobile: '',
       address: '',
+      soHopDong: '',
       typePartner: 2,
       email: ''
     };
@@ -121,7 +123,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       return false;
     }
 
-    var call = {id:  $scope.info.id, taxCode: $scope.info.taxCode, fullName: $scope.info.fullName, mobile: $scope.info.mobile, address: $scope.info.address, typePartner: $scope.info.typePartner, email: $scope.info.email};
+    var call = {id:  $scope.info.id, taxCode: $scope.info.taxCode, fullName: $scope.info.fullName, mobile: $scope.info.mobile, address: $scope.info.address, soHopDong: $scope.info.soHopDong,  typePartner: $scope.info.typePartner, email: $scope.info.email};
     var param = JSON.parse(JSON.stringify(call));
     $http.post(preUrl + "/bienNhan/khach-hang/them-moi-khach-hang", param, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
@@ -152,6 +154,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         fullName: item.fullName,
         mobile: item.mobile,
         address: item.address,
+        soHopDong: item.soHopDong,
         typePartner: item.typePartner,
         email: item.email
       };

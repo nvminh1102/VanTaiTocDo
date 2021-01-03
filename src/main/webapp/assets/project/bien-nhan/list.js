@@ -105,6 +105,10 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     $scope.exportPhieuNhanHang = function (giaoHangId) {
         window.open(preUrl+"/bienNhan/exportExcelPhieuNhan?giaoHangId=" + giaoHangId , '_blank');
     }
+    
+    $scope.exportPhieuThu = function (giaoHangId) {
+        window.open(preUrl+"/bienNhan/exportPhieuThu?giaoHangId=" + giaoHangId , '_blank');
+    }
 
 
     }]);

@@ -131,6 +131,8 @@ public class BienNhanDAOImpl implements BienNhanDAO {
     @Override
     public Optional<PagingResult> search(PagingResult page, String receiptCode, String nameStock,
             Date fromGenDate, Date toGenDate, String loaiXe, String bienSo, Integer status) {
+        List<Object[]> db = new ArrayList<>();
+        List<VtReceiptView> list = new ArrayList<>();
         try {
             StringBuffer strWhere = new StringBuffer();
             if (receiptCode != null && !"".equals(receiptCode)) {
@@ -151,19 +153,21 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (bienSo != null && !bienSo.trim().equals("")) {
                 strWhere.append(" and upper(t.bien_so) = :bienSo");
             }
-            if (status != null && status.compareTo(0)>=0) {
+            if (status != null && status.compareTo(0) >= 0) {
                 strWhere.append(" and t.status = :status");
             }
 
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payment_type,t.tien_da_tra,t.status,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payment_type,t.tien_da_tra,t.status,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui, b.so_hop_dong ,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
                     + " c.MOBILE as mobile_nguoi_nhan, t.payer,  "
-                    + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
+                    + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien, "
+                    + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu,  "
+                    + " (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong "
                     + "from vt_receipt t left join vt_partner b  on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID "
                     + " where 1=1 ");
             sqlBuffer.append(strWhere.toString());
             sqlBuffer.append(" order by t.GEN_DATE DESC");
 
-            Query query = entityManager.createNativeQuery(sqlBuffer.toString(), VtReceiptView.class);
+            Query query = entityManager.createNativeQuery(sqlBuffer.toString());
             if (receiptCode != null && !"".equals(receiptCode)) {
                 query.setParameter("receiptCode", receiptCode.trim().toUpperCase());
             }
@@ -183,11 +187,37 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (bienSo != null && !bienSo.trim().equals("")) {
                 query.setParameter("bienSo", bienSo.trim().toUpperCase());
             }
-            if (status != null && status.compareTo(0)>=0) {
+            if (status != null && status.compareTo(0) >= 0) {
                 query.setParameter("status", status);
             }
 
-            List<VtReceiptView> list = query.getResultList();
+            db = query.getResultList();
+
+            db.stream().forEach((record) -> {
+                VtReceiptView row = new VtReceiptView();
+                row.setId(record[0] == null ? null : Long.valueOf(record[0].toString()));
+                row.setReceiptCode(record[1] == null ? null : (String) record[1]);
+                row.setDateReceipt(record[2] == null ? null : (Date) record[2]);
+                row.setNameStock(record[3] == null ? null : (String) record[3]);
+                row.setNhaXe(record[4] == null ? null : (String) record[4]);
+                row.setBienSo(record[5] == null ? null : (String) record[5]);
+                row.setEmployee(record[6] == null ? null : (String) record[6]);
+                row.setPaymentType(record[7] == null ? null : Integer.valueOf(record[7].toString()));
+                row.setTienDaTra(record[8] == null ? null : Long.valueOf(record[8].toString()));
+                row.setStatus(record[9] == null ? null : Long.valueOf(record[9].toString()));
+                row.setTenNguoiGui(record[10] == null ? null : (String) record[10]);
+                row.setDiaChiNguoiGui(record[11] == null ? null : (String) record[11]);
+                row.setSoHopDong(record[12] == null ? null : (String) record[12]);
+                row.setTenNguoiNhan(record[13] == null ? null : (String) record[13]);
+                row.setDiaChiNguoiNhan(record[14] == null ? null : (String) record[14]);
+                row.setMobileNguoiNhan(record[15] == null ? null : (String) record[15]);
+                row.setPayer(record[16] == null ? null : (String) record[16]);
+                row.setTongTien(record[17] == null ? null : Long.valueOf(record[17].toString()));
+                row.setMaPhieuThu(record[18] == null ? null : (String) record[18]);
+                row.setSoLuong(record[19] == null ? null : Integer.valueOf(record[19].toString()));
+                list.add(row);
+            });
+
             if (list != null && list.size() > 0) {
                 page.setItems(list);
             }

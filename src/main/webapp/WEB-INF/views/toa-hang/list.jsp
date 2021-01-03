@@ -148,8 +148,8 @@
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Nơi đi</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Biển số xe</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Tên lái xe</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Nơi nhận</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Người phụ trách</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Địa điểm</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Tổng tiền phải thu</th>
                                     </tr>
                                 </thead>

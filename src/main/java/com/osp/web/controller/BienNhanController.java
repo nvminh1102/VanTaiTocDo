@@ -3,15 +3,16 @@ package com.osp.web.controller;
 import com.osp.common.ConstantAuthor;
 import com.osp.common.ConstantAuthor.NHA_XE;
 import com.osp.common.ConstantAuthor.PHIEU_NHAN_HANG;
-import com.osp.common.Constants;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.*;
 import com.osp.model.view.BienNhanForm;
 import com.osp.web.dao.BienNhanDAO;
+import com.osp.web.dao.InPhieuThuDAO;
 import com.osp.web.dao.KhachHangDAO;
 import com.osp.web.dao.MatHangDAO;
 import com.osp.web.dao.NhaXeDAO;
+import com.osp.web.dao.PhieuGiaoHangDAO;
 import net.sf.jett.transform.ExcelTransformer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -39,9 +40,12 @@ import java.util.*;
 @Controller
 @RequestMapping("/bienNhan")
 public class BienNhanController {
+
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     private SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
     private final String templatePhieuNhanHang = "/fileTemplate/templatePhieuNhanHang.xlsx";
+    private final String templatePhieuThu = "/fileTemplate/templatePhieuThu.xlsx";
+
     @Autowired
     BienNhanDAO bienNhanDAO;
     @Autowired
@@ -50,12 +54,16 @@ public class BienNhanController {
     MatHangDAO matHangDAO;
     @Autowired
     NhaXeDAO nhaXeDAO;
+    @Autowired
+    PhieuGiaoHangDAO phieuGiaoHangDAO;
+    @Autowired
+    InPhieuThuDAO inPhieuThuDAO;
 
     @GetMapping("/preAdd")
     @Secured(ConstantAuthor.PHIEU_NHAN_HANG.add)
     public String list(Model model) {
         Integer maxId = bienNhanDAO.getMaxId();
-        String receiptCode = "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
+        String receiptCode = "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
         model.addAttribute("receiptCode", receiptCode);
         return "bienNhan.add";
     }
@@ -72,10 +80,17 @@ public class BienNhanController {
             // insert người gửi
             if (nguoiGuiDb.getId() == null) {
                 VtPartner nguoiGui = new VtPartner();
-                nguoiGui.setTaxCode(item.getNguoiGui().getTaxCode());
-                nguoiGui.setFullName(item.getNguoiGui().getFullName());
-                nguoiGui.setMobile(item.getNguoiGui().getMobile());
-                nguoiGui.setAddress(item.getNguoiGui().getAddress());
+                nguoiGui.setTaxCode(item.getNguoiGui().getTaxCode().trim());
+                nguoiGui.setFullName(item.getNguoiGui().getFullName().trim());
+                if(item.getNguoiGui().getMobile()!=null){
+                    nguoiGui.setMobile(item.getNguoiGui().getMobile().trim());
+                }
+                if(item.getNguoiGui().getAddress()!=null){
+                    nguoiGui.setAddress(item.getNguoiGui().getAddress().trim());
+                }
+                if(item.getNguoiGui().getSoHopDong()!=null){
+                    nguoiGui.setSoHopDong(item.getNguoiGui().getSoHopDong().trim());
+                }
                 nguoiGui.setCreatedBy(user.getUsername());
                 nguoiGui.setLastUpdate(new Date());
                 nguoiGui.setGenDate(new Date());
@@ -88,10 +103,17 @@ public class BienNhanController {
             // insert người nhận
             if (nguoiNhanDb.getId() == null) {
                 VtPartner nguoiNhan = new VtPartner();
-                nguoiNhan.setTaxCode(item.getNguoiNhan().getTaxCode());
-                nguoiNhan.setFullName(item.getNguoiNhan().getFullName());
-                nguoiNhan.setMobile(item.getNguoiNhan().getMobile());
-                nguoiNhan.setAddress(item.getNguoiNhan().getAddress());
+                nguoiNhan.setTaxCode(item.getNguoiNhan().getTaxCode().trim());
+                nguoiNhan.setFullName(item.getNguoiNhan().getFullName().trim());
+                if(item.getNguoiNhan().getMobile()!=null){
+                    nguoiNhan.setMobile(item.getNguoiNhan().getMobile().trim());
+                }
+                if(item.getNguoiNhan().getAddress()!=null){
+                    nguoiNhan.setAddress(item.getNguoiNhan().getAddress().trim());
+                }
+                if(item.getNguoiNhan().getSoHopDong()!=null){
+                    nguoiNhan.setSoHopDong(item.getNguoiNhan().getSoHopDong().trim());
+                }
                 nguoiNhan.setCreatedBy(user.getUsername());
                 nguoiNhan.setLastUpdate(new Date());
                 nguoiNhan.setGenDate(new Date());
@@ -119,7 +141,16 @@ public class BienNhanController {
             bienNhan.setDatepushStock(new Date());
             // 1 trả trước, 2 trả sau, 3 công nợ
             bienNhan.setPaymentType(item.getBienNhan().getPaymentType());
-            bienNhan.setPayer(item.getBienNhan().getPayer());
+            if(item.getBienNhan().getNguoiThanhToanId()!=null){
+                if(item.getBienNhan().getNguoiThanhToanId()== -2){
+                    bienNhan.setNguoiThanhToanId(rsNguoiGui.getId());
+                }else if(item.getBienNhan().getNguoiThanhToanId()== -3){
+                    bienNhan.setNguoiThanhToanId(rsNguoiNhan.getId());
+                }else{
+                    bienNhan.setNguoiThanhToanId(item.getBienNhan().getNguoiThanhToanId());
+                }
+            }
+//            bienNhan.setPayer(item.getBienNhan().getPayer());
 //            bienNhan.setTaxCode(item.getBienNhan().getTaxCode());
             bienNhan.setNhaXe(item.getBienNhan().getNhaXe());
             bienNhan.setBienSo(item.getBienNhan().getBienSo());
@@ -217,11 +248,11 @@ public class BienNhanController {
     @GetMapping("/search")
     @Secured(ConstantAuthor.PHIEU_NHAN_HANG.view)
     public ResponseEntity<PagingResult> parameterList(@RequestParam(value = "p", required = false, defaultValue = "1") int pageNumber,
-        @RequestParam(value = "numberPerPage", required = false, defaultValue = "25") int numberPerPage,
-        @RequestParam(value = "receiptCode", required = false, defaultValue = "") String receiptCode,
-        @RequestParam(value = "nameStock", required = false, defaultValue = "") String nameStock,
-        @RequestParam(value = "fromDateReceipt", required = false, defaultValue = "") String fromDateReceipt,
-        @RequestParam(value = "toDateReceipt", required = false, defaultValue = "") String toDateReceipt) {
+            @RequestParam(value = "numberPerPage", required = false, defaultValue = "25") int numberPerPage,
+            @RequestParam(value = "receiptCode", required = false, defaultValue = "") String receiptCode,
+            @RequestParam(value = "nameStock", required = false, defaultValue = "") String nameStock,
+            @RequestParam(value = "fromDateReceipt", required = false, defaultValue = "") String fromDateReceipt,
+            @RequestParam(value = "toDateReceipt", required = false, defaultValue = "") String toDateReceipt) {
         PagingResult page = new PagingResult();
         page.setPageNumber(pageNumber);
         page.setNumberPerPage(numberPerPage);
@@ -231,7 +262,7 @@ public class BienNhanController {
         try {
             if (fromDateReceipt != null && !"".equals(fromDateReceipt)) {
                 String strFdate = fromDateReceipt + " 00:00:00";
-                fromDate  = new Timestamp(sdf.parse(strFdate).getTime());
+                fromDate = new Timestamp(sdf.parse(strFdate).getTime());
             }
             if (toDateReceipt != null && !"".equals(toDateReceipt)) {
                 String strTdate = toDateReceipt + " 23:59:59";
@@ -274,7 +305,7 @@ public class BienNhanController {
 
     @GetMapping("/ThongTinBienNhan")
     public ResponseEntity<BienNhanForm> getInfoEditAuction(@RequestParam(value = "id", required = true) Integer bienNhanId,
-                                                                    HttpServletRequest request) {
+            HttpServletRequest request) {
         BienNhanForm item = new BienNhanForm();
         try {
             item.setBienNhan(bienNhanDAO.getById(bienNhanId));
@@ -340,6 +371,9 @@ public class BienNhanController {
             if (item.getNguoiGui().getAddress() != null && !"".equals(item.getNguoiGui().getAddress())) {
                 nguoiGui.setAddress(item.getNguoiGui().getAddress().trim());
             }
+            if (item.getNguoiGui().getSoHopDong()!= null && !"".equals(item.getNguoiGui().getSoHopDong())) {
+                nguoiGui.setSoHopDong(item.getNguoiGui().getSoHopDong().trim());
+            }
             // update người gửi
             VtPartner nguoiGuiCu = khachHangDAO.getById(bienNhanCu.getDeliveryPartnerId());
             if (nguoiGuiCu != null) {
@@ -350,7 +384,10 @@ public class BienNhanController {
                     nguoiGuiCu.setFullName(nguoiGui.getFullName());
                     nguoiGuiCu.setMobile(nguoiGui.getMobile());
                     nguoiGuiCu.setAddress(nguoiGui.getAddress());
-                   boolean blUpdate = khachHangDAO.edit(nguoiGuiCu);
+                    nguoiGuiCu.setSoHopDong(nguoiGui.getSoHopDong());
+                    nguoiGuiCu.setUpdatedBy(user.getUsername());
+                    nguoiGuiCu.setLastUpdate(new Date());
+                    boolean blUpdate = khachHangDAO.edit(nguoiGuiCu);
 
                 }
             }
@@ -367,6 +404,9 @@ public class BienNhanController {
             if (item.getNguoiNhan().getAddress() != null && !"".equals(item.getNguoiNhan().getAddress())) {
                 nguoiNhan.setAddress(item.getNguoiNhan().getAddress().trim());
             }
+            if (item.getNguoiNhan().getSoHopDong()!= null && !"".equals(item.getNguoiNhan().getSoHopDong())) {
+                nguoiNhan.setSoHopDong(item.getNguoiNhan().getSoHopDong().trim());
+            }
 
             // update người nhận
             VtPartner nguoiNhanCu = khachHangDAO.getById(bienNhanCu.getReceivePartnerId());
@@ -378,8 +418,10 @@ public class BienNhanController {
                     nguoiNhanCu.setFullName(nguoiNhan.getFullName());
                     nguoiNhanCu.setMobile(nguoiNhan.getMobile());
                     nguoiNhanCu.setAddress(nguoiNhan.getAddress());
+                    nguoiNhanCu.setSoHopDong(nguoiNhan.getSoHopDong());
+                    nguoiGuiCu.setUpdatedBy(user.getUsername());
+                    nguoiGuiCu.setLastUpdate(new Date());
                     boolean blUpdate = khachHangDAO.edit(nguoiNhanCu);
-
                 }
             }
 
@@ -388,7 +430,7 @@ public class BienNhanController {
             bienNhanCu.setNameStock(item.getBienNhan().getNameStock().trim());
             bienNhanCu.setDateReceipt(item.getBienNhan().getDateReceipt());
             bienNhanCu.setPaymentType(item.getBienNhan().getPaymentType());
-            bienNhanCu.setPayer(item.getBienNhan().getPayer());
+//            bienNhanCu.setPayer(item.getBienNhan().getPayer());
             bienNhanCu.setDeliveryPartnerId(item.getBienNhan().getDeliveryPartnerId());
             bienNhanCu.setReceivePartnerId(item.getBienNhan().getReceivePartnerId());
             bienNhanCu.setNhaXe(item.getBienNhan().getNhaXe());
@@ -396,6 +438,10 @@ public class BienNhanController {
             bienNhanCu.setLoaiXe(item.getBienNhan().getLoaiXe());
             bienNhanCu.setEmployee(item.getBienNhan().getEmployee());
             bienNhanCu.setUpdatedBy(user.getUsername());
+            if(item.getBienNhan().getNguoiThanhToanId()!=null){
+                    bienNhanCu.setNguoiThanhToanId(item.getBienNhan().getNguoiThanhToanId());
+            }
+            
             boolean blUpdate = bienNhanDAO.edit(bienNhanCu);
 
             if (blUpdate) {
@@ -443,7 +489,7 @@ public class BienNhanController {
             matHangDAO.add(info);
         }
     }
-    
+
     @RequestMapping(value = "/loadListHangHoa", method = RequestMethod.GET)
     public ResponseEntity<List<VtReceiptDetail>> loadListHangHoa(@RequestParam @Valid final Integer id) {
         List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetail(id);
@@ -455,11 +501,16 @@ public class BienNhanController {
     public ResponseEntity<List> danhSachNhaXe() {
         return new ResponseEntity<>(nhaXeDAO.danhSachNhaXe(), HttpStatus.OK);
     }
+    @GetMapping("/danhSachKhachHang")
+//    @Secured(ConstantAuthor.NHA_XE.view)
+    public ResponseEntity<List> danhSachKhachHang() {
+        return new ResponseEntity<>(khachHangDAO.getListByType(null), HttpStatus.OK);
+    }
 
     @GetMapping("/thongTinNhaXe")
     @Secured(NHA_XE.view)
     public ResponseEntity<NhaXe> thongTinNhaXe(@RequestParam(value = "bienSo", required = true) String bienSo,
-                                               HttpServletRequest request) {
+            HttpServletRequest request) {
         NhaXe nhaXe = new NhaXe();
         try {
             nhaXe = nhaXeDAO.getByBienSo(bienSo.trim());
@@ -472,7 +523,7 @@ public class BienNhanController {
     @GetMapping("/exportExcelPhieuNhan")
     @Secured(ConstantAuthor.PHIEU_NHAN_HANG.add)
     public void exportExcel(HttpServletResponse response, HttpServletRequest request,
-                            @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
+            @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
         PagingResult page = new PagingResult();
         page.setPageNumber(1);
         VtReceipt phieuNhanHang = new VtReceipt();
@@ -521,4 +572,48 @@ public class BienNhanController {
             e.printStackTrace();
         }
     }
+
+    @GetMapping("/exportPhieuThu")
+    @Secured(ConstantAuthor.GIAO_HANG.exportPhieuGiao)
+    public void exportPhieuThu(HttpServletResponse response, HttpServletRequest request,
+            @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PagingResult page = new PagingResult();
+        page.setPageNumber(1);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy");
+        try {
+            List<VtReceiptDetail> vtReceiptDetails = phieuGiaoHangDAO.getPhieuNhanHang(giaoHangId);
+            VtReceiptDetail vtReceiptDetail = (vtReceiptDetails != null ? vtReceiptDetails.get(0) : new VtReceiptDetail());
+            page.setItems(vtReceiptDetails);
+            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + (inPhieuThuDAO.getMaxId()+1);
+            Map<String, Object> beans = new HashMap<String, Object>();
+            beans.put("vtReceiptDetail", vtReceiptDetail);
+            beans.put("maPhieuThu", maPhieuThu);
+            beans.put("ngayLap", sdf.format(new Date()));
+            beans.put("page", page);
+            if(vtReceiptDetails!=null && vtReceiptDetails.size()>0){
+                VtInPhieuThu vtInPhieuThu = new VtInPhieuThu();
+                vtInPhieuThu.setMaPhieuThu(maPhieuThu);
+                vtInPhieuThu.setReceiptId(vtReceiptDetails.get(0).getId());
+                vtInPhieuThu.setTypes(1); // 1: phieu thu trả trước; 2: phiếu thu trả sau
+                inPhieuThuDAO.add(vtInPhieuThu, user);
+            }
+            Resource resource = new ClassPathResource(templatePhieuThu);
+            InputStream fileIn = resource.getInputStream();
+            ExcelTransformer transformer = new ExcelTransformer();
+            Workbook workbook = transformer.transform(fileIn, beans);
+
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-thu-" + (vtReceiptDetails != null ? vtReceiptDetails.get(0).getReceiptCode() + "-" : "") + sdf.format(new Date()) + ".xlsx");
+            ServletOutputStream out = response.getOutputStream();
+            workbook.write(out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

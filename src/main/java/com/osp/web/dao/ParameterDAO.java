@@ -29,6 +29,4 @@ public interface ParameterDAO {
 
     public boolean deleteParam(Parameter parameterDel);
     
-    public List<VtPartner>  getListByType(Integer typePartner);
-    
 }

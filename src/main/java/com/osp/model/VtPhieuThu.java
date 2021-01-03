@@ -15,14 +15,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -30,24 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "vt_phieu_thu")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VtPhieuThu.findAll", query = "SELECT v FROM VtPhieuThu v")
-    , @NamedQuery(name = "VtPhieuThu.findById", query = "SELECT v FROM VtPhieuThu v WHERE v.id = :id")
-    , @NamedQuery(name = "VtPhieuThu.findByReceiptCode", query = "SELECT v FROM VtPhieuThu v WHERE v.receiptCode = :receiptCode")
-    , @NamedQuery(name = "VtPhieuThu.findByDeliveryPartnerId", query = "SELECT v FROM VtPhieuThu v WHERE v.deliveryPartnerId = :deliveryPartnerId")
-    , @NamedQuery(name = "VtPhieuThu.findByReceivePartnerId", query = "SELECT v FROM VtPhieuThu v WHERE v.receivePartnerId = :receivePartnerId")
-    , @NamedQuery(name = "VtPhieuThu.findByNameStock", query = "SELECT v FROM VtPhieuThu v WHERE v.nameStock = :nameStock")
-    , @NamedQuery(name = "VtPhieuThu.findByDateReceipt", query = "SELECT v FROM VtPhieuThu v WHERE v.dateReceipt = :dateReceipt")
-    , @NamedQuery(name = "VtPhieuThu.findByDatepushStock", query = "SELECT v FROM VtPhieuThu v WHERE v.datepushStock = :datepushStock")
-    , @NamedQuery(name = "VtPhieuThu.findByPayer", query = "SELECT v FROM VtPhieuThu v WHERE v.payer = :payer")
-    , @NamedQuery(name = "VtPhieuThu.findByEmployee", query = "SELECT v FROM VtPhieuThu v WHERE v.employee = :employee")
-    , @NamedQuery(name = "VtPhieuThu.findByStatus", query = "SELECT v FROM VtPhieuThu v WHERE v.status = :status")
-    , @NamedQuery(name = "VtPhieuThu.findByFileAttach", query = "SELECT v FROM VtPhieuThu v WHERE v.fileAttach = :fileAttach")
-    , @NamedQuery(name = "VtPhieuThu.findByGenDate", query = "SELECT v FROM VtPhieuThu v WHERE v.genDate = :genDate")
-    , @NamedQuery(name = "VtPhieuThu.findByCreatedBy", query = "SELECT v FROM VtPhieuThu v WHERE v.createdBy = :createdBy")
-    , @NamedQuery(name = "VtPhieuThu.findByLastUpdate", query = "SELECT v FROM VtPhieuThu v WHERE v.lastUpdate = :lastUpdate")
-    , @NamedQuery(name = "VtPhieuThu.findByUpdatedBy", query = "SELECT v FROM VtPhieuThu v WHERE v.updatedBy = :updatedBy")})
 public class VtPhieuThu implements Serializable {
 
     private static final long serialVersionUID = 1L;

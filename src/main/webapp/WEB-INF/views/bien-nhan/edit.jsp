@@ -126,12 +126,14 @@
                                     </select>
                                 </div>
 
-                                <div class="col-sm-2" style="text-align: right">
-                                    <label>Người thanh toán</label>
+                               <div class="col-sm-2" style="text-align: right">
+                                    <label>Người thanh toán<span style="color: red">*</span></label>
                                 </div>
-                                <div class="col-sm-4">
-                                    <input ng-model="info.bienNhan.payer" name="info.bienNhan.payer" id="info.bienNhan.payer" maxlength="250"
-                                           class="input-sm form-control"/>
+                                <div class="col-md-4">
+                                    <select ng-model="info.bienNhan.nguoiThanhToanId" id="info.bienNhan.nguoiThanhToanId" name ="info.bienNhan.nguoiThanhToanId"  class="select2" style="width: 100%">
+                                        <option value="" selected >-- Lựa chọn --</option>
+                                        <option ng-repeat="item in khachHangList track by $index"  ng-value="item.id">{{item.fullName}}</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -176,6 +178,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Số hợp đồng</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.nguoiGui.sohopdong" name="nguoiGui.sohopdong" id="nguoiGui.sohopdong" maxlength="200"
+                                           class="input-sm form-control"/>
+                                </div>
+                            </div>
+                        </div>
 
                         <%--người nhận--%>
 
@@ -215,6 +228,17 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.nguoiNhan.address" name="nguoiNhan.address" id="nguoiNhan.address" maxlength="500"
+                                           class="input-sm form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                            <div class="col-md-12">
+                                <div class="col-sm-2"  style="text-align: right">
+                                    <label>Số hợp đồng</label>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input ng-model="info.nguoiNhan.sohopdong" name="nguoiNhan.sohopdong" id="nguoiNhan.sohopdong" maxlength="200"
                                            class="input-sm form-control"/>
                                 </div>
                             </div>

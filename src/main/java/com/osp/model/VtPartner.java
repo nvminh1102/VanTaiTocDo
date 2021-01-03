@@ -28,21 +28,6 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "vt_partner")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "VtPartner.findAll", query = "SELECT v FROM VtPartner v")
-    , @NamedQuery(name = "VtPartner.findById", query = "SELECT v FROM VtPartner v WHERE v.id = :id")
-    , @NamedQuery(name = "VtPartner.findByUserName", query = "SELECT v FROM VtPartner v WHERE v.userName = :userName")
-    , @NamedQuery(name = "VtPartner.findByFullName", query = "SELECT v FROM VtPartner v WHERE v.fullName = :fullName")
-    , @NamedQuery(name = "VtPartner.findByAddress", query = "SELECT v FROM VtPartner v WHERE v.address = :address")
-    , @NamedQuery(name = "VtPartner.findByTaxCode", query = "SELECT v FROM VtPartner v WHERE v.taxCode = :taxCode")
-    , @NamedQuery(name = "VtPartner.findByMobile", query = "SELECT v FROM VtPartner v WHERE v.mobile = :mobile")
-    , @NamedQuery(name = "VtPartner.findByEmail", query = "SELECT v FROM VtPartner v WHERE v.email = :email")
-    , @NamedQuery(name = "VtPartner.findByTypePartner", query = "SELECT v FROM VtPartner v WHERE v.typePartner = :typePartner")
-    , @NamedQuery(name = "VtPartner.findByGenDate", query = "SELECT v FROM VtPartner v WHERE v.genDate = :genDate")
-    , @NamedQuery(name = "VtPartner.findByCreatedBy", query = "SELECT v FROM VtPartner v WHERE v.createdBy = :createdBy")
-    , @NamedQuery(name = "VtPartner.findByLastUpdate", query = "SELECT v FROM VtPartner v WHERE v.lastUpdate = :lastUpdate")
-    , @NamedQuery(name = "VtPartner.findByUpdatedBy", query = "SELECT v FROM VtPartner v WHERE v.updatedBy = :updatedBy")})
 public class VtPartner implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,6 +44,8 @@ public class VtPartner implements Serializable {
     private String address;
     @Column(name = "tax_code", length = 200)
     private String taxCode;
+    @Column(name = "so_hop_dong", length = 200)
+    private String soHopDong;
     @Column(name = "MOBILE", length = 50)
     private String mobile;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -129,6 +116,15 @@ public class VtPartner implements Serializable {
         this.taxCode = taxCode;
     }
 
+    public String getSoHopDong() {
+        return soHopDong;
+    }
+
+    public void setSoHopDong(String soHopDong) {
+        this.soHopDong = soHopDong;
+    }
+
+    
     public String getMobile() {
         return mobile;
     }

@@ -41,6 +41,8 @@ public class VtReceipt implements Serializable {
     private Integer deliveryPartnerId;
     @Column(name = "receive_partner_id")
     private Integer receivePartnerId;
+    @Column(name = "nguoi_thanh_toan_id")
+    private Integer nguoiThanhToanId;
     @Column(name = "name_Stock", length = 200)
     private String nameStock;
     @Column(name = "date_receipt")
@@ -309,5 +311,15 @@ public class VtReceipt implements Serializable {
     public void setTongTien(Integer tongTien) {
         this.tongTien = tongTien;
     }
+
+    public Integer getNguoiThanhToanId() {
+        return nguoiThanhToanId;
+    }
+
+    public void setNguoiThanhToanId(Integer nguoiThanhToanId) {
+        this.nguoiThanhToanId = nguoiThanhToanId;
+    }
+    
+    
     
 }

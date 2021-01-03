@@ -80,6 +80,7 @@
                                 <th class="text-center v-inherit text-dark" style="width: 20%;">Địa chỉ</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số thùng</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số HD</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu thu số</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
                                 <th class="text-center v-inherit text-dark" style="width: 5%;"><input id="select_allBN" type="checkbox" ng-model="checkAll" ng-change="selectAll(checkAll)"/></th>
                             </tr>
@@ -97,8 +98,9 @@
                                 <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>
                                 <td class="text-center v-inherit">{{item.mobileNguoiNhan}}</td>
                                 <td class="text-center v-inherit">{{item.diaChiNguoiNhan}}</td>
-                                <td class="text-center v-inherit">{{item.numbers}}</td>
-                                <td class="text-center v-inherit">{{item.numbers}}</td>
+                                <td class="text-center v-inherit">{{item.soLuong}}</td>
+                                <td class="text-center v-inherit">{{item.soHopDong}}</td>
+                                <td class="text-center v-inherit">{{item.maPhieuThu}}</td>
                                 <td class="text-center v-inherit">{{item.note}}</td>
                                 <td class="text-center v-inherit"><input type="checkbox" class="onChangeBNSelectBox_" ng-model="checked[$index]" ng-init="checked[$index] = false" ng-change="chooseBienNhan(item, checked[$index])"/></td>
                             </tr>

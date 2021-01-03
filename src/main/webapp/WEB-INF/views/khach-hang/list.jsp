@@ -77,7 +77,7 @@
                                             <option value="" selected>Tất cả</option>
                                             <option ng-value="2">Người gửi</option>
                                             <option ng-value="3">Người nhận</option>
-                                            <option ng-value="4">Nhà xe</option>
+                                            <option ng-value="1">Khách hàng</option>
                                         </select>
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@
                                     <td class="text-left v-inherit">{{item.taxCode}}</td>
                                     <td class="text-left v-inherit">{{item.mobile}}</td>
                                     <td class="text-left v-inherit">{{item.address}}</td>
-                                    <td class="text-left v-inherit">{{item.typePartner == 2 ? "Người gửi" : item.typePartner == 3 ? "Người nhận" : item.typePartner == 4 ? "Nhà xe" : ""}}</td>
+                                    <td class="text-left v-inherit">{{item.typePartner == 2 ? "Người gửi" : item.typePartner == 3 ? "Người nhận" : item.typePartner == 1 ? "Khách hàng" : ""}}</td>
                                     <td class="text-center v-inherit">{{item.genDate|date:'dd/MM/yyyy'}}</td>
                                 </tr>
                                 </tbody>
@@ -240,14 +240,14 @@
                     <div class="row">
                         <label class="col-sm-2 control-label" style="line-height: 30px">Số CMTND <span style="color: red"> (*)</span></label>
                         <div class="col-sm-4">
-                            <input name="info.taxCode" id="info.taxCode" ng-value="info.taxCode" ng-model="info.taxCode" maxlength="20" class="form-control"/>
+                            <input name="info.taxCode" id="info.taxCode" ng-value="info.taxCode" ng-model="info.taxCode" maxlength="200" class="form-control"/>
                         </div>
                         <label class="col-sm-2 control-label" style="line-height: 30px">Loại khách hàng <span style="color: red"> (*)</span></label>
                         <div class="col-sm-4">
                             <select class="form-control" name="info.typePartner" id="info.typePartner" ng-model="info.typePartner">
                                 <option ng-value="2">Người gửi</option>
                                 <option ng-value="3">Người nhận</option>
-                                <option ng-value="4">Nhà xe</option>
+                                <option ng-value="1">Khách hàng</option>
                             </select>
                         </div>
                     </div>
@@ -255,22 +255,28 @@
                     <div class="row" style="padding-top: 2%">
                         <label class="col-sm-2 control-label" style="line-height: 30px">Tên khách hàng <span style="color: red"> (*)</span></label>
                         <div class="col-sm-4">
-                            <input name="info.fullName" id="info.fullName" ng-value="info.fullName" ng-model="info.fullName" maxlength="150" class="form-control"/>
+                            <input name="info.fullName" id="info.fullName" ng-value="info.fullName" ng-model="info.fullName" maxlength="200" class="form-control"/>
                         </div>
                         <label class="col-sm-2 control-label" style="line-height: 30px">Số điện thoại</label>
                         <div class="col-sm-4">
-                            <input name="info.mobile" id="info.mobile" ng-value="info.mobile" ng-model="info.mobile" maxlength="20" class="form-control"/>
+                            <input name="info.mobile" id="info.mobile" ng-value="info.mobile" ng-model="info.mobile" maxlength="50" class="form-control"/>
                         </div>
                     </div>
 
                     <div class="row" style="padding-top: 2%">
                         <label class="col-sm-2 control-label" style="line-height: 30px">Địa chỉ</label>
                         <div class="col-sm-4">
-                            <input name="info.address" id="info.address" ng-value="info.address" ng-model="info.address" maxlength="400" class="form-control"/>
+                            <input name="info.address" id="info.address" ng-value="info.address" ng-model="info.address" maxlength="500" class="form-control"/>
                         </div>
                         <label class="col-sm-2 control-label" style="line-height: 30px">Email</label>
                         <div class="col-sm-4">
-                            <input name="info.email" id="info.email" ng-value="info.email" ng-model="info.email" maxlength="150" class="form-control"/>
+                            <input name="info.email" id="info.email" ng-value="info.email" ng-model="info.email" maxlength="50" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top: 2%">
+                        <label class="col-sm-2 control-label" style="line-height: 30px">Số hợp đồng</label>
+                        <div class="col-sm-4">
+                            <input name="info.soHopDong" id="info.soHopDong" ng-value="info.soHopDong" ng-model="info.soHopDong" maxlength="200" class="form-control"/>
                         </div>
                     </div>
                 </div>

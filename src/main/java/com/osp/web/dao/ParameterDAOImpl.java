@@ -137,17 +137,4 @@ public class ParameterDAOImpl implements ParameterDAO {
         return false;
     }
 
-    @Override
-    public List<VtPartner> getListByType(Integer typePartner) {
-        List<VtPartner> vtPartners = new ArrayList<>();
-        try {
-            Query queryAll = entityManager.createQuery("select p from VtPartner p where typePartner = :typePartner ");
-            queryAll.setParameter("typePartner", typePartner);
-            vtPartners = queryAll.getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return vtPartners;
-    }
-
 }
