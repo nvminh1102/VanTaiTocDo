@@ -149,9 +149,9 @@
                                                         class="glyphicon glyphicon-cog"></i></button>
                                                 <ul class="dropdown-menu pull-left" style="width: 230px;">
                                                     <sec:authorize access="hasRole('ROLE_IN_CHON_XE_NHAN_HANG_EXPORT')">
-                                                    <li>
+<!--                                                    <li>
                                                         <a href="javascript:void(0)" ng-click="exportPhieu(item.id)" >In phiếu thu</a>
-                                                    </li>
+                                                    </li>-->
                                                     </sec:authorize>
                                                     <sec:authorize access="hasRole('ROLE_SUA_CHON_XE_NHAN_HANG_EDIT')">
                                                         <li>

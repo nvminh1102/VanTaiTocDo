@@ -133,6 +133,7 @@
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số điện thoại</th>
                                     <th class="text-center v-inherit text-dark" style="width: 20%;">Địa chỉ</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Loại khách hàng</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Số HD</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày tạo</th>
                                 </tr>
                                 </thead>
@@ -177,6 +178,7 @@
                                     <td class="text-left v-inherit">{{item.mobile}}</td>
                                     <td class="text-left v-inherit">{{item.address}}</td>
                                     <td class="text-left v-inherit">{{item.typePartner == 2 ? "Người gửi" : item.typePartner == 3 ? "Người nhận" : item.typePartner == 1 ? "Khách hàng" : ""}}</td>
+                                    <td class="text-left v-inherit">{{item.soHopDong}}</td>
                                     <td class="text-center v-inherit">{{item.genDate|date:'dd/MM/yyyy'}}</td>
                                 </tr>
                                 </tbody>

@@ -293,8 +293,8 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
         List<VtReceiptDetail> items = new ArrayList<>();
         try {
             String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui,  c.FULL_NAME as ten_nguoi_nhan, "
-                    + " c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost , td.sizes, td.weight, td.note , t.payer, b.address as diaChiGui, b.MOBILE as sdtGui, DATE_FORMAT(t.gen_date, '%d-%m-%Y') as strGenDate, t.name_Stock "
-                    + " from vt_receipt t inner join vt_receipt_detail td on t.id = td.receipt_id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID  "
+                    + " c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost , td.sizes, td.weight, td.note , t.payer, b.address as diaChiGui, b.MOBILE as sdtGui, DATE_FORMAT(t.gen_date, '%d-%m-%Y') as strGenDate, t.name_Stock, d.full_name "
+                    + " from vt_receipt t inner join vt_receipt_detail td on t.id = td.receipt_id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID left join vt_partner d on t.receive_partner_id = d.id  "
                     + " where t.id = :id order by t.id, td.id ";
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
             queryDetail.setParameter("id", id);
@@ -319,6 +319,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setSdtNguoiGui(record[14] == null ? null : (String) record[14]);
                 row.setStrGenDate(record[15] == null ? null : (String) record[15]);
                 row.setStockName(record[16] == null ? null : (String) record[16]);
+                row.setNguoiThanhToan(record[17] == null ? null : (String) record[17]);
                 items.add(row);
             });
             return items;

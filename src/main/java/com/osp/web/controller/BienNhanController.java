@@ -529,6 +529,7 @@ public class BienNhanController {
         VtReceipt phieuNhanHang = new VtReceipt();
         VtPartner nguoiGui = new VtPartner();
         VtPartner nguoiNhan = new VtPartner();
+        VtPartner nguoiThanhToan = new VtPartner();
         String typePayment = "";
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -546,6 +547,7 @@ public class BienNhanController {
             }
             nguoiGui = khachHangDAO.getById(phieuNhanHang.getDeliveryPartnerId());
             nguoiNhan = khachHangDAO.getById(phieuNhanHang.getReceivePartnerId());
+            nguoiThanhToan = khachHangDAO.getById(phieuNhanHang.getNguoiThanhToanId());
             page.setItems(matHangDAO.getDsMatHang(giaoHangId));
             Map<String, Object> beans = new HashMap<String, Object>();
             if (phieuNhanHang.getDateReceipt() != null) {
@@ -553,6 +555,7 @@ public class BienNhanController {
             }
             beans.put("phieuNhanHang", phieuNhanHang);
             beans.put("nguoiGui", nguoiGui);
+            beans.put("nguoiThanhToan", nguoiThanhToan);
             beans.put("loaiThanhToan", typePayment);
             beans.put("nguoiNhan", nguoiNhan);
             beans.put("page", page);

@@ -2,7 +2,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         $scope.listBienNhanDaChon = {items: [], rowCount: 0, numberPerPage: 25, pageNumber: 1, pageList: [], pageCount: 0};
         $scope.phieuGiao = {nhaXe: "", loaiXe: "", bienSo: "", tenLaiXe: "", sdtLaiXe: ""};
 
-        $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: "", status: "2"};
+        $scope.searchBienNhan = {basic: "", receiptCode: "", fromDeceipt: "", toDeceipt: "", nhaXe: "", nameStock: "", status: "1"};
         $scope.listBienNhan = [];
         $scope.idSelected = "";
         $scope.checkLoadData = false;
@@ -10,7 +10,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         $scope.checkAll = false;
 
 
-        $scope.searchBienNhan.status = "2";
+        $scope.searchBienNhan.status = "1";
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
         $http.get(preUrl + "/manager/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
                 .then(function (response) {
@@ -33,7 +33,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         };
 
         $scope.loadListData = function () {
-            $scope.searchBienNhan.status = "2";
+            $scope.searchBienNhan.status = "1";
             var searchBienNhan = JSON.stringify($scope.searchBienNhan);
             $http.get(preUrl + "/manager/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan}})
                     .then(function (response) {

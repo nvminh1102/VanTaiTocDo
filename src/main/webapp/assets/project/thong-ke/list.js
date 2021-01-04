@@ -22,12 +22,12 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         });
       });
 
-    $http.get(preUrl + "/bienNhan/danhSachNhaXe")
+    $http.get(preUrl + "/manager/bienNhan/danhSachNhaXe")
         .then(function (response) {
             $scope.nhaXeList = response.data;
         });
 
-      $http.get(preUrl + "/bienNhan/thong-ke/search")
+      $http.get(preUrl + "/manager/thong-ke/search")
       .then(function (response) {
         if (response != null && response != 'undefined' && response.status == 200) {
           $scope.page = response.data;
@@ -39,7 +39,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.search = function () {
         $scope.page.pageNumber = 1;
-        $http.get(preUrl + "/bienNhan/thong-ke/search", {params: {bienSo: $scope.search.bienSo, loaiXe: $scope.search.loaiXe, hinhThucVanChuyen: $scope.search.hinhThucVanChuyen, fromDate: $scope.search.fromDate, toDate: $scope.search.toDate}})
+        $http.get(preUrl + "/manager/thong-ke/search", {params: {bienSo: $scope.search.bienSo, loaiXe: $scope.search.loaiXe, hinhThucVanChuyen: $scope.search.hinhThucVanChuyen, fromDate: $scope.search.fromDate, toDate: $scope.search.toDate}})
         .then(function (response) {
           if (response != null && response != 'undefined' && response.status == 200) {
             $scope.page = response.data;
@@ -52,7 +52,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.loadPage = function (pageNumber) {
         if (pageNumber >= 1) {
-          $http.get(preUrl + "/bienNhan/thong-ke/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, bienSo: $scope.search.bienSo, loaiXe: $scope.search.loaiXe, hinhThucVanChuyen: $scope.search.hinhThucVanChuyen, fromDate: $scope.search.fromDate, toDate: $scope.search.toDate}})
+          $http.get(preUrl + "/manager/thong-ke/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, bienSo: $scope.search.bienSo, loaiXe: $scope.search.loaiXe, hinhThucVanChuyen: $scope.search.hinhThucVanChuyen, fromDate: $scope.search.fromDate, toDate: $scope.search.toDate}})
           .then(function (response) {
             $scope.page = response.data;
             $scope.page.pageList = getPageList($scope.page);
@@ -80,7 +80,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   };
 
     $scope.xuatPhieuThanhToan = function () {
-        window.open(preUrl + "/bienNhan/thanh-toan/exportExcelThanhToan?soPhieuNhan=" + $scope.search.soPhieuNhan +
+        window.open(preUrl + "/manager/thanh-toan/exportExcelThanhToan?soPhieuNhan=" + $scope.search.soPhieuNhan +
             "&nguoiGui=" + $scope.search.nguoiGui + "&typePayment=" + $scope.search.typePayment + "&isPayment=" + $scope.search.isPayment +
             "&fromGenDate=" + $scope.search.fromDate + "&toGenDate=" + $scope.search.toDate, '_blank');
     }

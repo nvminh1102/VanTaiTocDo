@@ -144,7 +144,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
                                         toastr.success(response.data.messageError);
                                         $timeout(function () {
-                                            window.location.href = preUrl + "/phieu-giao-hang/list";
+                                            window.location.href = preUrl + "/manager/phieu-giao-hang/list";
                                         }, 2000);
                                     } else {
                                         toastr.success(response.data.messageError);

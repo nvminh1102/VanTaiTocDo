@@ -73,7 +73,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
                                 .then(function (response) {
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
                                         toastr.success(response.data.messageError);
-                                        window.location.href = preUrl + "/toa-hang/list";
+                                        window.location.href = preUrl + "/manager/toa-hang/list";
                                     } else {
                                         toastr.success(response.data.messageError);
                                     }
