@@ -15,7 +15,7 @@
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/toa-hang/list">Toa hàng</a></li>
+                <li><a href="<%=request.getContextPath()%>/manager/toa-hang/list">Toa hàng</a></li>
                 <li><a href="javascript:void(0)">Thông tin toa hàng</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;"  ng-controller="vantai">
@@ -135,7 +135,7 @@
                                         <sec:authorize access="hasRole('ROLE_THEM_TOA_HANG_ADD')">
                                             <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="saveToaHang()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
                                         </sec:authorize>
-                                        <a href="<%=request.getContextPath()%>/toa-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
+                                        <a href="<%=request.getContextPath()%>/manager/toa-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>
                             </div>

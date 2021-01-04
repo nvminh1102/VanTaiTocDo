@@ -111,7 +111,7 @@
                                 <thead class="bg-gray">
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 60px;">Tool</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tên nhà xe</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Loại xe</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Biển số</th>

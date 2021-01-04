@@ -150,8 +150,7 @@ public class KhachHangDAOImpl implements KhachHangDAO {
       }
       List resultList = queryCount.getResultList();
       if (resultList.size() > 0) {
-        BigInteger count = (BigInteger) resultList.get(0);
-        page.setRowCount(count.longValue());
+        page.setRowCount((Long)resultList.get(0));
       }
     } catch (Exception e) {
       e.printStackTrace();

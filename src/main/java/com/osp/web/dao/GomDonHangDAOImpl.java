@@ -3,15 +3,11 @@ package com.osp.web.dao;
 import com.osp.common.DateUtils;
 import com.osp.common.PagingResult;
 import com.osp.model.User;
-import com.osp.model.VtPhieuGiaoHang;
-import com.osp.model.VtPhieuGiaoHangDetail;
-import com.osp.model.VtReceipt;
+import com.osp.model.VtGomDonNhan;
+import com.osp.model.VtGomDonNhanDetail;
 import com.osp.model.VtReceiptDetail;
-import com.osp.model.VtToaHang;
-import com.osp.model.VtToaHangDetail;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.model.view.VtReceiptView;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,63 +21,54 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional(value = "transactionManager")
-public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
+public class GomDonHangDAOImpl implements GomDonHangDAO {
 
     @PersistenceContext(unitName = "appAdmin")
     @Qualifier(value = "transactionManager")
     private EntityManager entityManager;
 
     @Override
-    public Optional<PagingResult> search(VtPhieuGiaoHang vtPhieuGiaoHang, PagingResult page) {
+    public Optional<PagingResult> search(String bienSo, Date fromGenDate, Date toGenDate, PagingResult page) {
         int offset = 0;
         if (page.getPageNumber() > 0) {
             offset = (page.getPageNumber() - 1) * page.getNumberPerPage();
         }
         try {
             String strWhere = "";
-            if (vtPhieuGiaoHang.getMaPhieuGiao() != null && !vtPhieuGiaoHang.getMaPhieuGiao().trim().equals("")) {
-                strWhere = strWhere + " and upper(r.maPhieuGiao) like :maPhieuGiao ";
-            }
-            if (vtPhieuGiaoHang.getBienSo() != null && !vtPhieuGiaoHang.getBienSo().trim().equals("")) {
+            if (bienSo != null && !bienSo.trim().equals("")) {
                 strWhere = strWhere + " and r.bienSo = :bienSo ";
             }
-            if (vtPhieuGiaoHang.getFromGenDate() != null) {
+            if (fromGenDate != null) {
                 strWhere = strWhere + " and r.genDate >= :fromGenDate ";
             }
-            if (vtPhieuGiaoHang.getToGenDate() != null) {
+            if (toGenDate != null) {
                 strWhere = strWhere + " and r.genDate <= :toGenDate ";
             }
-            Query queryCount = entityManager.createQuery(" select count(r.id) from VtPhieuGiaoHang r where 1=1 " + strWhere);
-            if (vtPhieuGiaoHang.getMaPhieuGiao() != null && !vtPhieuGiaoHang.getMaPhieuGiao().trim().equals("")) {
-                queryCount.setParameter("maPhieuGiao", "%" + vtPhieuGiaoHang.getMaPhieuGiao().trim().toUpperCase() + "%");
+            Query queryCount = entityManager.createQuery(" select count(r.id) from VtGomDonNhan r where 1=1 " + strWhere);
+            if (bienSo != null && !bienSo.trim().equals("")) {
+                queryCount.setParameter("bienSo", bienSo.trim());
             }
-            if (vtPhieuGiaoHang.getBienSo() != null && !vtPhieuGiaoHang.getBienSo().trim().equals("")) {
-                queryCount.setParameter("bienSo", vtPhieuGiaoHang.getBienSo().trim());
+            if (fromGenDate != null) {
+                queryCount.setParameter("fromGenDate", fromGenDate);
             }
-            if (vtPhieuGiaoHang.getFromGenDate() != null) {
-                queryCount.setParameter("fromGenDate", vtPhieuGiaoHang.getFromGenDate());
-            }
-            if (vtPhieuGiaoHang.getToGenDate() != null) {
-                queryCount.setParameter("toGenDate", DateUtils.addDays(vtPhieuGiaoHang.getToGenDate(), 1));
+            if (toGenDate != null) {
+                queryCount.setParameter("toGenDate", DateUtils.addDays(toGenDate, 1));
             }
 
             List resultList = queryCount.getResultList();
             if (resultList != null && resultList.size() > 0) {
                 Long count = (Long) resultList.get(0);
                 if (count != null && count.compareTo(0L) > 0) {
-                    List<VtPhieuGiaoHang> list = new ArrayList<>();
-                    Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHang r where 1=1 " + strWhere + " order by r.genDate desc ", VtPhieuGiaoHang.class);
-                    if (vtPhieuGiaoHang.getMaPhieuGiao() != null && !vtPhieuGiaoHang.getMaPhieuGiao().trim().equals("")) {
-                        queryCount.setParameter("maPhieuGiao", "%" + vtPhieuGiaoHang.getMaPhieuGiao().trim().toUpperCase() + "%");
+                    List<VtGomDonNhan> list = new ArrayList<>();
+                    Query queryAll = entityManager.createQuery("select r from VtGomDonNhan r where 1=1 " + strWhere + " order by r.genDate desc ", VtGomDonNhan.class);
+                    if (bienSo != null && !bienSo.trim().equals("")) {
+                        queryAll.setParameter("bienSo", bienSo.trim());
                     }
-                    if (vtPhieuGiaoHang.getBienSo() != null && !vtPhieuGiaoHang.getBienSo().trim().equals("")) {
-                        queryCount.setParameter("bienSo", vtPhieuGiaoHang.getBienSo().trim());
+                    if (fromGenDate != null) {
+                        queryAll.setParameter("fromGenDate", fromGenDate);
                     }
-                    if (vtPhieuGiaoHang.getFromGenDate() != null) {
-                        queryCount.setParameter("fromGenDate", vtPhieuGiaoHang.getFromGenDate());
-                    }
-                    if (vtPhieuGiaoHang.getToGenDate() != null) {
-                        queryCount.setParameter("toGenDate", DateUtils.addDays(vtPhieuGiaoHang.getToGenDate(), 1));
+                    if (toGenDate != null) {
+                        queryAll.setParameter("toGenDate", DateUtils.addDays(toGenDate, 1));
                     }
                     list = queryAll.setFirstResult(offset).setMaxResults(page.getNumberPerPage()).getResultList();
                     page.setItems(list);
@@ -98,30 +85,30 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
     @Override
     public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user) {
         try {
-            VtPhieuGiaoHang vtPhieuGiaoHang = vTGoodsReceiptForm.getVtPhieuGiaoHang();
-            vtPhieuGiaoHang.setUpdatedBy(user.getUsername());
-            vtPhieuGiaoHang.setLastUpdate(new Date());
-            if (vtPhieuGiaoHang.getId() != null) {
-                Query query = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId());
+            VtGomDonNhan vtGomDonNhan = vTGoodsReceiptForm.getVtGomDonNhan();
+            vtGomDonNhan.setUpdatedBy(user.getUsername());
+            vtGomDonNhan.setLastUpdate(new Date());
+            if (vtGomDonNhan.getId() != null) {
+                Query query = entityManager.createQuery("delete from VtGomDonNhanDetail a WHERE a.vtGomDonNhanId=:vtGomDonNhanId").setParameter("vtGomDonNhanId", vtGomDonNhan.getId());
                 query.executeUpdate();
-                entityManager.merge(vtPhieuGiaoHang);
+                entityManager.merge(vtGomDonNhan);
             } else {
-                vtPhieuGiaoHang.setGenDate(new Date());
-                vtPhieuGiaoHang.setCreatedBy(user.getUsername());
-                entityManager.persist(vtPhieuGiaoHang);
+                vtGomDonNhan.setGenDate(new Date());
+                vtGomDonNhan.setCreatedBy(user.getUsername());
+                entityManager.persist(vtGomDonNhan);
             }
             List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             for (VtReceiptView bo : vtReceiptViews) {
-                VtPhieuGiaoHangDetail vtPhieuGiaoHangDetail = new VtPhieuGiaoHangDetail();
-                vtPhieuGiaoHangDetail.setPhieuGiaoHangId(vtPhieuGiaoHang.getId());
-                vtPhieuGiaoHangDetail.setCreatedBy(vtPhieuGiaoHang.getCreatedBy());
-                vtPhieuGiaoHangDetail.setUpdatedBy(vtPhieuGiaoHang.getUpdatedBy());
-                vtPhieuGiaoHangDetail.setLastUpdate(vtPhieuGiaoHang.getLastUpdate());
-                vtPhieuGiaoHangDetail.setGenDate(vtPhieuGiaoHang.getGenDate());
-                vtPhieuGiaoHangDetail.setReceiptId(bo.getId().intValue());
-                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status =3 WHERE a.id=:id").setParameter("id", bo.getId().intValue());
-                queryUpdateHangHoa.executeUpdate();
-                entityManager.persist(vtPhieuGiaoHangDetail);
+                VtGomDonNhanDetail vtGomDonNhanDetail = new VtGomDonNhanDetail();
+                vtGomDonNhanDetail.setVtGomDonNhanId(vtGomDonNhan.getId());
+                vtGomDonNhanDetail.setCreatedBy(vtGomDonNhan.getCreatedBy());
+                vtGomDonNhanDetail.setUpdatedBy(vtGomDonNhan.getUpdatedBy());
+                vtGomDonNhanDetail.setLastUpdate(vtGomDonNhan.getLastUpdate());
+                vtGomDonNhanDetail.setGenDate(vtGomDonNhan.getGenDate());
+                vtGomDonNhanDetail.setReceiptId(bo.getId().intValue());
+//                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status =3 WHERE a.id=:id").setParameter("id", bo.getId().intValue());
+//                queryUpdateHangHoa.executeUpdate();
+                entityManager.persist(vtGomDonNhanDetail);
             }
             entityManager.flush();
         } catch (Exception e) {
@@ -136,9 +123,9 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
     public Boolean delete(Integer id, User user, String ip) {
         try {
             if (id != null) {
-                Query querydetail = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", id);
+                Query querydetail = entityManager.createQuery("delete from VtGomDonNhanDetail a WHERE a.vtGomDonNhanId=:vtGomDonNhanId").setParameter("vtGomDonNhanId", id);
                 querydetail.executeUpdate();
-                Query query = entityManager.createQuery("delete from VtPhieuGiaoHang a WHERE a.id=:id").setParameter("id", id);
+                Query query = entityManager.createQuery("delete from VtGomDonNhan a WHERE a.id=:id").setParameter("id", id);
                 query.executeUpdate();
                 entityManager.flush();
             } else {
@@ -160,17 +147,17 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
         Integer soLuong = 0;
         Integer tongTien = 0;
         try {
-            Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHang r where r.id = :id ");
+            Query queryAll = entityManager.createQuery("select r from VtGomDonNhan r where r.id = :id ");
             queryAll.setParameter("id", id);
 
-            VtPhieuGiaoHang vtPhieuGiaoHang = (VtPhieuGiaoHang) queryAll.getSingleResult();
+            VtGomDonNhan vtGomDonNhan = (VtGomDonNhan) queryAll.getSingleResult();
             String sqlBuffer = "SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
                     + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien , (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong "
-                    + " from Vt_Phieu_Giao_Hang_Detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID   "
-                    + " where thd.phieu_giao_hang_id = :phieuGiaoHangId ";
+                    + " from vt_gom_don_nhan_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID   "
+                    + " where thd.vt_gom_don_nhan_id = :vtGomDonNhanId ";
 
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
-            queryDetail.setParameter("phieuGiaoHangId", id);
+            queryDetail.setParameter("vtGomDonNhanId", id);
             db = queryDetail.getResultList();
 
             db.stream().forEach((record) -> {
@@ -198,9 +185,9 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 soLuong = soLuong + vtReceiptView.getSoLuong();
                 tongTien = tongTien + ((vtReceiptView.getTongTien() != null ? vtReceiptView.getTongTien().intValue() : 0) - (vtReceiptView.getTienDaTra() != null ? vtReceiptView.getTienDaTra().intValue() : 0));
             }
-            vtPhieuGiaoHang.setSoLuong(soLuong);
-            vtPhieuGiaoHang.setTongTien(tongTien);
-            vTGoodsReceiptForm.setVtPhieuGiaoHang(vtPhieuGiaoHang);
+            vtGomDonNhan.setSoLuong(soLuong);
+            vtGomDonNhan.setTongTien(tongTien);
+            vTGoodsReceiptForm.setVtGomDonNhan(vtGomDonNhan);
             vTGoodsReceiptForm.setVtReceiptViews(vtReceiptViews);
             return vTGoodsReceiptForm;
         } catch (Exception e) {
@@ -209,8 +196,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             return null;
         }
     }
-    
-    
+
     @Override
     public VTGoodsReceiptForm getExportById(Integer id) {
         VTGoodsReceiptForm vTGoodsReceiptForm = new VTGoodsReceiptForm();
@@ -219,10 +205,10 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
         Integer soLuong = 0;
         Integer tongTien = 0;
         try {
-            Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHang r where r.id = :id ");
+            Query queryAll = entityManager.createQuery("select r from VtGomDonNhan r where r.id = :id ");
             queryAll.setParameter("id", id);
 
-            VtPhieuGiaoHang vtPhieuGiaoHang = (VtPhieuGiaoHang) queryAll.getSingleResult();
+            VtGomDonNhan vtGomDonNhan = (VtGomDonNhan) queryAll.getSingleResult();
             String sqlBuffer = " SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan,  "
                     + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , rd.cost AS thanh_tien , rd.numbers AS so_luong , rd.name, rd.note , d.so_hop_dong , "
                     + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu "
@@ -257,8 +243,8 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
                 row.setSoLuong(record[16] == null ? null : Integer.valueOf(record[16].toString()));
-                row.setName(record[17] == null ? null : (String)record[17]);
-                row.setNote(record[18] == null ? null : (String)record[18]);
+                row.setName(record[17] == null ? null : (String) record[17]);
+                row.setNote(record[18] == null ? null : (String) record[18]);
                 row.setSoHopDong(record[19] == null ? null : (String) record[19]);
                 row.setMaPhieuThu(record[20] == null ? null : (String) record[20]);
                 vtReceiptViews.add(row);
@@ -271,14 +257,14 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 } else if (vtReceiptView.getPaymentType() == 3) {
                     vtReceiptView.setSoTienPhaiThu("Công nợ");
                 } else if (vtReceiptView.getPaymentType() == 2) {
-                    if(vtReceiptView.getTongTien()!=null){
+                    if (vtReceiptView.getTongTien() != null) {
                         vtReceiptView.setSoTienPhaiThu(String.format("%,.0f", new Double(vtReceiptView.getTongTien())));
                     }
                 }
             }
-            vtPhieuGiaoHang.setSoLuong(soLuong);
-            vtPhieuGiaoHang.setTongTien(tongTien);
-            vTGoodsReceiptForm.setVtPhieuGiaoHang(vtPhieuGiaoHang);
+            vtGomDonNhan.setSoLuong(soLuong);
+            vtGomDonNhan.setTongTien(tongTien);
+            vTGoodsReceiptForm.setVtGomDonNhan(vtGomDonNhan);
             vTGoodsReceiptForm.setVtReceiptViews(vtReceiptViews);
             return vTGoodsReceiptForm;
         } catch (Exception e) {
@@ -311,8 +297,8 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
-                row.setSizes(record[9] == null ? null : (String)record[9]);
-                row.setWeight(record[10] == null ? null : (String)record[10]);
+                row.setSizes(record[9] == null ? null : (String) record[9]);
+                row.setWeight(record[10] == null ? null : (String) record[10]);
                 row.setNote(record[11] == null ? null : (String) record[11]);
                 row.setNguoiThanhToan(record[12] == null ? null : (String) record[12]);
                 row.setDiaChiNguoiGui(record[13] == null ? null : (String) record[13]);
@@ -333,7 +319,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
     public Integer getMaxId() {
         Integer maxId = 0;
         try {
-            Query query = entityManager.createQuery(" select max(r.id) from VtPhieuGiaoHang r ");
+            Query query = entityManager.createQuery(" select max(r.id) from VtGomDonNhan r ");
             maxId = (Integer) query.getSingleResult();
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,9 +1,9 @@
 
 app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($scope, $http, fileUpload) {
         $scope.info = {};
-        $scope.info.bienNhan = {receiptCode: "", nameStock: "", dateReceipt: "", paymentType: "", nhaXe: "", bienSo: "", loaiXe: "", employee: "", nguoiThanhToanId=""};
-        $scope.info.nguoiGui = {taxCode: "", fullName: "", mobile: "", address: "", sohopdong: ""};
-        $scope.info.nguoiNhan = {taxCode: "", fullName: "", mobile: "", address: "", sohopdong: ""};
+        $scope.info.bienNhan = {receiptCode: "", nameStock: "", dateReceipt: "", paymentType: "", nhaXe: "", bienSo: "", loaiXe: "", employee: "", nguoiThanhToanId:""};
+        $scope.info.nguoiGui = {taxCode: "", fullName: "", mobile: "", address: "", soHopDong: ""};
+        $scope.info.nguoiNhan = {taxCode: "", fullName: "", mobile: "", address: "", soHopDong: ""};
         $scope.info.property = [];
         $scope.titleModal = 'ADD';
         var arrIdDelete = [];
@@ -12,13 +12,13 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             $scope.info.bienNhan.receiptCode = receiptCode;
         }
 
-        $http.get(preUrl + "/bienNhan/danhSachNhaXe")
+        $http.get(preUrl + "/manager/bienNhan/danhSachNhaXe")
                 .then(function (response) {
                     $scope.nhaXeList = response.data;
                 });
 
         $scope.onChangeBienSo = function () {
-            $http.get(preUrl + "/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.info.bienNhan.bienSo}})
+            $http.get(preUrl + "/manager/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.info.bienNhan.bienSo}})
                     .then(function (response) {
                         $scope.info.bienNhan.nhaXe = response.data.nhaXe;
                         $scope.info.bienNhan.loaiXe = response.data.loaiXe;
@@ -27,7 +27,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         }
 
 
-        $http.get(preUrl + "/bienNhan/danhSachKhachHang")
+        $http.get(preUrl + "/manager/bienNhan/danhSachKhachHang")
                 .then(function (response) {
                     $scope.khachHangList = response.data;
                 });
@@ -153,7 +153,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             };
 
             var infoAuction = JSON.parse(JSON.stringify(info));
-            $http.post(preUrl + "/bienNhan/them-moi-bien-nhan", infoAuction, {headers: {'Content-Type': 'application/json'}})
+            $http.post(preUrl + "/manager/bienNhan/them-moi-bien-nhan", infoAuction, {headers: {'Content-Type': 'application/json'}})
                     .then(function (response) {
                         $scope.info.bienNhan.dateReceipt = moment($scope.info.bienNhan.dateReceipt).format('DD/MM/YYYY');
                         switch (Number(response.data)) {
@@ -188,7 +188,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
                 if (!validateFileUpload(file)) {
                     return false;
                 }
-                var uploadUrl = preUrl + "/common/uploadFiles";
+                var uploadUrl = preUrl + "/manager/common/uploadFiles";
                 fileUpload.uploadFileToUrl(file, uploadUrl).then(function (response) {
                     if (response.data != null && response.data != undefined && response.status == 200) {
                         $scope.document.idFile = response.data.idFile;
@@ -259,13 +259,13 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
         $(document).on('click', function (e) {
             if (e.target.id != 'nguoiGui.taxCode' && e.target.id != 'btnThemMatHang' && e.target.id != 'btnSaveAuctionInfo') {
-                $http.get(preUrl + "/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiGui.taxCode, typePartner: 2}})
+                $http.get(preUrl + "/manager/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiGui.taxCode, typePartner: 2}})
                         .then(function (response) {
                             if (response.data.fullName != null && response.data.fullName != "") {
                                 $scope.info.nguoiGui.fullName = response.data.fullName;
                                 $scope.info.nguoiGui.mobile = response.data.mobile;
                                 $scope.info.nguoiGui.address = response.data.address;
-                                $scope.info.nguoiGui.sohopdong = response.data.sohopdong;
+                                $scope.info.nguoiGui.soHopDong = response.data.soHopDong;
                             }
                         });
             }
@@ -273,13 +273,13 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
         $(document).on('click', function (e) {
             if (e.target.id != 'nguoiNhan.taxCode' && e.target.id != 'btnThemMatHang' && e.target.id != 'btnSaveAuctionInfo') {
-                $http.get(preUrl + "/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiNhan.taxCode, typePartner: 3}})
+                $http.get(preUrl + "/manager/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiNhan.taxCode, typePartner: 3}})
                         .then(function (response) {
                             if (response.data.fullName != null && response.data.fullName != "") {
                                 $scope.info.nguoiNhan.fullName = response.data.fullName;
                                 $scope.info.nguoiNhan.mobile = response.data.mobile;
                                 $scope.info.nguoiNhan.address = response.data.address;
-                                $scope.info.nguoiNhan.sohopdong = response.data.sohopdong;
+                                $scope.info.nguoiNhan.soHopDong = response.data.soHopDong;
                             }
                         });
             }

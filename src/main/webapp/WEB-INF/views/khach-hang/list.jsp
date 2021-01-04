@@ -127,11 +127,11 @@
                                 <thead class="bg-gray">
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 60px;">Tool</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tên khách hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số CMTND</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số điện thoại</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Địa chỉ</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 20%;">Địa chỉ</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Loại khách hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày tạo</th>
                                 </tr>

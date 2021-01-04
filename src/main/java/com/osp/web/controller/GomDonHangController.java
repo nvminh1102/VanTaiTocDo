@@ -5,15 +5,13 @@ import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
-import com.osp.model.VtGoodsReceipt;
-import com.osp.model.VtPartner;
-import com.osp.model.VtReceipt;
+import com.osp.model.VtInPhieuThu;
+import com.osp.model.VtPhieuGiaoHang;
 import com.osp.model.VtReceiptDetail;
-import com.osp.model.VtToaHang;
 import com.osp.model.view.VTGoodsReceiptForm;
-import com.osp.model.view.VtGoodsReceiptBO;
-import com.osp.web.dao.PhieuNhanHangDAO;
-import com.osp.web.dao.ToaHangDAO;
+import com.osp.web.dao.GomDonHangDAO;
+import com.osp.web.dao.InPhieuThuDAO;
+import com.osp.web.dao.PhieuGiaoHangDAO;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -45,87 +43,89 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-@RequestMapping("/manager/toa-hang")
-public class ToaHangController {
+@RequestMapping("/manager/gom-don-hang")
+public class GomDonHangController {
 
     SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");
-    private final String templatePhieuBienNhan = "/fileTemplate/templatePhieuBienNhan.xlsx";
+//    private final String templatePhieuGiaoHang = "/fileTemplate/templatePhieuGiaoHang.xlsx";
+    private final String templatePhieuThu = "/fileTemplate/templatePhieuThu.xlsx";
 
     @Autowired
-    ToaHangDAO toaHangDAO;
+    GomDonHangDAO gomDonHangDAO;
+    
+    @Autowired
+    InPhieuThuDAO inPhieuThuDAO;
+    
 //    @Autowired
 //    LogAccessDAO logAccessDao;
 
     @GetMapping("/list")
-    @Secured(ConstantAuthor.TOA_HANG.view)
+    @Secured(ConstantAuthor.GIAO_HANG.view)
     public String list() {
-        return "toahang.list";
+        return "gomdonhang.list";
     }
 
     @RequestMapping(value = "/load-list", method = RequestMethod.GET)
-    @Secured(ConstantAuthor.TOA_HANG.view)
+    @Secured(ConstantAuthor.GIAO_HANG.view)
     public ResponseEntity<PagingResult> searchAdd(@RequestParam @Valid final String search, @RequestParam @Valid final int offset, @RequestParam @Valid final int number, HttpServletRequest request) {
-        VtToaHang vtToaHang = new VtToaHang();
+        VtPhieuGiaoHang vtPhieuGiaoHang  = new VtPhieuGiaoHang();
         PagingResult page = new PagingResult();
         JSONObject searchObject = new JSONObject(search);
         SimpleDateFormat formatterddMMyyyy = new SimpleDateFormat("dd-MM-yyyy");
+        String bienSoxe = null;
+        Date fromGenDate = null;
+        Date toGenDate = null;
         try {
-            if (searchObject.has("toaHangCode") && !StringUtils.isBlank(searchObject.get("toaHangCode").toString())) {
-                vtToaHang.setToaHangCode(searchObject.get("toaHangCode").toString().trim());
-            }
+//            if (searchObject.has("maPhieuGiao") && !StringUtils.isBlank(searchObject.get("maPhieuGiao").toString())) {
+//                vtPhieuGiaoHang.setMaPhieuGiao(searchObject.get("maPhieuGiao").toString().trim());
+//            }
             if (searchObject.has("bienSo") && !StringUtils.isBlank(searchObject.get("bienSo").toString())) {
-                vtToaHang.setBienSo(searchObject.get("bienSo").toString().trim());
-            }
-            if (searchObject.has("noiDen") && !StringUtils.isBlank(searchObject.get("noiDen").toString())) {
-                vtToaHang.setNoiDen(searchObject.get("noiDen").toString().trim());
-            }
-            if (searchObject.has("noiDi") && !StringUtils.isBlank(searchObject.get("noiDi").toString())) {
-                vtToaHang.setNoiDi(searchObject.get("noiDi").toString().trim());
+                bienSoxe = searchObject.get("bienSo").toString().trim();
             }
             if (searchObject.has("fromGenDate") && !StringUtils.isBlank(searchObject.get("fromGenDate").toString())) {
-                vtToaHang.setFromGenDate(formatterddMMyyyy.parse(searchObject.get("fromGenDate").toString().trim()));
+                fromGenDate = formatterddMMyyyy.parse(searchObject.get("fromGenDate").toString().trim());
             }
             if (searchObject.has("toGenDate") && !StringUtils.isBlank(searchObject.get("toGenDate").toString())) {
-                vtToaHang.setToGenDate(formatterddMMyyyy.parse(searchObject.get("toGenDate").toString().trim()));
+                toGenDate = formatterddMMyyyy.parse(searchObject.get("toGenDate").toString().trim());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         page.setNumberPerPage(number);
         page.setPageNumber(offset);
-        page = toaHangDAO.search(vtToaHang, page).orElse(new PagingResult());
+        page = gomDonHangDAO.search(bienSoxe, fromGenDate, toGenDate, page).orElse(new PagingResult());
         return new ResponseEntity<PagingResult>(page, HttpStatus.OK);
     }
 
     @GetMapping("/preAdd")
-    @Secured(ConstantAuthor.TOA_HANG.add)
+    @Secured(ConstantAuthor.GIAO_HANG.add)
     public String preAdd(HttpServletRequest request) {
-        Integer maxId = toaHangDAO.getMaxId();
-        String toaHangCode = "TOA-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
-        request.setAttribute("toaHangCode", toaHangCode);
-        return "toahang.add";
+//        Integer maxId = gomDonHangDAO.getMaxId();
+//        String maPhieuGiao = "GH-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
+//        request.setAttribute("maPhieuGiao", maPhieuGiao);
+        return "gomdonhang.add";
     }
 
     @GetMapping("/preEdit/{id}")
-    @Secured(ConstantAuthor.TOA_HANG.edit)
+    @Secured(ConstantAuthor.GIAO_HANG.edit)
     public String preEdit(@PathVariable("id") Integer id, HttpServletRequest request) {
         request.setAttribute("id", id);
-        return "toahang.add";
+        return "gomdonhang.add";
     }
 
     @RequestMapping(value = "/loadDataEdit", method = RequestMethod.GET)
-    @Secured(ConstantAuthor.TOA_HANG.edit)
+    @Secured(ConstantAuthor.GIAO_HANG.edit)
     public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
-        VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getVTGoodsReceiptFormById(id);
+        VTGoodsReceiptForm vTGoodsReceiptForm = gomDonHangDAO.getVTGoodsReceiptFormById(id);
         return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
     }
     
     @PostMapping("/add")
-    @Secured(ConstantAuthor.TOA_HANG.add)
+    @Secured(ConstantAuthor.GIAO_HANG.add)
     public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
-        boolean check = toaHangDAO.add(vTGoodsReceiptForm, user);
+        boolean check = gomDonHangDAO.add(vTGoodsReceiptForm, user);
         if (check) {
             reponse = new MessReponse(true, 200, "Lưu thành công!");
         } else {
@@ -135,12 +135,12 @@ public class ToaHangController {
     }
 
     @PostMapping("/delete")
-    @Secured(ConstantAuthor.TOA_HANG.delete)
-    public ResponseEntity<String> delete(@RequestBody @Valid final VtToaHang vtToaHang, HttpServletRequest request) {
+    @Secured(ConstantAuthor.GIAO_HANG.delete)
+    public ResponseEntity<String> delete(@RequestBody @Valid final VtPhieuGiaoHang vtPhieuGiaoHang, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             String ipClient = Utils.getIpClient(request);
-            boolean check = toaHangDAO.delete(vtToaHang.getId(), user, ipClient);
+            boolean check = gomDonHangDAO.delete(vtPhieuGiaoHang.getId(), user, ipClient);
             if (check) {
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {
@@ -152,32 +152,40 @@ public class ToaHangController {
         return new ResponseEntity<String>("1", HttpStatus.OK);
     }
     
-    
-    @GetMapping("/exportPhieuBienNhan")
-//    @Secured(ConstantAuthor.PublishAuctionTc.view)
-    @Secured(ConstantAuthor.TOA_HANG.export)
-    public void exportExcel(HttpServletResponse response, HttpServletRequest request,
-                            @RequestParam(value = "idToaHang", required = false) Integer idToaHang) {
+    @GetMapping("/exportPhieuThu")
+    @Secured(ConstantAuthor.GIAO_HANG.exportPhieuGiao)
+    public void exportPhieuThu(HttpServletResponse response, HttpServletRequest request,
+                            @RequestParam(value = "idPhieuThu", required = false) Integer idPhieuThu) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PagingResult page = new PagingResult();
         page.setPageNumber(1);
-        VtToaHang vtToaHang = new VtToaHang();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy");
         try {
-            VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getListBienNhan(idToaHang);
-            vtToaHang = vTGoodsReceiptForm.getVtToaHang();
-            page.setItems(vTGoodsReceiptForm.getVtReceiptDetail());
+            List<VtReceiptDetail> vtReceiptDetails = gomDonHangDAO.getPhieuNhanHang(idPhieuThu);
+            VtReceiptDetail vtReceiptDetail = (vtReceiptDetails!=null ? vtReceiptDetails.get(0): new VtReceiptDetail());
+            page.setItems(vtReceiptDetails);
+            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + (inPhieuThuDAO.getMaxId()+1);
+            
             Map<String, Object> beans = new HashMap<String, Object>();
-            beans.put("strGenDate", sdf.format(vtToaHang.getGenDate()));
-            beans.put("vtToaHang", vtToaHang);
+            beans.put("vtReceiptDetail", vtReceiptDetail);
+            beans.put("maPhieuThu", maPhieuThu);
             beans.put("ngayLap", sdf.format(new Date()));
             beans.put("page", page);
-            Resource resource = new ClassPathResource(templatePhieuBienNhan);
+            if(vtReceiptDetails!=null && vtReceiptDetails.size()>0){
+                VtInPhieuThu vtInPhieuThu = new VtInPhieuThu();
+                vtInPhieuThu.setMaPhieuThu(maPhieuThu);
+                vtInPhieuThu.setReceiptId(vtReceiptDetails.get(0).getId());
+                vtInPhieuThu.setTypes(1); // 1: phieu thu trả trước; 2: phiếu thu trả sau
+                inPhieuThuDAO.add(vtInPhieuThu, user);
+            }
+            Resource resource = new ClassPathResource(templatePhieuThu);
             InputStream fileIn = resource.getInputStream();
             ExcelTransformer transformer = new ExcelTransformer();
             Workbook workbook = transformer.transform(fileIn, beans);
 
             response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-bien-nhan-" + vtToaHang.getToaHangCode() + "-" + sdf.format(new Date())+ ".xlsx");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "Phieu-thu-" + (vtReceiptDetails!=null ? vtReceiptDetails.get(0).getReceiptCode() + "-":"")+ sdf.format(new Date())+ ".xlsx");
             ServletOutputStream out = response.getOutputStream();
             workbook.write(out);
             out.flush();

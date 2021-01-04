@@ -5,31 +5,32 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 
-<script src="<%=request.getContextPath()%>/assets/project/phieu-giao-hang/add.js${urlCache}" type="text/javascript"></script>
+<script src="<%=request.getContextPath()%>/assets/project/gom-don-hang/add.js${urlCache}" type="text/javascript"></script>
 <script>
     var id = '${id}';
-    var maPhieuGiao = '${maPhieuGiao}';</script>
+//    var maPhieuGiao = '${maPhieuGiao}';
+</script>
 <section id="content" ng-app="FrameworkBase"  >
     <section class="vbox background-white">
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/manager/phieu-giao-hang/list">Phiếu giao hàng</a></li>
-                <li><a href="javascript:void(0)">Thông tin phiêu giao hàng</a></li>
+                <li><a href="<%=request.getContextPath()%>/manager/gom-don-hang/list">Chọn xe nhận hàng</a></li>
+                <li><a href="javascript:void(0)">Thông tin chọn xe nhận hàng</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;"  ng-controller="vantai">
                 <header class="panel-heading">
-                    <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">PHIẾU GIAO HÀNG</h4></a>
+                    <a href="javascript:void(0)"><h4 class="panel-title text-center font-bold font-size28" data-toggle="collapse" data-target="#collapseOne">CHỌN XE NHẬN HÀNG</h4></a>
                 </header>
                 <div id="collapseOne" class="panel-collapse collapse in" aria-expanded="true">
                     <div class="panel-body background-xam">
                         <form id="formAdd" class="form-horizontal"  data-parsley-validate="true">
                             <div id="collapseSearch" class="panel-collapse collapse in" aria-expanded="true">
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label text-dark">Số phiếu giao hàng<span style="color: red;">(*)</span></label>
+<!--                                    <label class="col-md-2 control-label text-dark">Số phiếu giao hàng<span style="color: red;">(*)</span></label>
                                     <div class="col-md-4">
                                         <input ng-model="phieuGiao.maPhieuGiao"  data-parsley-required="true"  data-parsley-error-message="Số phiều giao hàng bắt buộc nhập!!" maxlength="200" class="form-control input-sm"/>
-                                    </div>
+                                    </div>-->
                                     <label class="col-md-2 control-label text-dark">Biển số</label>
                                     <div class="col-md-4">
                                         <select ng-model="phieuGiao.bienSo" id="phieuGiao.bienSo" name ="phieuGiao.bienSo"  class="select2" style="width: 100%" ng-change="onChangeBienSo()">
@@ -64,7 +65,7 @@
                                         <label style="color: red;">{{listBienNhanDaChon.items.length}} - {{listHangHoa.items.length}}</label>
                                     </div>
                                     <div class="p-r-0 p-l-0 col-md-6">
-                                        <sec:authorize access="hasRole('ROLE_THEM_GIAO_HANG_ADD')">
+                                        <sec:authorize access="hasRole('ROLE_THEM_CHON_XE_NHAN_HANG_ADD')">
                                             <button type="button" class="pull-right btn btn-info btn-s-sm" data-toggle="modal" data-target="#chonPhieuNhanHang"><i class="fa fa-plus"></i> Chọn phiếu nhận hàng</button>
                                         </sec:authorize>
                                     </div>
@@ -104,9 +105,12 @@
                                                 <td class="text-center v-inherit">{{item.maPhieuThu}}</td>
                                                 <td class="text-center v-inherit">{{item.note}}</td>
                                                 <td class="text-center v-inherit">
-                                                    <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonBienNhan(item)"><i class="fa fa-edit"></i>xóa</a>
+                                                <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonBienNhan(item)"><i class="fa fa-edit"></i>xóa</a>
                                         <sec:authorize access="hasRole('ROLE_EXPORT_PHIEU_VIEW')">
                                             <a  class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuThu(item.id)"><i class="fa fa-edit"></i>In phiếu thu</a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasRole('ROLE_THEM_PHIEU_NHAN_HANG_ADD')">
+                                            <a  class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuNhanHang(item.id)"><i class="fa fa-edit"></i>In phiếu nhận hàng</a>
                                         </sec:authorize>
                                         </td>
                                         </tr>
@@ -115,10 +119,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
-                                        <sec:authorize access="hasRole('ROLE_THEM_GIAO_HANG_ADD')">
+                                        <sec:authorize access="hasRole('ROLE_THEM_CHON_XE_NHAN_HANG_ADD')">
                                             <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieu()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
                                         </sec:authorize>
-                                        <a href="<%=request.getContextPath()%>/manager/phieu-giao-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
+                                        <a href="<%=request.getContextPath()%>/manager/gom-don-hang/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>
                             </div>

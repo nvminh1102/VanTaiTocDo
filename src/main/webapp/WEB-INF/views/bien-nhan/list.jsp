@@ -101,7 +101,7 @@
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
                                 <sec:authorize access="hasRole('ROLE_THEM_PHIEU_NHAN_HANG_ADD')">
-                                    <a href="<%=request.getContextPath()%>/bienNhan/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
+                                    <a href="<%=request.getContextPath()%>/manager/bienNhan/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
                                 </sec:authorize>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                 <thead class="bg-gray">
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 60px;">Tool</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Trạng thái</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày nhận</th>
@@ -141,14 +141,14 @@
                                                     class="glyphicon glyphicon-cog"></i></button>
                                             <ul class="dropdown-menu pull-left" style="width: 230px;">
                                                 <sec:authorize access="hasRole('ROLE_THEM_PHIEU_NHAN_HANG_ADD')">
-                                                    <li>
+<!--                                                    <li>
                                                         <a href="javascript:void(0)" ng-click="exportPhieuNhanHang(item.id)" >In phiếu nhận hàng</a>
-                                                    </li>
+                                                    </li>-->
                                                 </sec:authorize>
                                                 <sec:authorize access="hasRole('ROLE_THEM_PHIEU_NHAN_HANG_ADD')">
-                                                    <li>
+<!--                                                    <li>
                                                         <a href="javascript:void(0)" ng-click="exportPhieuThu(item.id)" >In phiếu thu</a>
-                                                    </li>
+                                                    </li>-->
                                                 </sec:authorize>
 
                                                 <sec:authorize access="hasRole('ROLE_SUA_PHIEU_NHAN_HANG_EDIT')">
@@ -234,7 +234,7 @@
             </div>
         </div>
     </div>
-    <form id="frmEdit" action="<%=request.getContextPath()%>/bienNhan/preEdit" method='POST'>
+    <form id="frmEdit" action="<%=request.getContextPath()%>/manager/bienNhan/preEdit" method='POST'>
         <input type="hidden" name='editId' id='editId' value="">
     </form>
 </section>

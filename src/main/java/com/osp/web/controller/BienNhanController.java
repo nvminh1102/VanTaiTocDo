@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("/bienNhan")
+@RequestMapping("/manager/bienNhan")
 public class BienNhanController {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
@@ -586,7 +586,8 @@ public class BienNhanController {
             List<VtReceiptDetail> vtReceiptDetails = phieuGiaoHangDAO.getPhieuNhanHang(giaoHangId);
             VtReceiptDetail vtReceiptDetail = (vtReceiptDetails != null ? vtReceiptDetails.get(0) : new VtReceiptDetail());
             page.setItems(vtReceiptDetails);
-            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + (inPhieuThuDAO.getMaxId()+1);
+            Integer maxId = inPhieuThuDAO.getMaxId();
+            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + ((maxId!=null ? maxId: 0) +1);
             Map<String, Object> beans = new HashMap<String, Object>();
             beans.put("vtReceiptDetail", vtReceiptDetail);
             beans.put("maPhieuThu", maPhieuThu);

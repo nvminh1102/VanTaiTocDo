@@ -136,4 +136,14 @@
         <put-attribute name="page" value="/WEB-INF/views/phieu-giao-hang/add.jsp" />
     </definition>
     <!--end phieu giao hang-->
+    <!-- Gom don hang-->
+    <definition name="gomdonhang.list" extends="default">
+        <put-attribute name="title" value="Chọn xe nhận hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/gom-don-hang/list.jsp" />
+    </definition>
+    <definition name="gomdonhang.add" extends="default">
+        <put-attribute name="title" value="Chọn xe nhận hàng"/>
+        <put-attribute name="page" value="/WEB-INF/views/gom-don-hang/add.jsp" />
+    </definition>
+    <!--end Gom don hang-->
 </tiles-definitions>

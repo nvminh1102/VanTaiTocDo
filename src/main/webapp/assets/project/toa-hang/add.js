@@ -6,13 +6,13 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
         $scope.listBienNhanDaChon = popupPhieuNhanHang.getListDataBN();
         $scope.listHangHoa = popupPhieuNhanHang.getListDataHH();
 
-        $http.get(preUrl + "/bienNhan/danhSachNhaXe")
+        $http.get(preUrl + "/manager/bienNhan/danhSachNhaXe")
                 .then(function (response) {
                     $scope.nhaXeList = response.data;
                 });
 
         $scope.onChangeBienSo = function () {
-            $http.get(preUrl + "/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.toaHang.bienSo}})
+            $http.get(preUrl + "/manager/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.toaHang.bienSo}})
                     .then(function (response) {
                         $scope.toaHang.nhaXe = response.data.nhaXe;
                         $scope.toaHang.loaiXe = response.data.loaiXe;
@@ -26,7 +26,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
         }
 
         if (id != null && id != '') {
-            $http.get(preUrl + "/toa-hang/loadDataEdit", {params: {id: id}})
+            $http.get(preUrl + "/manager/toa-hang/loadDataEdit", {params: {id: id}})
                     .then(function (response) {
                         $scope.toaHang = response.data.vtToaHang;
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
@@ -69,7 +69,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
                         };
                         var vTGoodsReceiptForm = JSON.stringify($scope.call);
                         console.log(vTGoodsReceiptForm);
-                        $http.post(preUrl + "/toa-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
+                        $http.post(preUrl + "/manager/toa-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
                                 .then(function (response) {
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
                                         toastr.success(response.data.messageError);
