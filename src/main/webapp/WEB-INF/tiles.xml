@@ -146,4 +146,8 @@
         <put-attribute name="page" value="/WEB-INF/views/gom-don-hang/add.jsp" />
     </definition>
     <!--end Gom don hang-->
+    <definition name="thong-ke-phieu-giao-nhan.list" extends="default">
+        <put-attribute name="title" value="Thống kê phiếu giao nhận"/>
+        <put-attribute name="page" value="/WEB-INF/views/ThongKe/phieu-giao-nhan.jsp" />
+    </definition>
 </tiles-definitions>

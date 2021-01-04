@@ -105,6 +105,14 @@ public class ConstantAuthor {
         public static final String delete="ROLE_XOA_THANH_TOAN_DELETE";
     }
 
+    public static class ROLE_THONG_KE {
+        public static final String view="ROLE_TK_GIAO_NHAN_VIEW";
+        public static final String edit="ROLE_TK_GIAO_NHAN_EDIT";
+        public static final String add="ROLE_TK_GIAO_NHAN_ADD";
+        public static final String delete="ROLE_TK_GIAO_NHAN_DELETE";
+        public static final String export="ROLE_TK_GIAO_NHAN_EXPORT_VIEW";
+    }
+
 
     public static boolean contain(String right) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
