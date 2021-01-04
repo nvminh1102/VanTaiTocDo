@@ -226,7 +226,7 @@
                                 </div>
 
                                 <div class="col-sm-2"  style="text-align: right">
-                                    <label>Địa chỉ người gửi</label>
+                                    <label>Địa chỉ người nhận</label>
                                 </div>
                                 <div class="col-sm-4">
                                     <input ng-model="info.nguoiNhan.address" name="nguoiNhan.address" id="nguoiNhan.address" maxlength="500"

@@ -175,6 +175,14 @@
                                                     class="fa fa-angle-right"></i> <span>Thanh toán</span> </a></li>
                                     </ul>
                                 </sec:authorize>
+
+                                <sec:authorize access="hasRole('ROLE_TK_GIAO_NHAN_VIEW')">
+                                    <ul class="nav lt">
+                                        <li class="<%= isActive(request.getContextPath() + "/bienNhan/thong-ke/danh-sach-giao-nhan", request) ? "active" : ""%>">
+                                            <a href="<%=request.getContextPath()%>/bienNhan/thong-ke/danh-sach-giao-nhan" class=""> <i
+                                                    class="fa fa-angle-right"></i> <span>Thống kê giao nhận</span> </a></li>
+                                    </ul>
+                                </sec:authorize>
                             </li>
                         </sec:authorize>
 
