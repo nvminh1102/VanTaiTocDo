@@ -92,7 +92,7 @@ public class ThanhToanController {
   public ResponseEntity<String> updateTienDaTra(@RequestBody BienNhanForm item, HttpServletRequest request) {
     try {
       VtReceipt phieuNhanHang = bienNhanDAO.getById(item.getBienNhan().getId());
-      phieuNhanHang.setTienDaTra(item.getBienNhan().getTienDaTra());
+      phieuNhanHang.setTienDaTra(phieuNhanHang.getTienDaTra() + item.getBienNhan().getTienDaTra());
       bienNhanDAO.edit(phieuNhanHang);
       return new ResponseEntity<String>("1", HttpStatus.OK);
     } catch (Exception e) {

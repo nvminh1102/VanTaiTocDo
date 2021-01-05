@@ -130,9 +130,9 @@
                                     <label>Người thanh toán<span style="color: red">*</span></label>
                                 </div>
                                 <div class="col-md-4">
-                                    <select ng-model="info.bienNhan.nguoiThanhToanId" id="info.bienNhan.nguoiThanhToanId" name ="info.bienNhan.nguoiThanhToanId"  class="select2" style="width: 100%">
+                                    <select ng-model="info.bienNhan.nguoiThanhToanId" id="nguoiThanhToanId" name ="info.bienNhan.nguoiThanhToanId"  class="select2" style="width: 100%">
                                         <option value="" selected >-- Lựa chọn --</option>
-                                        <option ng-repeat="item in khachHangList track by $index"  ng-value="item.id">{{item.fullName}}</option>
+                                        <option ng-repeat="item in khachHangList"  value="{{item.id}}">{{item.fullName}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
 
                         <%--nhà xe--%>
 
-                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                        <!--div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
                                 <div class="col-sm-2"  style="text-align: right">
                                     <label>Biển số</label>
@@ -283,7 +283,7 @@
                                            class="input-sm form-control"/>
                                 </div>
                             </div>
-                        </div>
+                        </div-->
 
                         <div class="row" style="padding-top: 1%;">
                             <div class="col-md-12" style="text-align: right">

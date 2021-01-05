@@ -212,7 +212,7 @@ public class GomDonHangDAOImpl implements GomDonHangDAO {
             String sqlBuffer = " SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan,  "
                     + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , rd.cost AS thanh_tien , rd.numbers AS so_luong , rd.name, rd.note , d.so_hop_dong , "
                     + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu "
-                    + "  from Vt_Phieu_Giao_Hang_Detail thd  "
+                    + "  from vt_phieu_giao_hang_detail thd  "
                     + " inner join vt_receipt t on thd.receipt_Id = t.id  "
                     + " inner join vt_receipt_detail rd on t.id = rd.receipt_Id   "
                     + " left join vt_partner b on t.delivery_partner_id = b.ID   "

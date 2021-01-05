@@ -185,7 +185,7 @@ public class PhieuThuDAOImpl implements PhieuThuDAO {
             vTGoodsReceiptForm.setVtPhieuThuView(vtPhieuThuView);
             String sqlBuffer = "SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
                     + " c.MOBILE as mobile_nguoi_nhan  "
-                    + "from Vt_Goods_Receipt_Detail grd inner join vt_receipt t on grd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  "
+                    + "from vt_goods_receipt_detail grd inner join vt_receipt t on grd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  "
                     + " where grd.goods_receipt_id = :goodsreceiptid ";
 
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer, VtReceiptView.class);

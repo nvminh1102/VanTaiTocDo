@@ -24,6 +24,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       $http.get(preUrl + "/managerVanTai/bienNhan/search")
       .then(function (response) {
         if (response != null && response != 'undefined' && response.status == 200) {
+            console.log(response.data.items);
           $scope.page = response.data;
           $scope.page.pageCount = getPageCount($scope.page);
           $scope.page.pageList = getPageList($scope.page);
@@ -36,6 +37,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         $http.get(preUrl + "/managerVanTai/bienNhan/search", {params: {receiptCode: $scope.search.receiptCode, nameStock: $scope.search.nameStock, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
         .then(function (response) {
           if (response != null && response != 'undefined' && response.status == 200) {
+              console.log(response.data.items);
             $scope.page = response.data;
             $scope.page.pageCount = getPageCount($scope.page);
             $scope.page.pageList = getPageList($scope.page);
@@ -48,6 +50,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         if (pageNumber >= 1) {
           $http.get(preUrl + "/managerVanTai/bienNhan/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, receiptCode: $scope.search.receiptCode, nameStock: $scope.search.nameStock, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
           .then(function (response) {
+              console.log(response.data.items);
             $scope.page = response.data;
             $scope.page.pageList = getPageList($scope.page);
             $scope.page.pageCount = getPageCount($scope.page);

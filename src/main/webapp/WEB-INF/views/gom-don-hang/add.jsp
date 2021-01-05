@@ -33,9 +33,9 @@
                                     </div>-->
                                     <label class="col-md-2 control-label text-dark">Biển số</label>
                                     <div class="col-md-4">
-                                        <select ng-model="phieuGiao.bienSo" id="phieuGiao.bienSo" name ="phieuGiao.bienSo"  class="select2" style="width: 100%" ng-change="onChangeBienSo()">
-                                            <option value="" selected >-- Lựa chọn --</option>
-                                            <option ng-repeat="item in nhaXeList track by $index"  ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
+                                        <select ng-model="phieuGiao.bienSo" id="idBienSo" class="select2" style="width: 100%" ng-change="onChangeBienSo()">
+                                            <option value="" >-- Lựa chọn --</option>
+                                            <option ng-repeat="item in nhaXeList"  value="{{item.bienSo}}" >nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                                 <td class="text-center v-inherit">
                                                 <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonBienNhan(item)"><i class="fa fa-edit"></i>xóa</a>
                                         <sec:authorize access="hasRole('ROLE_EXPORT_PHIEU_VIEW')">
-                                            <a  class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuThu(item.id)"><i class="fa fa-edit"></i>In phiếu thu</a>
+                                            <a  ng-show="item.paymentType != null && item.paymentType == '1'" class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuThu(item.id)"><i class="fa fa-edit"></i>In phiếu thu</a>
                                         </sec:authorize>
                                         <sec:authorize access="hasRole('ROLE_THEM_PHIEU_NHAN_HANG_ADD')">
                                             <a  class="btn btn-success btn-sm font-bold" href="" ng-click="exportPhieuNhanHang(item.id)"><i class="fa fa-edit"></i>In phiếu nhận hàng</a>

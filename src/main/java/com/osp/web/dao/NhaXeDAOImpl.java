@@ -166,10 +166,14 @@ public class NhaXeDAOImpl implements NhaXeDAO {
       String sql = " select a from NhaXe a where a.bienSo=:bienSo ";
       Query query = entityManager.createQuery(sql, NhaXe.class);
       query.setParameter("bienSo", bienSo);
-      return (NhaXe) query.getSingleResult();
+      List<Object> objects = query.getResultList();
+      if(objects!=null && objects.size()>0){
+        return (NhaXe) objects.get(0);
+      }
     } catch (Exception e) {
       e.printStackTrace();
       return null;
     }
+    return null;
   }
 }

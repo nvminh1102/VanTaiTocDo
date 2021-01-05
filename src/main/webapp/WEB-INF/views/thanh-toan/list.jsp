@@ -11,7 +11,7 @@
 
 <script src="<%=request.getContextPath()%>/assets/project/thanh-toan/list.js" type="text/javascript"></script>
 
-<section id="content" ng-app="FrameworkBase"  ng-controller="frameworkCtrl">
+<section id="content" ng-app="FrameworkBase"  ng-controller="vantai">
     <section class="vbox background-white">
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
@@ -156,10 +156,11 @@
                                     <td class="text-center v-inherit" >{{(page.pageNumber - 1) * page.numberPerPage + $index + 1}}</td>
                                     <td class="text-center">
                                         <%--<sec:authorize access="hasAnyRole('ROLE_SYSTEM_PUBLISH_AUCTION_VIEW', 'ROLE_SYSTEM_PUBLISH_AUCTION_EDIT')">--%>
-                                        <div class="btn-group"  ng-click="checkShowThanhToan(item)">
+                                        <!--<div class="btn-group"  ng-click="checkShowThanhToan(item)">-->
+                                        <div class="btn-group">
                                             <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i
                                                     class="glyphicon glyphicon-cog"></i></button>
-                                            <ul class="dropdown-menu pull-left" style="width: 230px;" ng-show="item.tienDaTra == null || tienPhaiTra < item.tienDaTra">
+                                            <ul class="dropdown-menu pull-left" style="width: 230px;" ng-show="item.tienDaTra == null || item.tongTien > item.tienDaTra">
                                             <sec:authorize access="hasRole('ROLE_THEM_THANH_TOAN_ADD')">
                                                 <li>
                                                     <div class="line line-dashed m-b-none m-t-none"></div>

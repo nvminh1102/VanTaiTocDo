@@ -32,6 +32,11 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
                             $scope.listBienNhanDaChon.items = response.data.vtReceiptViews;
                         }
+                        if ($scope.toaHang.bienSo != null && $scope.toaHang.bienSo != '') {
+                            $timeout(function () {
+                                $("#idBienSo").select2("val", $scope.toaHang.bienSo);
+                            }, 0);
+                        }
                     });
         }
 

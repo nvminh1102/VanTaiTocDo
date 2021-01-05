@@ -41,6 +41,8 @@ public class BienNhanDAOImpl implements BienNhanDAO {
     public Optional<PagingResult> page(PagingResult page, String receiptCode, String nameStock,
             Date fromGenDate, Date toGenDate, String loaiXe, String bienSo) {
         try {
+            List<Object[]> db = new ArrayList<>();
+            List<VtReceiptView> list = new ArrayList<>();
             int offset = 0;
             if (page.getPageNumber() > 0) {
                 offset = (page.getPageNumber() - 1) * page.getNumberPerPage();
@@ -64,10 +66,13 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (bienSo != null && !bienSo.trim().equals("")) {
                 strWhere.append(" and upper(t.bien_so) = :bienSo");
             }
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payer,t.payment_type,t.tien_da_tra,t.status,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan,  "
-                    + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
-                    + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  "
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.id, t.receipt_code, t.date_receipt, t.name_Stock, t.nha_xe, "
+                    + " t.bien_so, t.employee, t.payment_type, t.tien_da_tra, t.status, "
+                    + " b.FULL_NAME as ten_nguoi_gui, b.address as dia_chi_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan, c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, "
+                    + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien, d.FULL_NAME, "
+                    + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu,  "
+                    + " (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong , d.so_hop_dong "
+                    + " from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID left join vt_partner d on t.nguoi_thanh_toan_id = d.ID  "
                     + " where 1=1 ");
             sqlBuffer.append(strWhere.toString());
             sqlBuffer.append(" order by t.GEN_DATE DESC");
@@ -76,32 +81,6 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                     + "from vt_receipt t left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID "
                     + " where 1=1 ");
             sqlBufferCount.append(strWhere.toString());
-
-            Query query = entityManager.createNativeQuery(sqlBuffer.toString(), VtReceiptView.class);
-            if (receiptCode != null && !"".equals(receiptCode)) {
-                query.setParameter("receiptCode", receiptCode.trim().toUpperCase());
-            }
-            if (nameStock != null && !"".equals(nameStock)) {
-                query.setParameter("nameStock", nameStock.trim().toUpperCase());
-            }
-            if (fromGenDate != null) {
-                query.setParameter("fromGenDate", fromGenDate);
-            }
-            if (toGenDate != null) {
-                query.setParameter("toGenDate", DateUtils.addDays(toGenDate, 1));
-            }
-
-            if (loaiXe != null && !loaiXe.trim().equals("")) {
-                query.setParameter("loaiXe", loaiXe.trim().toUpperCase());
-            }
-            if (bienSo != null && !bienSo.trim().equals("")) {
-                query.setParameter("bienSo", bienSo.trim().toUpperCase());
-            }
-
-            List<VtReceiptView> list = query.setFirstResult(offset).setMaxResults(page.getNumberPerPage()).getResultList();
-            if (list != null && list.size() > 0) {
-                page.setItems(list);
-            }
             Query queryCount = entityManager.createNativeQuery(sqlBufferCount.toString());
             if (receiptCode != null && !"".equals(receiptCode)) {
                 queryCount.setParameter("receiptCode", receiptCode.trim().toUpperCase());
@@ -119,6 +98,64 @@ public class BienNhanDAOImpl implements BienNhanDAO {
             if (resultList.size() > 0) {
                 BigInteger count = (BigInteger) resultList.get(0);
                 page.setRowCount(count.longValue());
+
+                Query query = entityManager.createNativeQuery(sqlBuffer.toString());
+                if (receiptCode != null && !"".equals(receiptCode)) {
+                    query.setParameter("receiptCode", receiptCode.trim().toUpperCase());
+                }
+                if (nameStock != null && !"".equals(nameStock)) {
+                    query.setParameter("nameStock", nameStock.trim().toUpperCase());
+                }
+                if (fromGenDate != null) {
+                    query.setParameter("fromGenDate", fromGenDate);
+                }
+                if (toGenDate != null) {
+                    query.setParameter("toGenDate", DateUtils.addDays(toGenDate, 1));
+                }
+
+                if (loaiXe != null && !loaiXe.trim().equals("")) {
+                    query.setParameter("loaiXe", loaiXe.trim().toUpperCase());
+                }
+                if (bienSo != null && !bienSo.trim().equals("")) {
+                    query.setParameter("bienSo", bienSo.trim().toUpperCase());
+                }
+                db = query.setFirstResult(offset).setMaxResults(page.getNumberPerPage()).getResultList();
+
+                db.stream().forEach((record) -> {
+                    VtReceiptView row = new VtReceiptView();
+                    row.setId(record[0] == null ? null : Long.valueOf(record[0].toString()));
+                    row.setReceiptCode(record[1] == null ? null : (String) record[1]);
+                    row.setDateReceipt(record[2] == null ? null : (Date) record[2]);
+                    row.setNameStock(record[3] == null ? null : (String) record[3]);
+                    row.setNhaXe(record[4] == null ? null : (String) record[4]);
+                    
+                    
+                    row.setBienSo(record[5] == null ? null : (String) record[5]);                  
+                    row.setEmployee(record[6] == null ? null : (String) record[6]);
+                    row.setPaymentType(record[7] == null ? null : Integer.valueOf(record[7].toString()));
+                    row.setTienDaTra(record[8] == null ? null : Long.valueOf(record[8].toString()));
+                    row.setStatus(record[9] == null ? null : Long.valueOf(record[9].toString()));
+                    
+                    
+                    row.setTenNguoiGui(record[10] == null ? null : (String) record[10]);
+                    row.setDiaChiNguoiGui(record[11] == null ? null : (String) record[11]);
+                    row.setTenNguoiNhan(record[12] == null ? null : (String) record[12]);
+                    row.setDiaChiNguoiNhan(record[13] == null ? null : (String) record[13]);
+                    row.setMobileNguoiNhan(record[14] == null ? null : (String) record[14]);
+                    
+                    
+                    row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
+                    row.setPayer(record[16] == null ? null : (String)record[16]);
+                    row.setMaPhieuThu(record[17] == null ? null : (String) record[17]);
+                    row.setSoLuong(record[18] == null ? null : Integer.valueOf(record[18].toString()));
+                    row.setSoHopDong(record[19] == null ? null : (String) record[19]);
+                    list.add(row);
+                });
+
+                if (list != null && list.size() > 0) {
+                    page.setItems(list);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,7 +249,7 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 row.setTongTien(record[16] == null ? null : Long.valueOf(record[16].toString()));
                 row.setMaPhieuThu(record[17] == null ? null : (String) record[17]);
                 row.setSoLuong(record[18] == null ? null : Integer.valueOf(record[18].toString()));
-                row.setSoHopDong(record[19] == null ? null : (String)record[19]);
+                row.setSoHopDong(record[19] == null ? null : (String) record[19]);
                 list.add(row);
             });
 

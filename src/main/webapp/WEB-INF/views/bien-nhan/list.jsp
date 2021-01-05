@@ -115,14 +115,16 @@
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Trạng thái</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày nhận</th>
+                                    
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Kho tiếp nhận</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Nhân viên tiếp nhận</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Nhà xe</th>
+<!--                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Nhân viên tiếp nhận</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Nhà xe</th>-->
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Địa chỉ</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">địa chỉ</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Thanh toán</th>
+                                    
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Hình thức thanh toán</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Người thanh toán</th>
                                 </tr>
                                 </thead>
@@ -176,14 +178,16 @@
                                     <td class="text-left v-inherit">{{item.receiptCode}}</td>
                                     <td class="text-left v-inherit">{{item.status == 1 ? "Nhận hàng" : item.status == 2 ? "Lên toa" : item.status == 3 ? "Đã giao" : ""}}</td>
                                     <td class="text-center v-inherit">{{item.dateReceipt|date:'dd/MM/yyyy'}}</td>
+                                    
                                     <td class="text-left v-inherit">{{item.nameStock}}</td>
-                                    <td class="text-left v-inherit">{{item.employee}}</td>
-                                    <td class="text-left v-inherit">{{item.nhaXe}}</td>
+<!--                                    <td class="text-left v-inherit">{{item.employee}}</td>
+                                    <td class="text-left v-inherit">{{item.nhaXe}}</td>-->
                                     <%--<td class="text-left v-inherit">{{ item.bienSo}}</td>--%>
                                     <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
                                     <td class="text-left v-inherit">{{item.diaChiNguoiGui}}</td>
                                     <td class="text-left v-inherit">{{item.tenNguoiNhan}}</td>
                                     <td class="text-left v-inherit">{{item.diaChiNguoiNhan}}</td>
+                                    
                                     <td class="text-left v-inherit">{{item.paymentType == 1 ? "Trả trước" : item.paymentType == 2 ? "Trả sau" : "Công nợ"}}</td>
                                     <td class="text-left v-inherit">{{item.payer}}</td>
                                 </tr>

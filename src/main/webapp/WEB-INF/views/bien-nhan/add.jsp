@@ -248,7 +248,7 @@
 
                         <%--nhà xe--%>
 
-                        <div class="row" style="padding-top: 1%; padding-bottom: 1%">
+                        <!--div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12">
                                 <div class="col-sm-2"  style="text-align: right">
                                     <label>Biển số</label>
@@ -290,7 +290,7 @@
                                            class="input-sm form-control" readonly/>
                                 </div>
                             </div>
-                        </div>
+                        </div-->
 
                         <div class="row" style="padding-top: 1%;">
                             <div class="col-md-12" style="text-align: right">

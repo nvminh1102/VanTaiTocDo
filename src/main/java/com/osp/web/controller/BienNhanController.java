@@ -143,9 +143,9 @@ public class BienNhanController {
             bienNhan.setPaymentType(item.getBienNhan().getPaymentType());
             if(item.getBienNhan().getNguoiThanhToanId()!=null){
                 if(item.getBienNhan().getNguoiThanhToanId()== -2){
-                    bienNhan.setNguoiThanhToanId(rsNguoiGui.getId());
+                    bienNhan.setNguoiThanhToanId(nguoiGuiDb.getId()==null ? rsNguoiGui.getId(): nguoiGuiDb.getId());
                 }else if(item.getBienNhan().getNguoiThanhToanId()== -3){
-                    bienNhan.setNguoiThanhToanId(rsNguoiNhan.getId());
+                    bienNhan.setNguoiThanhToanId(nguoiNhanDb.getId()==null ? rsNguoiNhan.getId(): nguoiNhanDb.getId());
                 }else{
                     bienNhan.setNguoiThanhToanId(item.getBienNhan().getNguoiThanhToanId());
                 }

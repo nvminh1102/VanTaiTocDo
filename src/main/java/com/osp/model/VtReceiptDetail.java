@@ -95,6 +95,8 @@ public class VtReceiptDetail implements Serializable {
     private Integer paymentType;
     @Transient
     private String maPhieuThu;
+    @Transient
+    private Integer tienDaTra;
     
     public VtReceiptDetail() {
     }
@@ -371,6 +373,14 @@ public class VtReceiptDetail implements Serializable {
 
     public void setMaPhieuThu(String maPhieuThu) {
         this.maPhieuThu = maPhieuThu;
+    }
+
+    public Integer getTienDaTra() {
+        return tienDaTra;
+    }
+
+    public void setTienDaTra(Integer tienDaTra) {
+        this.tienDaTra = tienDaTra;
     }
     
 }

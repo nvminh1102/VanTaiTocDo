@@ -111,6 +111,11 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
                             $scope.listBienNhanDaChon.items = response.data.vtReceiptViews;
                         }
+                        if ($scope.phieuGiao.bienSo != null && $scope.phieuGiao.bienSo != '') {
+                            $timeout(function () {
+                                $("#idBienSo").select2("val", $scope.phieuGiao.bienSo);
+                            }, 0);
+                        }
                     });
         }
 

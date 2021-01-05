@@ -33,9 +33,9 @@
                                     </div>
                                     <label class="col-md-2 control-label text-dark">Biển số</label>
                                     <div class="col-md-4">
-                                        <select ng-model="toaHang.bienSo" id="toaHang.bienSo" name ="toaHang.bienSo" class="select2" style="width: 100%" ng-change="onChangeBienSo()">
+                                        <select ng-model="toaHang.bienSo" id="idBienSo" class="select2" style="width: 100%" ng-change="onChangeBienSo()">
                                             <option value="" selected >-- Lựa chọn --</option>
-                                            <option ng-repeat="item in nhaXeList track by $index" ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
+                                            <option ng-repeat="item in nhaXeList" value="{{item.bienSo}}">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
                                         </select>
                                     </div>
                                 </div>

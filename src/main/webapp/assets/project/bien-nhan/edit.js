@@ -1,7 +1,7 @@
 
-app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($scope, $http, fileUpload) {
+app.controller('frameworkCtrl', ['$scope', '$http', '$timeout', '$q', function ($scope, $http, $timeout, $q) {
         $scope.info = {};
-        $scope.info.bienNhan = {receiptCode: "", nameStock: "", dateReceipt: "", paymentType: "", nhaXe: "", bienSo: "", loaiXe: "", employee: "", nguoiThanhToanId:""};
+        $scope.info.bienNhan = {receiptCode: "", nameStock: "", dateReceipt: "", paymentType: "", nhaXe: "", bienSo: "", loaiXe: "", employee: "", nguoiThanhToanId: ""};
         $scope.info.nguoiGui = {taxCode: "", fullName: "", mobile: "", address: "", soHopDong: ""};
         $scope.info.nguoiNhan = {taxCode: "", fullName: "", mobile: "", address: "", soHopDong: ""};
         $scope.info.property = [];
@@ -59,7 +59,9 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
                     var dateReceipt = new Date($scope.info.bienNhan.dateReceipt);
                     if (dateReceipt != null && dateReceipt != '') {
                         $scope.info.bienNhan.dateReceipt = moment(dateReceipt).format('DD/MM/YYYY');
-
+                    }
+                    if ($scope.info.bienNhan.nguoiThanhToanId != null && $scope.info.bienNhan.nguoiThanhToanId != '') {
+                            $("#nguoiThanhToanId").select2("val", $scope.info.bienNhan.nguoiThanhToanId);
                     }
                     // $scope.myFile.listFileDocument = $scope.info.fileUploads;
                 });
