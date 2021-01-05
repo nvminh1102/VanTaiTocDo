@@ -109,7 +109,7 @@
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
                                 <sec:authorize access="hasRole('ROLE_THEM_PHIEU_THU_ADD')">
-                                    <a href="<%=request.getContextPath()%>/phieu-thu/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu thu</a>
+                                    <a href="<%=request.getContextPath()%>/manager/phieu-thu/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu thu</a>
                                 </sec:authorize>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                                 <thead class="bg-gray">
                                     <tr>
                                         <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu thu</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 60px;">Số phiếu thu</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày thu</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Kho tiếp nhận</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>
@@ -142,7 +142,7 @@
                                         <td class="text-left v-inherit">{{item.tenNguoiNhan}}</td>
                                         <td class="text-left v-inherit">{{item.diaChiNguoiNhan}}</td>
                                         <sec:authorize access="hasRole('ROLE_SUA_PHIEU_THU_EDIT')">
-                                            <td class="text-center v-inherit"><a href="<%=request.getContextPath()%>/phieu-thu/preEdit/{{item.id}}"><i class="fa-hover fa fa-eye" style="color: blue;font-size: 15px"></i></a></td>
+                                            <td class="text-center v-inherit"><a href="<%=request.getContextPath()%>/manager/phieu-thu/preEdit/{{item.id}}"><i class="fa-hover fa fa-eye" style="color: blue;font-size: 15px"></i></a></td>
                                         </sec:authorize>
                                     </tr>
                                 </tbody>

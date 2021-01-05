@@ -65,7 +65,7 @@
         <section class="scrollable padder" style="background: white;padding-bottom: 200px;">
             <ul class="bg-primary breadcrumb no-border no-radius b-b b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/bienNhan/list">Phiếu nhận hàng</a></li>
+                <li><a href="<%=request.getContextPath()%>/manager/bienNhan/list">Phiếu nhận hàng</a></li>
                 <li><a href="#" id="title">Chỉnh sửa phiếu nhận hàng</a></li>
             </ul>
             <%--<div class="m-b-md">--%>
@@ -184,7 +184,7 @@
                                     <label>Số hợp đồng</label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input ng-model="info.nguoiGui.sohopdong" name="nguoiGui.sohopdong" id="nguoiGui.sohopdong" maxlength="200"
+                                    <input ng-model="info.nguoiGui.soHopDong" name="nguoiGui.soHopDong" id="nguoiGui.soHopDong" maxlength="200"
                                            class="input-sm form-control"/>
                                 </div>
                             </div>
@@ -238,7 +238,7 @@
                                     <label>Số hợp đồng</label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input ng-model="info.nguoiNhan.sohopdong" name="nguoiNhan.sohopdong" id="nguoiNhan.sohopdong" maxlength="200"
+                                    <input ng-model="info.nguoiNhan.soHopDong" name="nguoiNhan.soHopDong" id="nguoiNhan.soHopDong" maxlength="200"
                                            class="input-sm form-control"/>
                                 </div>
                             </div>
@@ -338,7 +338,7 @@
                         <div class="row" style="padding-top: 1%; padding-bottom: 1%">
                             <div class="col-md-12" style="text-align: center; padding-bottom: 30px; padding-top: 30px">
                                 <button id="btnSaveAuctionInfo" class="btn btn-primary" style="width: 115px" ng-click="saveAuctionInfo()">Lưu biên nhận</button>
-                                <a href="<%=request.getContextPath()%>/bienNhan/list" class="btn btn-default" style="width: 115px">Hủy bỏ</a>
+                                <a href="<%=request.getContextPath()%>/manager/bienNhan/list" class="btn btn-default" style="width: 115px">Hủy bỏ</a>
                             </div>
                         </div>
                     </form>

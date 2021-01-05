@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@RequestMapping("/bienNhan/thanh-toan")
+@RequestMapping("/manager/thanh-toan")
 public class ThanhToanController {
   private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
   @Autowired

@@ -64,6 +64,8 @@ public class VtReceiptView {
   private String soHopDong;
   @Transient
   private String maPhieuThu;
+  @Transient
+  private String soTienPhaiThu;
 
 
   public Long getId() {
@@ -280,6 +282,14 @@ public class VtReceiptView {
 
     public void setMaPhieuThu(String maPhieuThu) {
         this.maPhieuThu = maPhieuThu;
+    }
+
+    public String getSoTienPhaiThu() {
+        return soTienPhaiThu;
+    }
+
+    public void setSoTienPhaiThu(String soTienPhaiThu) {
+        this.soTienPhaiThu = soTienPhaiThu;
     }
   
   

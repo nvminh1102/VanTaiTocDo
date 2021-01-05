@@ -1,5 +1,6 @@
 package com.osp.model.view;
 
+import com.osp.model.VtGomDonNhan;
 import com.osp.model.VtPhieuGiaoHang;
 import com.osp.model.VtReceiptDetail;
 import com.osp.model.VtToaHang;
@@ -14,6 +15,7 @@ public class VTGoodsReceiptForm {
     private VtPhieuThuView vtPhieuThuView;
     private VtToaHang vtToaHang;
     private VtPhieuGiaoHang vtPhieuGiaoHang;
+    private VtGomDonNhan vtGomDonNhan;
     private List<VtReceiptView> vtReceiptViews;
     private List<VtReceiptDetail> vtReceiptDetail;
 
@@ -64,6 +66,14 @@ public class VTGoodsReceiptForm {
 
     public void setVtPhieuGiaoHang(VtPhieuGiaoHang vtPhieuGiaoHang) {
         this.vtPhieuGiaoHang = vtPhieuGiaoHang;
+    }
+
+    public VtGomDonNhan getVtGomDonNhan() {
+        return vtGomDonNhan;
+    }
+
+    public void setVtGomDonNhan(VtGomDonNhan vtGomDonNhan) {
+        this.vtGomDonNhan = vtGomDonNhan;
     }
     
     

@@ -162,7 +162,7 @@ public class InPhieuThuDAOImpl implements InPhieuThuDAO {
     public Integer getMaxId() {
         Integer maxId = 0;
         try {
-            Query query = entityManager.createQuery(" select max(r.id) from VtPhieuThu r ");
+            Query query = entityManager.createQuery(" select max(r.id) from VtInPhieuThu r ");
             maxId = (Integer) query.getSingleResult();
         } catch (Exception e) {
             e.printStackTrace();

@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-@RequestMapping("/phieu-giao-hang")
+@RequestMapping("/manager/phieu-giao-hang")
 public class PhieuGiaoHangController {
 
     SimpleDateFormat formatteryyyy = new SimpleDateFormat("yyyy");

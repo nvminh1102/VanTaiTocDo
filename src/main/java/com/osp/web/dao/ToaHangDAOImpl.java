@@ -187,8 +187,9 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             VtToaHang vtToaHang = (VtToaHang) queryAll.getSingleResult();
             vTGoodsReceiptForm.setVtToaHang(vtToaHang);
             String sqlBuffer = "SELECT distinct t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien "
-                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  "
+                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien, "
+                    + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu , d.so_hop_dong "
+                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  left join vt_partner d on t.receive_partner_id = d.ID  "
                     + " where thd.toa_hang_id = :toahangid ";
 
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
@@ -213,6 +214,9 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
+                row.setSoHopDong(record[16] == null ? null : (String)record[16]);
+                row.setMaPhieuThu(record[17] == null ? null : (String)record[17]);
+                row.setSoHopDong(record[18] == null ? null : (String)record[18]);
                 vtReceiptViews.add(row);
             });
 
@@ -220,7 +224,6 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             return vTGoodsReceiptForm;
         } catch (Exception e) {
             e.printStackTrace();
-            entityManager.getTransaction().rollback();
             return null;
         }
     }
@@ -282,7 +285,6 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             return vTGoodsReceiptForm;
         } catch (Exception e) {
             e.printStackTrace();
-            entityManager.getTransaction().rollback();
             return null;
         }
     }

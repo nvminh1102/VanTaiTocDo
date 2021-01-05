@@ -38,7 +38,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-@RequestMapping("/bienNhan")
+@RequestMapping("/manager/bienNhan")
 public class BienNhanController {
 
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
@@ -529,6 +529,7 @@ public class BienNhanController {
         VtReceipt phieuNhanHang = new VtReceipt();
         VtPartner nguoiGui = new VtPartner();
         VtPartner nguoiNhan = new VtPartner();
+        VtPartner nguoiThanhToan = new VtPartner();
         String typePayment = "";
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -546,6 +547,7 @@ public class BienNhanController {
             }
             nguoiGui = khachHangDAO.getById(phieuNhanHang.getDeliveryPartnerId());
             nguoiNhan = khachHangDAO.getById(phieuNhanHang.getReceivePartnerId());
+            nguoiThanhToan = khachHangDAO.getById(phieuNhanHang.getNguoiThanhToanId());
             page.setItems(matHangDAO.getDsMatHang(giaoHangId));
             Map<String, Object> beans = new HashMap<String, Object>();
             if (phieuNhanHang.getDateReceipt() != null) {
@@ -553,6 +555,7 @@ public class BienNhanController {
             }
             beans.put("phieuNhanHang", phieuNhanHang);
             beans.put("nguoiGui", nguoiGui);
+            beans.put("nguoiThanhToan", nguoiThanhToan);
             beans.put("loaiThanhToan", typePayment);
             beans.put("nguoiNhan", nguoiNhan);
             beans.put("page", page);
@@ -586,7 +589,8 @@ public class BienNhanController {
             List<VtReceiptDetail> vtReceiptDetails = phieuGiaoHangDAO.getPhieuNhanHang(giaoHangId);
             VtReceiptDetail vtReceiptDetail = (vtReceiptDetails != null ? vtReceiptDetails.get(0) : new VtReceiptDetail());
             page.setItems(vtReceiptDetails);
-            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + (inPhieuThuDAO.getMaxId()+1);
+            Integer maxId = inPhieuThuDAO.getMaxId();
+            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + ((maxId!=null ? maxId: 0) +1);
             Map<String, Object> beans = new HashMap<String, Object>();
             beans.put("vtReceiptDetail", vtReceiptDetail);
             beans.put("maPhieuThu", maPhieuThu);

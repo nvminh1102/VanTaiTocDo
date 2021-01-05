@@ -44,7 +44,7 @@
                                         <div class="col-md-8">
                                             <select ng-model="search.bienSo" id="search.bienSo" name ="search.bienSo" class="select2" style="width: 100%" ng-change="onChangeBienSo()">
                                                 <option value="" selected >-- Lựa chọn --</option>
-                                                <option ng-repeat="item in nhaXeList track by $index" ng-value="search.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
+                                                <option ng-repeat="item in nhaXeList track by $index" ng-value="item.bienSo">nhà xe: {{item.nhaXe}} -- biển số: {{item.bienSo}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -114,7 +114,7 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/phieu-giao-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Lập phiếu giao hàng</a>
+                                <a href="<%=request.getContextPath()%>/manager/phieu-giao-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Lập phiếu giao hàng</a>
                             </div>
                         </div>
 
@@ -123,7 +123,7 @@
                                 <thead class="bg-gray">
                                     <tr>
                                         <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                        <th class="text-center v-inherit text-dark" style="width: 10%;">Tool</th>
+                                        <th class="text-center v-inherit text-dark" style="width: 60px;">Tool</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày lập</th>
                                         <th class="text-center v-inherit text-dark" style="width: 10%;">Nhà xe</th>
@@ -154,7 +154,7 @@
                                                     <sec:authorize access="hasRole('ROLE_SUA_GIAO_HANG_EDIT')">
                                                         <li>
                                                             <div class="line line-dashed m-b-none m-t-none"></div>
-                                                            <a href="<%=request.getContextPath()%>/phieu-giao-hang/preEdit/{{item.id}}">
+                                                            <a href="<%=request.getContextPath()%>/manager/phieu-giao-hang/preEdit/{{item.id}}">
                                                                 Chỉnh sửa
                                                             </a>
                                                         </li>

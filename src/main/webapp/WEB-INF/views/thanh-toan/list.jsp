@@ -135,7 +135,7 @@
                                 <thead class="bg-gray">
                                 <tr>
                                     <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
-                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Thanh toán</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 60px;">Thanh toán</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Tên khách hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số phiếu nhận hàng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số tiền</th>

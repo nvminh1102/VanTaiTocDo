@@ -223,7 +223,6 @@ public class PhieuNhanHangDAOImpl implements PhieuNhanHangDAO {
             return vTGoodsReceiptForm;
         } catch (Exception e) {
             e.printStackTrace();
-            entityManager.getTransaction().rollback();
             return null;
         }
     }

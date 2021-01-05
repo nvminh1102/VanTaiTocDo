@@ -15,7 +15,7 @@
         <section class="scrollable padder">
             <ul class="bg-light breadcrumb no-border no-radius b-light pull-in">
                 <li><a href="<%=request.getContextPath()%>/"><i class="fa fa-home"></i>&nbsp;Trang chủ</a></li>
-                <li><a href="<%=request.getContextPath()%>/phieu-thu/list">Phiếu thu </a></li>
+                <li><a href="<%=request.getContextPath()%>/manager/phieu-thu/list">Phiếu thu </a></li>
                 <li><a href="javascript:void(0)">Thông tin phiếu thu tiền</a></li>
             </ul>
             <section class="panel panel-default" style="margin-bottom: 5px;"  ng-controller="vantai">
@@ -150,7 +150,7 @@
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
                                         <button type="button" class="btn btn-info btn-s-sm" data-toggle="modal"  ng-click="savePhieuThu()" ><i class="fa fa-plus"></i>Lưu thông tin</button>
-                                        <a href="<%=request.getContextPath()%>/phieu-thu/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
+                                        <a href="<%=request.getContextPath()%>/manager/phieu-thu/list" class="btn btn-danger"><i class="fa fa-times"></i>Hủy</a>
                                     </div>
                                 </div>
                             </div>
