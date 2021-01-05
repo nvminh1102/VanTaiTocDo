@@ -18,7 +18,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             $scope.property = {id: null, name: '', unit: '', numbers: '', weight: '', sizes: '', cost: '', note: ''};
         };
 
-        $http.get(preUrl + "/manager/bienNhan/danhSachKhachHang")
+        $http.get(preUrl + "/managerVanTai/bienNhan/danhSachKhachHang")
                 .then(function (response) {
                     $scope.khachHangList = response.data;
                 });
@@ -26,7 +26,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
         $(document).on('click', function (e) {
             if (e.target.id != 'nguoiGui.taxCode' && e.target.id != 'btnThemMatHang' && e.target.id != 'btnSaveAuctionInfo') {
-                $http.get(preUrl + "/manager/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiGui.taxCode, typePartner: 2}})
+                $http.get(preUrl + "/managerVanTai/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiGui.taxCode, typePartner: 2}})
                         .then(function (response) {
                             if (response.data.fullName != null && response.data.fullName != "") {
                                 $scope.info.nguoiGui.fullName = response.data.fullName;
@@ -40,7 +40,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
         $(document).on('click', function (e) {
             if (e.target.id != 'nguoiNhan.taxCode' && e.target.id != 'btnThemMatHang' && e.target.id != 'btnSaveAuctionInfo') {
-                $http.get(preUrl + "/manager/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiNhan.taxCode, typePartner: 3}})
+                $http.get(preUrl + "/managerVanTai/bienNhan/ThongTinNguoiGui", {params: {taxCode: $scope.info.nguoiNhan.taxCode, typePartner: 3}})
                         .then(function (response) {
                             if (response.data.fullName != null && response.data.fullName != "") {
                                 $scope.info.nguoiNhan.fullName = response.data.fullName;
@@ -52,7 +52,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             }
         });
 
-        $http.get(preUrl + "/manager/bienNhan/ThongTinBienNhan", {params: {id: $scope.id}})
+        $http.get(preUrl + "/managerVanTai/bienNhan/ThongTinBienNhan", {params: {id: $scope.id}})
                 .then(function (response) {
                     $scope.info = response.data;
                     $scope.info.property = response.data.matHang;
@@ -186,14 +186,14 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
             };
 
             if (arrIdDelete.length > 0)
-                $http.get(preUrl + "/manager/bienNhan/deleteProperty", {params: {arrIdDelete: arrIdDelete, receiptId: $scope.info.bienNhan.id}})
+                $http.get(preUrl + "/managerVanTai/bienNhan/deleteProperty", {params: {arrIdDelete: arrIdDelete, receiptId: $scope.info.bienNhan.id}})
                         .then(function (response) {
                             if (response.data == "0")
                                 toastr.error("Có lỗi trong quá trình xử lý, vui lòng thử lại!");
                             return false;
                         });
             var infoAuction = JSON.parse(JSON.stringify(info));
-            $http.post(preUrl + "/manager/bienNhan/chinh-sua-bien-nhan", infoAuction, {headers: {'Content-Type': 'application/json'}})
+            $http.post(preUrl + "/managerVanTai/bienNhan/chinh-sua-bien-nhan", infoAuction, {headers: {'Content-Type': 'application/json'}})
                     .then(function (response) {
                         $scope.info.bienNhan.dateReceipt = moment($scope.info.bienNhan.dateReceipt).format('DD/MM/YYYY');
                         switch (Number(response.data)) {

@@ -12,7 +12,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
 
         $scope.searchBienNhan.status = "1";
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
-        $http.get(preUrl + "/manager/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
+        $http.get(preUrl + "/managerVanTai/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
                 .then(function (response) {
                     $scope.listBienNhan = response.data.items;
                     $scope.tooltip();
@@ -35,7 +35,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         $scope.loadListData = function () {
             $scope.searchBienNhan.status = "1";
             var searchBienNhan = JSON.stringify($scope.searchBienNhan);
-            $http.get(preUrl + "/manager/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan}})
+            $http.get(preUrl + "/managerVanTai/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan}})
                     .then(function (response) {
                         $scope.listBienNhan = response.data.items;
                         $scope.tooltip();
@@ -43,16 +43,16 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         };
 
 //        $scope.exportPhieuThu = function (idPhieuThu) {
-//            window.open(preUrl + "/manager/phieu-giao-hang/exportPhieuThu?idPhieuThu=" + idPhieuThu, '_blank');
+//            window.open(preUrl + "/managerVanTai/phieu-giao-hang/exportPhieuThu?idPhieuThu=" + idPhieuThu, '_blank');
 //        }
 
         $scope.exportPhieuNhanHang = function (giaoHangId) {
-            window.open(preUrl + "/manager/bienNhan/exportExcelPhieuNhan?giaoHangId=" + giaoHangId, '_blank');
+            window.open(preUrl + "/managerVanTai/bienNhan/exportExcelPhieuNhan?giaoHangId=" + giaoHangId, '_blank');
         }
 
         $scope.exportPhieuThu = function (giaoHangId) {
             console.log("exportPhieuThu:" + giaoHangId);
-            window.open(preUrl + "/manager/bienNhan/exportPhieuThu?giaoHangId=" + giaoHangId, '_blank');
+            window.open(preUrl + "/managerVanTai/bienNhan/exportPhieuThu?giaoHangId=" + giaoHangId, '_blank');
         }
 
 
@@ -95,13 +95,13 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
             }
         };
 
-        $http.get(preUrl + "/manager/bienNhan/danhSachNhaXe")
+        $http.get(preUrl + "/managerVanTai/bienNhan/danhSachNhaXe")
                 .then(function (response) {
                     $scope.nhaXeList = response.data;
                 });
 
         $scope.onChangeBienSo = function () {
-            $http.get(preUrl + "/manager/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.phieuGiao.bienSo}})
+            $http.get(preUrl + "/managerVanTai/bienNhan/thongTinNhaXe", {params: {bienSo: $scope.phieuGiao.bienSo}})
                     .then(function (response) {
                         $scope.phieuGiao.nhaXe = response.data.nhaXe;
                         $scope.phieuGiao.loaiXe = response.data.loaiXe;
@@ -115,7 +115,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
 //        }
 
         if (id != null && id != '') {
-            $http.get(preUrl + "/manager/gom-don-hang/loadDataEdit", {params: {id: id}})
+            $http.get(preUrl + "/managerVanTai/gom-don-hang/loadDataEdit", {params: {id: id}})
                     .then(function (response) {
                         $scope.phieuGiao = response.data.vtGomDonNhan;
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
@@ -149,12 +149,12 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                     };
                     var vTGoodsReceiptForm = JSON.stringify($scope.call);
                     console.log(vTGoodsReceiptForm);
-                    $http.post(preUrl + "/manager/gom-don-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
+                    $http.post(preUrl + "/managerVanTai/gom-don-hang/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
                             .then(function (response) {
                                 if (response.data.reponseCode == 200 && response.data.success == true) {
                                     toastr.success(response.data.messageError);
                                     $timeout(function () {
-                                        window.location.href = preUrl + "/manager/gom-don-hang/list";
+                                        window.location.href = preUrl + "/managerVanTai/gom-don-hang/list";
                                     }, 2000);
                                 } else {
                                     toastr.success(response.data.messageError);

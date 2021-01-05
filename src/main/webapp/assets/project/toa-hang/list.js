@@ -20,13 +20,13 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
             }, 0);
         };
 
-        $http.get(preUrl + "/manager/bienNhan/danhSachNhaXe")
+        $http.get(preUrl + "/managerVanTai/bienNhan/danhSachNhaXe")
                 .then(function (response) {
                     $scope.nhaXeList = response.data;
                 });
 
 
-        $http.get(preUrl + "/manager/toa-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+        $http.get(preUrl + "/managerVanTai/toa-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                 .then(function (response) {
                     $scope.listData = response.data;
 
@@ -59,7 +59,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         //reload list
         $scope.loadListData = function () {
             var search = JSON.stringify($scope.search);
-            $http.get(preUrl + "/manager/toa-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/managerVanTai/toa-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData = response.data;
 
@@ -80,7 +80,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         $scope.loadPageData = function (index) {
             var search = JSON.stringify($scope.search);
             $scope.listData.pageNumber = index;
-            $http.get(preUrl + "/manager/toa-hang/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/managerVanTai/toa-hang/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData.items = response.data.items;
 
@@ -93,7 +93,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                     });
         };
         $scope.exportPhieuBienNhan = function (toaHangId) {
-            window.open(preUrl + "/manager/toa-hang/exportPhieuBienNhan?idToaHang=" + toaHangId, '_blank');
+            window.open(preUrl + "/managerVanTai/toa-hang/exportPhieuBienNhan?idToaHang=" + toaHangId, '_blank');
         }
 
         $scope.preXoa = function (item) {
@@ -105,7 +105,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         $scope.xoaToaHang = function () {
             var call = {id: $scope.delId};
             var vtToaHang = JSON.parse(JSON.stringify(call));
-            $http.post(preUrl + "/manager/toa-hang/delete", vtToaHang, {headers: {'Content-Type': 'application/json'}})
+            $http.post(preUrl + "/managerVanTai/toa-hang/delete", vtToaHang, {headers: {'Content-Type': 'application/json'}})
                     .then(function (response) {
                         switch (Number(response.data)) {
                             case 0:

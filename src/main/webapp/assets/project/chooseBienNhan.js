@@ -16,7 +16,7 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
 
         $scope.searchBienNhan.status = "1";
         var searchBienNhan = JSON.stringify($scope.searchBienNhan);
-        $http.get(preUrl + "/manager/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
+        $http.get(preUrl + "/managerVanTai/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan, offset: 0}})
                 .then(function (response) {
                     $scope.listBienNhan = response.data.items;
                     $scope.tooltip();
@@ -40,7 +40,7 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
         $scope.loadListData = function () {
             $scope.searchBienNhan.status = "1";
             var searchBienNhan = JSON.stringify($scope.searchBienNhan);
-            $http.get(preUrl + "/manager/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan}})
+            $http.get(preUrl + "/managerVanTai/bienNhan/list-bien-nhan", {params: {searchBienNhan: searchBienNhan}})
                     .then(function (response) {
                         $scope.listBienNhan = response.data.items;
                         $scope.tooltip();
@@ -59,7 +59,7 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
             if (check == true) {
 //                $scope.idCallBackManage = id;
                 // check add luon, validateDL sau
-                $http.get(preUrl + "/manager/bienNhan/loadListHangHoa", {params: {id: objectBienNhan.id}})
+                $http.get(preUrl + "/managerVanTai/bienNhan/loadListHangHoa", {params: {id: objectBienNhan.id}})
                         .then(function (response) {
                             console.log("response.data:");
                             console.log(response.data);

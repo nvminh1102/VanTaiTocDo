@@ -134,7 +134,7 @@
                             </div>
                             <sec:authorize access="hasRole('ROLE_THEM_TOA_HANG_ADD')">
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/manager/toa-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm toa hàng</a>
+                                <a href="<%=request.getContextPath()%>/managerVanTai/toa-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm toa hàng</a>
                             </div>
                             </sec:authorize>
                         </div>
@@ -177,7 +177,7 @@
                                                     <sec:authorize access="hasRole('ROLE_SUA_TOA_HANG_EDIT')">
                                                         <li>
                                                             <div class="line line-dashed m-b-none m-t-none"></div>
-                                                            <a href="<%=request.getContextPath()%>/manager/toa-hang/preEdit/{{item.id}}">
+                                                            <a href="<%=request.getContextPath()%>/managerVanTai/toa-hang/preEdit/{{item.id}}">
                                                                 Chỉnh sửa
                                                             </a>
                                                         </li>

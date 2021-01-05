@@ -1,7 +1,7 @@
 app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($scope, $http, fileUpload) {
       $scope.page = page;
       // $scope.search.typePartner = '';
-      $http.get(preUrl + "/manager/khach-hang/search")
+      $http.get(preUrl + "/managerVanTai/khach-hang/search")
       .then(function (response) {
         if (response != null && response != 'undefined' && response.status == 200) {
           $scope.page = response.data;
@@ -13,7 +13,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.search = function () {
         $scope.page.pageNumber = 1;
-        $http.get(preUrl + "/manager/khach-hang/search", {params: {taxCode: $scope.search.taxCode, fullName: $scope.search.fullName, mobile: $scope.search.mobile, address: $scope.search.address, typePartner: $scope.search.typePartner}})
+        $http.get(preUrl + "/managerVanTai/khach-hang/search", {params: {taxCode: $scope.search.taxCode, fullName: $scope.search.fullName, mobile: $scope.search.mobile, address: $scope.search.address, typePartner: $scope.search.typePartner}})
         .then(function (response) {
           if (response != null && response != 'undefined' && response.status == 200) {
             $scope.page = response.data;
@@ -26,7 +26,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.loadPage = function (pageNumber) {
         if (pageNumber >= 1) {
-          $http.get(preUrl + "/manager/khach-hang/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, taxCode: $scope.search.taxCode, fullName: $scope.search.fullName, mobile: $scope.search.mobile, address: $scope.search.address, typePartner: $scope.search.typePartner}})
+          $http.get(preUrl + "/managerVanTai/khach-hang/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, taxCode: $scope.search.taxCode, fullName: $scope.search.fullName, mobile: $scope.search.mobile, address: $scope.search.address, typePartner: $scope.search.typePartner}})
           .then(function (response) {
             $scope.page = response.data;
             $scope.page.pageList = getPageList($scope.page);
@@ -63,7 +63,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   $scope.xoaKhachHang = function () {
     var call = {id: $scope.delId};
     var param = JSON.parse(JSON.stringify(call));
-    $http.post(preUrl + "/manager/khach-hang/delete", param, {headers: {'Content-Type': 'application/json'}})
+    $http.post(preUrl + "/managerVanTai/khach-hang/delete", param, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
       switch (Number(response.data)) {
         case 0:
@@ -125,7 +125,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
     var call = {id:  $scope.info.id, taxCode: $scope.info.taxCode, fullName: $scope.info.fullName, mobile: $scope.info.mobile, address: $scope.info.address, soHopDong: $scope.info.soHopDong,  typePartner: $scope.info.typePartner, email: $scope.info.email};
     var param = JSON.parse(JSON.stringify(call));
-    $http.post(preUrl + "/manager/khach-hang/them-moi-khach-hang", param, {headers: {'Content-Type': 'application/json'}})
+    $http.post(preUrl + "/managerVanTai/khach-hang/them-moi-khach-hang", param, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
       switch (Number(response.data)) {
         case 0:

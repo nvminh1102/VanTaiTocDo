@@ -10,7 +10,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         }
 
         if (id != null && id != '') {
-            $http.get(preUrl + "/manager/phieu-thu/loadDataEdit", {params: {id: id}})
+            $http.get(preUrl + "/managerVanTai/phieu-thu/loadDataEdit", {params: {id: id}})
                     .then(function (response) {
                         $scope.phieuThu = response.data.vtPhieuThuView;
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
@@ -33,7 +33,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                         };
                         var vTGoodsReceiptForm = JSON.stringify($scope.call);
                         console.log(vTGoodsReceiptForm);
-                        $http.post(preUrl + "/manager/phieu-thu/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
+                        $http.post(preUrl + "/managerVanTai/phieu-thu/add", vTGoodsReceiptForm, {headers: {'Content-Type': 'application/json'}})
                                 .then(function (response) {
                                     if (response.data.reponseCode == 200 && response.data.success == true) {
                                         window.location.href = preUrl + "/phieu-thu/list";

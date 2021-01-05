@@ -114,7 +114,7 @@
                                 </select>
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
-                                <a href="<%=request.getContextPath()%>/manager/phieu-giao-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Lập phiếu giao hàng</a>
+                                <a href="<%=request.getContextPath()%>/managerVanTai/phieu-giao-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Lập phiếu giao hàng</a>
                             </div>
                         </div>
 
@@ -154,7 +154,7 @@
                                                     <sec:authorize access="hasRole('ROLE_SUA_GIAO_HANG_EDIT')">
                                                         <li>
                                                             <div class="line line-dashed m-b-none m-t-none"></div>
-                                                            <a href="<%=request.getContextPath()%>/manager/phieu-giao-hang/preEdit/{{item.id}}">
+                                                            <a href="<%=request.getContextPath()%>/managerVanTai/phieu-giao-hang/preEdit/{{item.id}}">
                                                                 Chỉnh sửa
                                                             </a>
                                                         </li>

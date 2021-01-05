@@ -115,7 +115,7 @@
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
                                 <sec:authorize access="hasRole('ROLE_THEM_CHON_XE_NHAN_HANG_ADD')">
-                                <a href="<%=request.getContextPath()%>/manager/gom-don-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Chọn xe nhận hàng</a>
+                                <a href="<%=request.getContextPath()%>/managerVanTai/gom-don-hang/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Chọn xe nhận hàng</a>
                                 </sec:authorize>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
                                                     <sec:authorize access="hasRole('ROLE_SUA_CHON_XE_NHAN_HANG_EDIT')">
                                                         <li>
                                                             <div class="line line-dashed m-b-none m-t-none"></div>
-                                                            <a href="<%=request.getContextPath()%>/manager/gom-don-hang/preEdit/{{item.id}}">
+                                                            <a href="<%=request.getContextPath()%>/managerVanTai/gom-don-hang/preEdit/{{item.id}}">
                                                                 Chỉnh sửa
                                                             </a>
                                                         </li>

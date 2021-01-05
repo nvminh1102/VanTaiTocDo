@@ -18,12 +18,12 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
             }, 0);
         };
         
-        $http.get(preUrl + "/manager/bienNhan/danhSachNhaXe")
+        $http.get(preUrl + "/managerVanTai/bienNhan/danhSachNhaXe")
                 .then(function (response) {
                     $scope.nhaXeList = response.data;
                 });
 
-        $http.get(preUrl + "/manager/phieu-giao-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+        $http.get(preUrl + "/managerVanTai/phieu-giao-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                 .then(function (response) {
                     $scope.listData = response.data;
                     $scope.listData.numberPerPage = $scope.numberPerPage;
@@ -55,7 +55,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         //reload list
         $scope.loadListData = function () {
             var search = JSON.stringify($scope.search);
-            $http.get(preUrl + "/manager/phieu-giao-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/managerVanTai/phieu-giao-hang/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData = response.data;
                         $scope.listData.numberPerPage = $scope.numberPerPage;
@@ -75,7 +75,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         $scope.loadPageData = function (index) {
             var search = JSON.stringify($scope.search);
             $scope.listData.pageNumber = index;
-            $http.get(preUrl + "/manager/phieu-giao-hang/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/managerVanTai/phieu-giao-hang/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData.items = response.data.items;
                         $scope.listData.numberPerPage = $scope.numberPerPage;
@@ -87,7 +87,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                     });
         };
         $scope.exportPhieu = function (idPhieu) {
-            window.open(preUrl + "/manager/phieu-giao-hang/exportPhieu?idPhieu=" + idPhieu, '_blank');
+            window.open(preUrl + "/managerVanTai/phieu-giao-hang/exportPhieu?idPhieu=" + idPhieu, '_blank');
         }
 
         $scope.preXoa = function (item) {
@@ -99,7 +99,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
         $scope.xoaPhieu = function () {
             var call = {id: $scope.delId};
             var vtToaHang = JSON.parse(JSON.stringify(call));
-            $http.post(preUrl + "/manager/phieu-giao-hang/delete", vtToaHang, {headers: {'Content-Type': 'application/json'}})
+            $http.post(preUrl + "/managerVanTai/phieu-giao-hang/delete", vtToaHang, {headers: {'Content-Type': 'application/json'}})
                     .then(function (response) {
                         switch (Number(response.data)) {
                             case 0:

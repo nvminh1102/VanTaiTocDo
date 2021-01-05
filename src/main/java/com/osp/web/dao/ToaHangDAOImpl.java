@@ -214,9 +214,8 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
-                row.setSoHopDong(record[16] == null ? null : (String)record[16]);
-                row.setMaPhieuThu(record[17] == null ? null : (String)record[17]);
-                row.setSoHopDong(record[18] == null ? null : (String)record[18]);
+                row.setMaPhieuThu(record[16] == null ? null : (String)record[16]);
+                row.setSoHopDong(record[17] == null ? null : (String)record[17]);
                 vtReceiptViews.add(row);
             });
 

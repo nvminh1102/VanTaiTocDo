@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/manager/thong-ke")
+@RequestMapping("/managerVanTai/thong-ke")
 public class ThongKePhieuGiaoNhanController {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     @Autowired

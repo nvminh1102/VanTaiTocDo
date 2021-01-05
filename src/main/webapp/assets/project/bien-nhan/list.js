@@ -21,7 +21,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         });
       });
 
-      $http.get(preUrl + "/manager/bienNhan/search")
+      $http.get(preUrl + "/managerVanTai/bienNhan/search")
       .then(function (response) {
         if (response != null && response != 'undefined' && response.status == 200) {
           $scope.page = response.data;
@@ -33,7 +33,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.search = function () {
         $scope.page.pageNumber = 1;
-        $http.get(preUrl + "/manager/bienNhan/search", {params: {receiptCode: $scope.search.receiptCode, nameStock: $scope.search.nameStock, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
+        $http.get(preUrl + "/managerVanTai/bienNhan/search", {params: {receiptCode: $scope.search.receiptCode, nameStock: $scope.search.nameStock, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
         .then(function (response) {
           if (response != null && response != 'undefined' && response.status == 200) {
             $scope.page = response.data;
@@ -46,7 +46,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.loadPage = function (pageNumber) {
         if (pageNumber >= 1) {
-          $http.get(preUrl + "/manager/bienNhan/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, receiptCode: $scope.search.receiptCode, nameStock: $scope.search.nameStock, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
+          $http.get(preUrl + "/managerVanTai/bienNhan/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, receiptCode: $scope.search.receiptCode, nameStock: $scope.search.nameStock, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
           .then(function (response) {
             $scope.page = response.data;
             $scope.page.pageList = getPageList($scope.page);
@@ -81,7 +81,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   $scope.xoaBienNhan = function () {
     var call = {id: $scope.delId};
     var param = JSON.parse(JSON.stringify(call));
-    $http.post(preUrl + "/manager/bienNhan/delete", param, {headers: {'Content-Type': 'application/json'}})
+    $http.post(preUrl + "/managerVanTai/bienNhan/delete", param, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
       switch (Number(response.data)) {
         case 0:
@@ -103,12 +103,12 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     }
 
     $scope.exportPhieuNhanHang = function (giaoHangId) {
-        window.open(preUrl+"/manager/bienNhan/exportExcelPhieuNhan?giaoHangId=" + giaoHangId , '_blank');
+        window.open(preUrl+"/managerVanTai/bienNhan/exportExcelPhieuNhan?giaoHangId=" + giaoHangId , '_blank');
     }
     
     $scope.exportPhieuThu = function (giaoHangId) {
         console.log("exportPhieuThu:" + giaoHangId);
-        window.open(preUrl+"/manager/bienNhan/exportPhieuThu?giaoHangId=" + giaoHangId , '_blank');
+        window.open(preUrl+"/managerVanTai/bienNhan/exportPhieuThu?giaoHangId=" + giaoHangId , '_blank');
     }
 
 

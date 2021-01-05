@@ -51,7 +51,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         //reload list
         $scope.loadListData = function () {
             var search = JSON.stringify($scope.search);
-            $http.get(preUrl + "/manager/phieu-thu/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/managerVanTai/phieu-thu/load-list", {params: {search: search, offset: 0, number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData = response.data;
                         $scope.listData.numberPerPage = $scope.numberPerPage;
@@ -71,7 +71,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
         $scope.loadPageData = function (index) {
             var search = JSON.stringify($scope.search);
             $scope.listData.pageNumber = index;
-            $http.get(preUrl + "/manager/phieu-thu/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
+            $http.get(preUrl + "/managerVanTai/phieu-thu/load-list", {params: {search: search, offset: $scope.listData.numberPerPage * ($scope.listData.pageNumber - 1), number: $scope.listData.numberPerPage}})
                     .then(function (response) {
                         $scope.listData.items = response.data.items;
                         $scope.listData.numberPerPage = $scope.numberPerPage;
@@ -83,7 +83,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
                     });
         };
         $scope.export = function () {
-            window.location.href = preUrl + "/manager/phieu-nhan-hang/export?fullName=" + $scope.search.fullName + "&dispatchCode=" + $scope.search.dispatchCode
+            window.location.href = preUrl + "/managerVanTai/phieu-nhan-hang/export?fullName=" + $scope.search.fullName + "&dispatchCode=" + $scope.search.dispatchCode
                     + "&type=" + $scope.search.type
                     + "&fromDateSign=" + $scope.search.fromDateSign + "&toDateSign=" + $scope.search.toDateSign;
         };
@@ -95,7 +95,7 @@ app.controller('vantai', ['$scope', '$http', '$filter', '$window', 'fileUpload',
 
         $scope.confirmDelete = function () {
 
-            $http.post(preUrl + "/manager/xoa-thong-tin-bo-nhiem-ccv", $scope.idDelete, {headers: {'Content-Type': 'application/json'}})
+            $http.post(preUrl + "/managerVanTai/xoa-thong-tin-bo-nhiem-ccv", $scope.idDelete, {headers: {'Content-Type': 'application/json'}})
                     .then(function (response) {
                         if (response.data.reponseCode == 200 && response.data.success == true) {
                             toastr.success("Xóa thành công!");

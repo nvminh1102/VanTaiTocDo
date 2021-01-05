@@ -1,7 +1,7 @@
 app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($scope, $http, fileUpload) {
       $scope.page = page;
       // $scope.search.typePartner = '';
-      $http.get(preUrl + "/manager/nha-xe/search")
+      $http.get(preUrl + "/managerVanTai/nha-xe/search")
       .then(function (response) {
         if (response != null && response != 'undefined' && response.status == 200) {
           $scope.page = response.data;
@@ -13,7 +13,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.search = function () {
         $scope.page.pageNumber = 1;
-        $http.get(preUrl + "/manager/nha-xe/search", {params: {nhaXe: $scope.search.nhaXe, loaiXe: $scope.search.loaiXe, bienSo: $scope.search.bienSo, tenLaiXe: $scope.search.tenLaiXe}})
+        $http.get(preUrl + "/managerVanTai/nha-xe/search", {params: {nhaXe: $scope.search.nhaXe, loaiXe: $scope.search.loaiXe, bienSo: $scope.search.bienSo, tenLaiXe: $scope.search.tenLaiXe}})
         .then(function (response) {
           if (response != null && response != 'undefined' && response.status == 200) {
             $scope.page = response.data;
@@ -26,7 +26,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.loadPage = function (pageNumber) {
         if (pageNumber >= 1) {
-          $http.get(preUrl + "/manager/nha-xe/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, nhaXe: $scope.search.nhaXe, loaiXe: $scope.search.loaiXe, bienSo: $scope.search.bienSo, tenLaiXe: $scope.search.tenLaiXe}})
+          $http.get(preUrl + "/managerVanTai/nha-xe/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, nhaXe: $scope.search.nhaXe, loaiXe: $scope.search.loaiXe, bienSo: $scope.search.bienSo, tenLaiXe: $scope.search.tenLaiXe}})
           .then(function (response) {
             $scope.page = response.data;
             $scope.page.pageList = getPageList($scope.page);
@@ -62,7 +62,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   $scope.xoaNhaXe = function () {
     var call = {id: $scope.delId};
     var param = JSON.parse(JSON.stringify(call));
-    $http.post(preUrl + "/manager/nha-xe/delete", param, {headers: {'Content-Type': 'application/json'}})
+    $http.post(preUrl + "/managerVanTai/nha-xe/delete", param, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
       switch (Number(response.data)) {
         case 0:
@@ -120,7 +120,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
     var call = {id:  $scope.info.id, nhaXe: $scope.info.nhaXe, loaiXe: $scope.info.loaiXe, bienSo: $scope.info.bienSo, tenLaiXe: $scope.info.tenLaiXe, sdtLaiXe: $scope.info.sdtLaiXe};
     var param = JSON.parse(JSON.stringify(call));
-    $http.post(preUrl + "/manager/nha-xe/them-moi-nha-xe", param, {headers: {'Content-Type': 'application/json'}})
+    $http.post(preUrl + "/managerVanTai/nha-xe/them-moi-nha-xe", param, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
       switch (Number(response.data)) {
         case 0:

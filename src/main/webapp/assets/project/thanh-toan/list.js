@@ -22,7 +22,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         });
       });
 
-      $http.get(preUrl + "/manager/thanh-toan/search")
+      $http.get(preUrl + "/managerVanTai/thanh-toan/search")
       .then(function (response) {
         if (response != null && response != 'undefined' && response.status == 200) {
           $scope.page = response.data;
@@ -34,7 +34,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.search = function () {
         $scope.page.pageNumber = 1;
-        $http.get(preUrl + "/manager/thanh-toan/search", {params: {soPhieuNhan: $scope.search.soPhieuNhan, nguoiGui: $scope.search.nguoiGui, typePayment: $scope.search.typePayment, isPayment: $scope.search.isPayment, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
+        $http.get(preUrl + "/managerVanTai/thanh-toan/search", {params: {soPhieuNhan: $scope.search.soPhieuNhan, nguoiGui: $scope.search.nguoiGui, typePayment: $scope.search.typePayment, isPayment: $scope.search.isPayment, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
         .then(function (response) {
           if (response != null && response != 'undefined' && response.status == 200) {
             $scope.page = response.data;
@@ -47,7 +47,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
 
       $scope.loadPage = function (pageNumber) {
         if (pageNumber >= 1) {
-          $http.get(preUrl + "/manager/thanh-toan/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, soPhieuNhan: $scope.search.soPhieuNhan, nguoiGui: $scope.search.nguoiGui, typePayment: $scope.search.typePayment, isPayment: $scope.search.isPayment, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
+          $http.get(preUrl + "/managerVanTai/thanh-toan/search", {params: {p: pageNumber, numberPerPage: $scope.page.numberPerPage, soPhieuNhan: $scope.search.soPhieuNhan, nguoiGui: $scope.search.nguoiGui, typePayment: $scope.search.typePayment, isPayment: $scope.search.isPayment, fromDateReceipt: $scope.search.fromDateReceipt, toDateReceipt: $scope.search.toDateReceipt}})
           .then(function (response) {
             $scope.page = response.data;
             $scope.page.pageList = getPageList($scope.page);
@@ -100,7 +100,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
     };
 
     var infoAuction = JSON.parse(JSON.stringify(info));
-    $http.post(preUrl + "/manager/thanh-toan/update-tien-da-tra", infoAuction, {headers: {'Content-Type': 'application/json'}})
+    $http.post(preUrl + "/managerVanTai/thanh-toan/update-tien-da-tra", infoAuction, {headers: {'Content-Type': 'application/json'}})
     .then(function (response) {
       switch (Number(response.data)) {
         case 1:
@@ -118,7 +118,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
   }
 
     $scope.checkShowThanhToan = function (item) {
-        $http.get(preUrl + "/manager/thanh-toan/tong-tien-mat-hang", {params: {id: item.id}})
+        $http.get(preUrl + "/managerVanTai/thanh-toan/tong-tien-mat-hang", {params: {id: item.id}})
             .then(function (response) {
                $scope.tienPhaiTra = response.data;
             });
@@ -132,7 +132,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
         toDateReceipt: ''
     };
     $scope.xuatPhieuThanhToan = function () {
-        window.open(preUrl+"/manager/thanh-toan/exportExcelThanhToan?soPhieuNhan=" +  $scope.search.soPhieuNhan +
+        window.open(preUrl+"/managerVanTai/thanh-toan/exportExcelThanhToan?soPhieuNhan=" +  $scope.search.soPhieuNhan +
             "&nguoiGui=" + $scope.search.nguoiGui + "&typePayment=" + $scope.search.typePayment + "&isPayment=" + $scope.search.isPayment +
             "&fromGenDate=" + $scope.search.fromDateReceipt + "&toGenDate=" + $scope.search.toDateReceipt, '_blank');
     }

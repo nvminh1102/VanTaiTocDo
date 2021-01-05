@@ -101,7 +101,7 @@
                             </div>
                             <div class="p-r-0 p-l-0 col-md-6">
                                 <sec:authorize access="hasRole('ROLE_THEM_PHIEU_NHAN_HANG_ADD')">
-                                    <a href="<%=request.getContextPath()%>/manager/bienNhan/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
+                                    <a href="<%=request.getContextPath()%>/managerVanTai/bienNhan/preAdd" class="pull-right btn btn-s-sm btn-info"><i class="fa fa-plus"></i>Thêm phiếu nhận hàng</a>
                                 </sec:authorize>
                             </div>
                         </div>
@@ -234,7 +234,7 @@
             </div>
         </div>
     </div>
-    <form id="frmEdit" action="<%=request.getContextPath()%>/manager/bienNhan/preEdit" method='POST'>
+    <form id="frmEdit" action="<%=request.getContextPath()%>/managerVanTai/bienNhan/preEdit" method='POST'>
         <input type="hidden" name='editId' id='editId' value="">
     </form>
 </section>
