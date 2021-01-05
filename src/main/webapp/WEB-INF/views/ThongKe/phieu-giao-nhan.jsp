@@ -129,9 +129,11 @@
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Loại xe</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Biển số</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Hình thức vận chuyển</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Mã</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Số lượng</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Điểm nhận</th>
                                     <th class="text-center v-inherit text-dark" style="width: 10%;">Điểm giao</th>
+                                    <th class="text-center v-inherit text-dark" style="width: 10%;">Ngày</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -145,10 +147,13 @@
                                     <td class="text-left v-inherit">{{item.nhaXe}}</td>
                                     <td class="text-left v-inherit">{{item.loaiXe}}</td>
                                     <td class="text-center v-inherit">{{item.bienSo}}</td>
-                                    <td class="text-left v-inherit">{{item.hinhThucVanChuyen == 1 ? "Nhận hàng" : item.hinhThucVanChuyen == 2 ? "Vận chuyển" : "Giao hàng"}}</td>
+                                    <!--<td class="text-left v-inherit">{{item.hinhThucVanChuyen == 1 ? "Nhận hàng" : item.hinhThucVanChuyen == 2 ? "Vận chuyển" : "Giao hàng"}}</td>-->
+                                    <td class="text-left v-inherit">{{item.hinhThucVanChuyen}}</td>
+                                    <td class="text-left v-inherit">{{item.receiptCode}}</td>
                                     <td class="text-left v-inherit">{{item.soLuong}}</td>
                                     <td class="text-left v-inherit">{{item.diaChiNhan}}</td>
                                     <td class="text-left v-inherit">{{item.diaChiGiao}}</td>
+                                    <td class="text-left v-inherit">{{item.strGenDate}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -158,7 +163,7 @@
                             <div class="row">
                                 <div class="p-l-0 col-sm-6 text-left text-center-xs m-b-xs">
                                     <sec:authorize access="hasRole('ROLE_TK_GIAO_NHAN_EXPORT_VIEW')">
-                                        <%--<button class="btn btn-info btn-s-sm" ng-click="xuatPhieuThanhToan();"><i class="fa fa-file-excel-o"></i> Xuất phiếu thanh toán</button>--%>
+                                        <button class="btn btn-info btn-s-sm" ng-click="exportExcel();"><i class="fa fa-file-excel-o"></i> Xuất file excel</button>
                                     </sec:authorize>
                                 </div>
                                 <div class="p-r-0 col-sm-6 text-right text-center-xs">

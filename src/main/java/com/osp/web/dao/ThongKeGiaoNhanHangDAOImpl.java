@@ -23,7 +23,6 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
     @Qualifier(value = "transactionManager")
     private EntityManager entityManager;
 
-
     @Override
     public Optional<PagingResult> page(PagingResult page, String bienSo, String loaiXe, String hinhThucVanChuyen, Date fromDate, Date toDate, boolean isExport) {
         List<ThongKeGiaoNhanView> resultList = new ArrayList<>();
@@ -49,41 +48,43 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
             if (toDate != null) {
                 strWhere.append(" and gen_date <= :toGenDate");
             }
-            StringBuffer sqlBuffer = new StringBuffer(" select * from (SELECT c.receipt_code,a.bien_so, a.nha_xe, a.loai_xe, c.ID AS id_phieu_nhan_hang, '3' AS hinh_thuc_van_chuyen, e.address AS dia_chi_nhan, f.address AS dia_chi_giao,a.gen_date, " +
-                    " (SELECT sum(a.numbers) FROM vt_receipt_detail a WHERE a.receipt_id = c.id) AS so_luong "
-                    + " FROM vt_phieu_giao_hang a "
-                    + " INNER JOIN vt_phieu_giao_hang_detail b ON a.ID = b.phieu_giao_hang_id "
-                    + " INNER JOIN vt_receipt c ON c.ID = b.receipt_id "
-                    + " INNER JOIN vt_receipt_detail g ON g.receipt_id = c.id "
-                    + " INNER JOIN vt_nha_xe d ON c.bien_so = d.bien_so "
-                    + " INNER JOIN vt_partner e ON e.id = c.delivery_partner_id "
-                    + " INNER JOIN vt_partner f ON f.id = c.receive_partner_id "
-                    + " GROUP BY b.receipt_id "
-                    + " UNION ALL "
-                    + " SELECT c.receipt_code,a.bien_so, a.nha_xe, a.loai_xe, c.id AS id_phieu_nhan_hang, '2' AS hinh_thuc_van_chuyen, a.noi_di AS dia_chi_nhan, a.noi_den AS dia_chi_giao,a.gen_date, "
-                    + " (SELECT sum(a.numbers) FROM vt_receipt_detail a WHERE a.receipt_id = c.id) AS so_luong "
-                    + " FROM vt_toa_hang a "
-                    + " INNER JOIN vt_toa_hang_detail b ON a.id = b.toa_hang_id "
-                    + " INNER JOIN vt_receipt c ON c.id = b.receipt_id "
-                    + " INNER JOIN vt_receipt_detail d ON d.receipt_id = c.id "
-                    + " GROUP BY c.receipt_code "
-                    + " UNION ALL "
-                    + " SELECT c.receipt_code,a.bien_so, a.nha_xe, a.loai_xe, c.id AS id_phieu_nhan_hang, '1' AS hinh_thuc_van_chuyen, e.address AS dia_chi_nhan, f.address AS dia_chi_giao,a.gen_date, "
-                    + " (SELECT sum(a.numbers) FROM vt_receipt_detail a WHERE a.receipt_id = c.id) AS so_luong "
-                    + " FROM vt_gom_don_nhan a "
-                    + " INNER JOIN vt_gom_don_nhan_detail b ON a.id = b.vt_gom_don_nhan_id "
-                    + " INNER JOIN vt_receipt c ON c.id = b.receipt_id "
-                    + " INNER JOIN vt_receipt_detail d ON d.receipt_id = c.id "
-                    + " INNER JOIN vt_partner e ON e.id = c.delivery_partner_id "
-                    + " INNER JOIN vt_partner f ON f.id = c.receive_partner_id "
-                    + " GROUP BY c.receipt_code "
-            );
-            sqlBuffer.append(" order by GEN_DATE DESC ) as info ");
+            StringBuffer sqlBuffer = new StringBuffer();
+
+            sqlBuffer.append(" select * from ( SELECT c.receipt_code  as maCode, a.nha_xe, a.loai_xe, a.bien_so, 'Giao Hàng' AS hinh_thuc_van_chuyen,  ");
+            sqlBuffer.append("                      sum(g.numbers) AS so_luong, e.address AS dia_chi_nhan, f.address AS dia_chi_giao ,a.gen_date,  DATE_FORMAT(a.gen_date, '%d-%m-%Y') as strGenDate ");
+            sqlBuffer.append("                     FROM vt_phieu_giao_hang a  ");
+            sqlBuffer.append("                     INNER JOIN vt_phieu_giao_hang_detail b ON a.ID = b.phieu_giao_hang_id  ");
+            sqlBuffer.append("                     INNER JOIN vt_receipt c ON c.ID = b.receipt_id  ");
+            sqlBuffer.append("                     INNER JOIN vt_receipt_detail g ON g.receipt_id = c.id  ");
+            sqlBuffer.append("                     INNER JOIN vt_nha_xe d ON c.bien_so = d.bien_so  ");
+            sqlBuffer.append("                     INNER JOIN vt_partner e ON e.id = c.delivery_partner_id  ");
+            sqlBuffer.append("                     INNER JOIN vt_partner f ON f.id = c.receive_partner_id  ");
+            sqlBuffer.append("                     GROUP BY c.receipt_code,  a.nha_xe, a.loai_xe, a.bien_so , e.address , f.address, a.gen_date ");
+            sqlBuffer.append(" UNION ALL  ");
+            sqlBuffer.append("  SELECT  a.toa_hang_code as maCode , a.nha_xe as nha_xe, a.loai_xe as loai_xe, a.bien_so as bien_so, 'Vận chuyển' AS hinh_thuc_van_chuyen ,  ");
+            sqlBuffer.append("                     sum(d.numbers) AS so_luong , a.noi_di AS dia_chi_nhan, a.noi_den AS dia_chi_giao, a.gen_date, DATE_FORMAT(a.gen_date, '%d-%m-%Y') as strGenDate  ");
+            sqlBuffer.append("                     FROM vt_toa_hang a  ");
+            sqlBuffer.append("                     INNER JOIN vt_toa_hang_detail b ON a.id = b.toa_hang_id  ");
+            sqlBuffer.append("                     INNER JOIN vt_receipt_detail d ON d.receipt_id = b.vt_receipt_detail_id ");
+            sqlBuffer.append("                     GROUP BY a.toa_hang_code, a.nha_xe, a.loai_xe, a.bien_so, a.noi_di, a.noi_den, a.gen_date ");
+            sqlBuffer.append(" UNION ALL       ");
+            sqlBuffer.append(" SELECT c.receipt_code  as maCode, a.nha_xe, a.loai_xe, a.bien_so, 'Nhận hàng' AS hinh_thuc_van_chuyen,  ");
+            sqlBuffer.append("                      sum(g.numbers) AS so_luong, e.address AS dia_chi_nhan, f.address AS dia_chi_giao , a.gen_date, DATE_FORMAT(a.gen_date, '%d-%m-%Y') as strGenDate ");
+            sqlBuffer.append("                     FROM vt_gom_don_nhan a  ");
+            sqlBuffer.append("                     INNER JOIN vt_gom_don_nhan_detail b ON a.ID = b.vt_gom_don_nhan_id  ");
+            sqlBuffer.append("                     INNER JOIN vt_receipt c ON c.ID = b.receipt_id  ");
+            sqlBuffer.append("                     INNER JOIN vt_receipt_detail g ON g.receipt_id = c.id  ");
+            sqlBuffer.append("                     INNER JOIN vt_nha_xe d ON c.bien_so = d.bien_so  ");
+            sqlBuffer.append("                     INNER JOIN vt_partner e ON e.id = c.delivery_partner_id  ");
+            sqlBuffer.append("                     INNER JOIN vt_partner f ON f.id = c.receive_partner_id  ");
+            sqlBuffer.append("                     GROUP BY c.receipt_code,  a.nha_xe, a.loai_xe, a.bien_so , e.address , f.address, a.gen_date ");
+            sqlBuffer.append(" ) as info ");
             StringBuffer sqlBufferCount = new StringBuffer("SELECT count(1) from ( ");
             sqlBufferCount.append(sqlBuffer.toString());
             sqlBufferCount.append(" ) as count");
             sqlBufferCount.append(strWhere.toString());
             sqlBuffer.append(strWhere.toString());
+            sqlBuffer.append(" order by GEN_DATE DESC ");
 
             Query query = entityManager.createNativeQuery(sqlBuffer.toString());
 
@@ -118,15 +119,15 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
                 list.stream().forEach((record) -> {
                     ThongKeGiaoNhanView row = new ThongKeGiaoNhanView();
                     row.setReceiptCode(record[0] == null ? null : record[0].toString());
-                    row.setBienSo(record[1] == null ? null : (String) record[1]);
-                    row.setNhaXe(record[2] == null ? null :  (String) record[2]);
-                    row.setLoaiXe(record[3] == null ? null : (String) record[3]);
-                    row.setIdPhieuNhanHang(record[4] == null ? null : (Integer) record[4]);
-                    row.setHinhThucVanChuyen(record[5] == null ? null : (String) record[5]);
+                    row.setNhaXe(record[1] == null ? null : (String) record[1]);
+                    row.setLoaiXe(record[2] == null ? null : (String) record[2]);
+                    row.setBienSo(record[3] == null ? null : (String) record[3]);
+                    row.setHinhThucVanChuyen(record[4] == null ? null : (String) record[4]);
+                    row.setSoLuong(record[5] == null ? null : Integer.valueOf(record[5].toString()));
                     row.setDiaChiNhan(record[6] == null ? null : (String) record[6]);
                     row.setDiaChiGiao(record[7] == null ? null : (String) record[7]);
                     row.setGenDate(record[8] == null ? null : (Date) record[8]);
-                    row.setSoLuong(record[9] == null ? null : Integer.valueOf(record[9].toString()));
+                    row.setStrGenDate(record[9] == null ? null : (String) record[9]);
                     resultList.add(row);
                 });
                 page.setItems(resultList);

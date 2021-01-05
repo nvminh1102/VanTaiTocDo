@@ -12,6 +12,7 @@ public class ThongKeGiaoNhanView {
     private String diaChiNhan;
     private String diaChiGiao;
     private Date genDate;
+    private String strGenDate;
     private Integer soLuong;
 
     public String getReceiptCode() {
@@ -93,4 +94,13 @@ public class ThongKeGiaoNhanView {
     public void setSoLuong(Integer soLuong) {
         this.soLuong = soLuong;
     }
+
+    public String getStrGenDate() {
+        return strGenDate;
+    }
+
+    public void setStrGenDate(String strGenDate) {
+        this.strGenDate = strGenDate;
+    }
+    
 }
