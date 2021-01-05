@@ -145,7 +145,7 @@
                                     <td class="text-left v-inherit">{{item.nhaXe}}</td>
                                     <td class="text-left v-inherit">{{item.loaiXe}}</td>
                                     <td class="text-center v-inherit">{{item.bienSo}}</td>
-                                    <td class="text-left v-inherit">{{item.hinhThucVanChuyen}}</td>
+                                    <td class="text-left v-inherit">{{item.hinhThucVanChuyen == 1 ? "Nhận hàng" : item.hinhThucVanChuyen == 2 ? "Vận chuyển" : "Giao hàng"}}</td>
                                     <td class="text-left v-inherit">{{item.soLuong}}</td>
                                     <td class="text-left v-inherit">{{item.diaChiNhan}}</td>
                                     <td class="text-left v-inherit">{{item.diaChiGiao}}</td>
