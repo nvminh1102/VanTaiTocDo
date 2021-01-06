@@ -32,6 +32,9 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
                         if (response.data.vtReceiptViews != "[]" && response.data.vtReceiptViews.length > 0) {
                             $scope.listBienNhanDaChon.items = response.data.vtReceiptViews;
                         }
+                        if (response.data.vtReceiptDetail != "[]" && response.data.vtReceiptDetail.length > 0) {
+                            $scope.listHangHoa.items = response.data.vtReceiptDetail;
+                        }
                         if ($scope.toaHang.bienSo != null && $scope.toaHang.bienSo != '') {
                             $timeout(function () {
                                 $("#idBienSo").select2("val", $scope.toaHang.bienSo);
@@ -62,6 +65,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', 'popupPhieuNhanHa
             if ($("#formAdd").parsley().validate()) {
                 if (typeof $scope.toaHang != "undefined" && typeof $scope.toaHang.toaHangCode != 'undefined') {
                     console.log($scope.listBienNhanDaChon);
+                    console.log($scope.listHangHoa);
                     if (typeof $scope.listBienNhanDaChon != "undefined" && typeof $scope.listBienNhanDaChon.items != "undefined" && $scope.listBienNhanDaChon.items.length > 0
                             && typeof $scope.listHangHoa != "undefined" && typeof $scope.listHangHoa.items != "undefined" && $scope.listHangHoa.items.length > 0) {
                         if (id != null && id != '') {

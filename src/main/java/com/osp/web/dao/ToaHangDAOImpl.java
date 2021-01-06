@@ -117,6 +117,19 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             vtToaHang.setUpdatedBy(user.getUsername());
             vtToaHang.setLastUpdate(new Date());
             if (vtToaHang != null && vtToaHang.getId() != null) {
+                // update trạng thái chi tiết các mặt hàng trong đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.receiptId in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
+                        .setParameter("toaHangId", vtToaHang.getId())
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdateHangHoa.executeUpdate();
+                // update trạng thái đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
+                Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.id in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
+                        .setParameter("toaHangId", vtToaHang.getId())
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdatePhieuNhan.executeUpdate();
+                
                 Query query = entityManager.createQuery("delete from VtToaHangDetail a WHERE a.toaHangId=:toaHangId").setParameter("toaHangId", vtToaHang.getId());
                 query.executeUpdate();
                 entityManager.merge(vtToaHang);
@@ -135,15 +148,19 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 vtToaHangDetail.setGenDate(vtToaHang.getGenDate());
                 vtToaHangDetail.setReceiptId(bo.getReceiptId());
                 vtToaHangDetail.setVtReceiptDetailId(bo.getId());
-                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status =2 WHERE a.id=:id").setParameter("id", bo.getId());
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status =2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:id")
+                        .setParameter("id", bo.getId())
+                        .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
                 entityManager.persist(vtToaHangDetail);
             }
             List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             for (VtReceiptView vtReceiptView : vtReceiptViews) {
                 // update các bản ghi VtReceipt trạng thái =2 với DK: status = 1 và ko có bản ghi VtReceiptDetail nào có trạng thái =1
-                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 2 ,  a.createdBy = :createdBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:receiptId and status = 1 "
-                        + " and id not in (select receiptId from VtReceiptDetail where status = 1 and receiptId = :receiptId )").setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue())).setParameter("createdBy", user.getUsername());
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 2 ,  a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:receiptId and status = 1 "
+                        + " and id not in (select receiptId from VtReceiptDetail where status = 1 and receiptId = :receiptId )")
+                        .setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue()))
+                        .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
             }
             entityManager.flush();
@@ -159,9 +176,24 @@ public class ToaHangDAOImpl implements ToaHangDAO {
     public Boolean delete(Integer id, User user, String ip) {
         try {
             if (id != null) {
-                Query querydetail = entityManager.createQuery("delete from VtToaHangDetail a WHERE a.toaHangId=:toaHangId").setParameter("toaHangId", id);
+                // update trạng thái chi tiết các mặt hàng trong đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.receiptId in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
+                        .setParameter("toaHangId", id)
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdateHangHoa.executeUpdate();
+                // update trạng thái đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
+                Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.id in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
+                        .setParameter("toaHangId", id)
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdatePhieuNhan.executeUpdate();
+                
+                Query querydetail = entityManager.createQuery("delete from VtToaHangDetail a WHERE a.toaHangId=:toaHangId")
+                        .setParameter("toaHangId", id);
                 querydetail.executeUpdate();
-                Query query = entityManager.createQuery("delete from VtToaHang a WHERE a.id=:id").setParameter("id", id);
+                Query query = entityManager.createQuery("delete from VtToaHang a WHERE a.id=:id")
+                        .setParameter("id", id);
                 query.executeUpdate();
                 entityManager.flush();
             } else {
@@ -179,7 +211,9 @@ public class ToaHangDAOImpl implements ToaHangDAO {
     public VTGoodsReceiptForm getVTGoodsReceiptFormById(Integer id) {
         VTGoodsReceiptForm vTGoodsReceiptForm = new VTGoodsReceiptForm();
         List<Object[]> db = new ArrayList<>();
+        List<Object[]> dbMatHang = new ArrayList<>();
         List<VtReceiptView> vtReceiptViews = new ArrayList<>();
+        List<VtReceiptDetail> vtReceiptDetails = new ArrayList<>();
         try {
             Query queryAll = entityManager.createQuery("select r from VtToaHang r where r.id = :id ");
             queryAll.setParameter("id", id);
@@ -214,12 +248,25 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
-                row.setMaPhieuThu(record[16] == null ? null : (String)record[16]);
-                row.setSoHopDong(record[17] == null ? null : (String)record[17]);
+                row.setMaPhieuThu(record[16] == null ? null : (String) record[16]);
+                row.setSoHopDong(record[17] == null ? null : (String) record[17]);
                 vtReceiptViews.add(row);
             });
 
             vTGoodsReceiptForm.setVtReceiptViews(vtReceiptViews);
+
+            String sqlMatHang = " select rd.id, rd.name, thd.receipt_id from vt_toa_hang_detail thd inner join vt_receipt_detail rd on thd.vt_receipt_detail_id = rd.id where thd.toa_hang_id = :toahangid ";
+            Query queryMatHang = entityManager.createNativeQuery(sqlMatHang);
+            queryMatHang.setParameter("toahangid", id);
+            dbMatHang = queryMatHang.getResultList();
+            dbMatHang.stream().forEach((record) -> {
+                VtReceiptDetail row = new VtReceiptDetail();
+                row.setId(record[0] == null ? null : Integer.valueOf(record[0].toString()));
+                row.setName(record[1] == null ? null : (String) record[1]);
+                row.setReceiptId(record[2] == null ? null : Integer.valueOf(record[2].toString()));
+                vtReceiptDetails.add(row);
+            });
+            vTGoodsReceiptForm.setVtReceiptDetail(vtReceiptDetails);
             return vTGoodsReceiptForm;
         } catch (Exception e) {
             e.printStackTrace();
@@ -273,9 +320,9 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 } else if (vtReceiptDetail.getPaymentType() != null && vtReceiptDetail.getPaymentType() == 3) {
                     vtReceiptDetail.setSoTienPhaiThu("Công nợ");
                 } else if (vtReceiptDetail.getPaymentType() != null && vtReceiptDetail.getPaymentType() == 2) {
-                    if(vtReceiptDetail.getCost()!=null){
-                        tongTien = tongTien + ((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra()  : 0));
-                        vtReceiptDetail.setSoTienPhaiThu(String.format("%,.0f", new Double(((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra()  : 0)))));
+                    if (vtReceiptDetail.getCost() != null) {
+                        tongTien = tongTien + ((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra() : 0));
+                        vtReceiptDetail.setSoTienPhaiThu(String.format("%,.0f", new Double(((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra() : 0)))));
                     }
                 }
             }

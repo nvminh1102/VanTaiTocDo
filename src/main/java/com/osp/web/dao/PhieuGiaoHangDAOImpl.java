@@ -102,8 +102,14 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             vtPhieuGiaoHang.setUpdatedBy(user.getUsername());
             vtPhieuGiaoHang.setLastUpdate(new Date());
             if (vtPhieuGiaoHang.getId() != null) {
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.id in (select receiptId from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId )")
+                        .setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId())
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdateHangHoa.executeUpdate();
                 Query query = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId());
                 query.executeUpdate();
+                
                 entityManager.merge(vtPhieuGiaoHang);
             } else {
                 vtPhieuGiaoHang.setGenDate(new Date());
@@ -119,7 +125,9 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 vtPhieuGiaoHangDetail.setLastUpdate(vtPhieuGiaoHang.getLastUpdate());
                 vtPhieuGiaoHangDetail.setGenDate(vtPhieuGiaoHang.getGenDate());
                 vtPhieuGiaoHangDetail.setReceiptId(bo.getId().intValue());
-                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status =3 WHERE a.id=:id").setParameter("id", bo.getId().intValue());
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status =3, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:id")
+                        .setParameter("id", bo.getId().intValue())
+                        .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
                 entityManager.persist(vtPhieuGiaoHangDetail);
             }
@@ -136,6 +144,12 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
     public Boolean delete(Integer id, User user, String ip) {
         try {
             if (id != null) {
+                Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP()"
+                        + " WHERE a.id in (select receiptId from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId )")
+                        .setParameter("phieuGiaoHangId", id)
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdatePhieuNhan.executeUpdate();
+                
                 Query querydetail = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", id);
                 querydetail.executeUpdate();
                 Query query = entityManager.createQuery("delete from VtPhieuGiaoHang a WHERE a.id=:id").setParameter("id", id);
