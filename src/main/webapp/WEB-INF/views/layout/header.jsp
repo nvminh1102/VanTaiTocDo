@@ -93,7 +93,7 @@
         <li class="dropdown" style="margin-right:14px;">
             <a href="#" class=" dropdown-toggle "  data-toggle="dropdown" > <span class="thumb-sm avatar pull-left"> <img src="<%=request.getContextPath()%>/assets/images/user.png"> </span></span> <sec:authentication property="principal.fullName" /> <b class="caret"></b> </a>
             <ul class="dropdown-menu animated fadeInRight "><span class="arrow top"></span>
-                <li><a href="#"><spring:message code="label.profile" ></spring:message></a></li>
+                <li><a href="<%=request.getContextPath()%>/system/user/edit/<sec:authentication property="principal.id" />"><spring:message code="label.profile" ></spring:message></a></li>
                 <li ><a href="<%=request.getContextPath()%>/system/user/change-my-pass"><spring:message code="label.button.changepassword" ></spring:message></a></li>
                 <li class="divider"></li>
                 <li><a href="<%=request.getContextPath()%>/j_spring_security_logout"><spring:message code="label.button.logout" ></spring:message></a></li>

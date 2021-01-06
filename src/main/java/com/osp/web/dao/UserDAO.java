@@ -147,7 +147,7 @@ public class UserDAO extends EntityDAOImpl{
     @Transactional(value = "transactionManager")
     public boolean restorePassword(User userRs, String ipClient) {
         try {
-            Query query = entityManager.createQuery("update User u set u.password=:pass where u.id=:id").setParameter("pass", encoder.encode("12345678")).setParameter("id", userRs.getId());
+            Query query = entityManager.createQuery("update User u set u.password=:pass where u.id=:id").setParameter("pass", encoder.encode(userRs.getUsername()+ "@stlvietnam2021")).setParameter("id", userRs.getId());
             query.executeUpdate();
             logAccessDao.addLog("Khôi phục mật khẩu tài khoản: " + userRs.getUsername(), Constants.Log.user, ipClient);
             return true;

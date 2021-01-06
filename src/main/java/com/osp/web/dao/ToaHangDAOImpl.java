@@ -267,13 +267,14 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             for (VtReceiptDetail vtReceiptDetail : items) {
                 soLuong = soLuong + vtReceiptDetail.getNumbers();
 //                tongTien = tongTien + vtReceiptDetail.getCost();
-                tongTien = tongTien + ((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra()  : 0));
+//                tongTien = tongTien + ((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra()  : 0));
                 if (vtReceiptDetail.getPaymentType() != null && vtReceiptDetail.getPaymentType() == 1) {
                     vtReceiptDetail.setSoTienPhaiThu("Đã thanh toán");
                 } else if (vtReceiptDetail.getPaymentType() != null && vtReceiptDetail.getPaymentType() == 3) {
                     vtReceiptDetail.setSoTienPhaiThu("Công nợ");
                 } else if (vtReceiptDetail.getPaymentType() != null && vtReceiptDetail.getPaymentType() == 2) {
                     if(vtReceiptDetail.getCost()!=null){
+                        tongTien = tongTien + ((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra()  : 0));
                         vtReceiptDetail.setSoTienPhaiThu(String.format("%,.0f", new Double(((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra()  : 0)))));
                     }
                 }

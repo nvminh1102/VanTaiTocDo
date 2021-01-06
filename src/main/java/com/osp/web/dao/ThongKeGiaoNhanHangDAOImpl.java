@@ -84,7 +84,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
             sqlBufferCount.append(" ) as count");
             sqlBufferCount.append(strWhere.toString());
             sqlBuffer.append(strWhere.toString());
-            sqlBuffer.append(" order by GEN_DATE DESC ");
+            sqlBuffer.append(" order by nha_xe, loai_xe, bien_so, GEN_DATE DESC ");
 
             Query query = entityManager.createNativeQuery(sqlBuffer.toString());
 
