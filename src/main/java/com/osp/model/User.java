@@ -18,153 +18,164 @@ import java.util.List;
 @Table(name = "ADM_USERS")
 public class User implements Serializable, UserDetails {
 
-  private static final long serialVersionUID = -8299255898396933698L;
-  //    @Id
+    private static final long serialVersionUID = -8299255898396933698L;
+    //    @Id
 //    @SequenceGenerator(name = "ADM_USERS_SEQ", sequenceName = "ADM_USERS_SEQ", allocationSize = 1)
 //    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ADM_USERS_SEQ")
 //    @Column(name = "ID", unique = true, nullable = false)
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "ID", unique = true, nullable = false)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", unique = true, nullable = false)
+    private Long id;
 
-  //    @NotNull
+    //    @NotNull
 //    @NotEmpty
-  @Column(name = "USER_NAME", nullable = false, unique = true)
-  private String username;
+    @Column(name = "USER_NAME", nullable = false, unique = true)
+    private String username;
 
-  //    @NotNull
+    //    @NotNull
 //    @NotEmpty
-  @Column(name = "PASSWORD", nullable = false, length = 100)
-  private String password;
+    @Column(name = "PASSWORD", nullable = false, length = 100)
+    private String password;
 
-  //    @NotNull
+    //    @NotNull
 //    @NotEmpty
-  @Column(name = "FULL_NAME", nullable = false, length = 100)
-  private String fullName;
+    @Column(name = "FULL_NAME", nullable = false, length = 100)
+    private String fullName;
 
-  @Column(name = "DESCRIPTION", length = 200)
-  private String description;
+    @Column(name = "DESCRIPTION", length = 200)
+    private String description;
 
-  @Column(name = "LAST_ACCESS_TIME")
-  private Date lastAccessTime;
+    @Column(name = "LAST_ACCESS_TIME")
+    private Date lastAccessTime;
 
-  @Column(name = "STATUS")
-  private int status;
+    @Column(name = "STATUS")
+    private int status;
 
-  @Column(name = "GEN_DATE")
-  private Date genDate;
+    @Column(name = "GEN_DATE")
+    private Date genDate;
 
-  @Column(name = "LAST_UPDATED")
-  private Date lastUpdated;
+    @Column(name = "LAST_UPDATED")
+    private Date lastUpdated;
 
-  private transient List<GrantedAuthority> grantedAuths;
+    @Column(name = "area_id")
+    private Integer areaId;
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return grantedAuths;
-  }
+    private transient List<GrantedAuthority> grantedAuths;
 
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return grantedAuths;
+    }
 
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
 
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
 
-  @Override
-  public boolean isEnabled() {
-    return this.status == 1;
-  }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
-  public List<GrantedAuthority> getGrantedAuths() {
-    return grantedAuths;
-  }
+    @Override
+    public boolean isEnabled() {
+        return this.status == 1;
+    }
 
-  public void setGrantedAuths(List<GrantedAuthority> grantedAuths) {
-    this.grantedAuths = grantedAuths;
-  }
+    public List<GrantedAuthority> getGrantedAuths() {
+        return grantedAuths;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public void setGrantedAuths(List<GrantedAuthority> grantedAuths) {
+        this.grantedAuths = grantedAuths;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  @Override
-  public String getUsername() {
-    return username;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setUsername(String username) {
-    this.username = username;
-  }
+    @Override
+    public String getUsername() {
+        return username;
+    }
 
-  @Override
-  public String getPassword() {
-    return password;
-  }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-  public String getFullName() {
-    return fullName;
-  }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
+    public String getFullName() {
+        return fullName;
+    }
 
-  public String getDescription() {
-    return description;
-  }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public Date getLastAccessTime() {
-    return lastAccessTime;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setLastAccessTime(Date lastAccessTime) {
-    this.lastAccessTime = lastAccessTime;
-  }
+    public Date getLastAccessTime() {
+        return lastAccessTime;
+    }
 
-  public int getStatus() {
-    return status;
-  }
+    public void setLastAccessTime(Date lastAccessTime) {
+        this.lastAccessTime = lastAccessTime;
+    }
 
-  public void setStatus(int status) {
-    this.status = status;
-  }
+    public int getStatus() {
+        return status;
+    }
 
-  public Date getGenDate() {
-    return genDate;
-  }
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-  public void setGenDate(Date genDate) {
-    this.genDate = genDate;
-  }
+    public Date getGenDate() {
+        return genDate;
+    }
 
-  public Date getLastUpdated() {
-    return lastUpdated;
-  }
+    public void setGenDate(Date genDate) {
+        this.genDate = genDate;
+    }
 
-  public void setLastUpdated(Date lastUpdated) {
-    this.lastUpdated = lastUpdated;
-  }
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
+    }
 
 }

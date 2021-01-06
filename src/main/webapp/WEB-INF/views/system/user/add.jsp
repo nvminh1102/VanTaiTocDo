@@ -12,7 +12,7 @@
                 <li><a href="javascript:void(0)"><spring:message code="label.add.user"/></a></li>
             </ul>
             <%--<div class="m-b-md">--%>
-                <%--<span style="color:red"><spring:message code="${messageError}"/></span>--%>
+            <%--<span style="color:red"><spring:message code="${messageError}"/></span>--%>
             <%--</div>--%>
 
             <section class="panel panel-default">
@@ -64,29 +64,46 @@
                         <div class="line line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label" style="line-height: 30px"><spring:message code="label.user.fullname"></spring:message><span style="color: red">*</span></label>
+                                <div class="col-sm-10">
+                                    <div class="input-group m-b col-sm-4">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-envelope" style="font-size: 11px" aria-hidden="true"></i>
+                                        </span>
+                                        <input name="fullName" placeholder="<spring:message code="label.login.input.username"></spring:message>" value="${user.fullName}" style="width:100%;" class="form-control" maxlength="50"/>
+                                    </div>
+                                <form:errors style="color: red" path="user.fullName" />
+                            </div>
+                        </div>
+                        <%--<!--                        <div class="line line-dashed line-lg pull-in"></div>--%>
+                        <%--<div class="form-group">--%>
+                        <%--<label class="col-sm-2 control-label" style="line-height: 30px">Số điện thoại <span style="color: red">*</span></label>--%>
+                        <%--<div class="col-sm-10">--%>
+                        <%--<div class="input-group m-b col-sm-4">--%>
+                        <%--<span class="input-group-addon">--%>
+                        <%--<i class="fa fa-envelope" style="font-size: 11px" aria-hidden="true"></i>--%>
+                        <%--</span>--%>
+                        <%--<input name="msisdn" placeholder="Số điện thoại" value="${user.msisdn}" style="width:100%;" class="form-control" maxlength="15"/>--%>
+                        <%--</div>--%>
+                        <%--<form:errors style="color: red" path="user.msisdn" />--%>
+                        <%--</div>--%>
+                        <%--</div>    -->--%>
+                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tỉnh thành</label>
                             <div class="col-sm-10">
                                 <div class="input-group m-b col-sm-4">
                                     <span class="input-group-addon">
                                         <i class="fa fa-envelope" style="font-size: 11px" aria-hidden="true"></i>
                                     </span>
-                                    <input name="fullName" placeholder="<spring:message code="label.login.input.username"></spring:message>" value="${user.fullName}" style="width:100%;" class="form-control" maxlength="50"/>
+                                    <select id="areaId" name ="areaId" style="width: 100%" class="form-control" > 
+                                        <option value="" selected >--Chọn tỉnh thành--</option>
+                                        <c:forEach items="${listArea}" var="item" varStatus="stat">
+                                            <option value="${item.id}">${item.name}</option>
+                                        </c:forEach>
+                                    </select>
                                 </div>
-                                <form:errors style="color: red" path="user.fullName" />
                             </div>
                         </div>
-<%--<!--                        <div class="line line-dashed line-lg pull-in"></div>--%>
-                        <%--<div class="form-group">--%>
-                            <%--<label class="col-sm-2 control-label" style="line-height: 30px">Số điện thoại <span style="color: red">*</span></label>--%>
-                            <%--<div class="col-sm-10">--%>
-                                <%--<div class="input-group m-b col-sm-4">--%>
-                                    <%--<span class="input-group-addon">--%>
-                                        <%--<i class="fa fa-envelope" style="font-size: 11px" aria-hidden="true"></i>--%>
-                                    <%--</span>--%>
-                                    <%--<input name="msisdn" placeholder="Số điện thoại" value="${user.msisdn}" style="width:100%;" class="form-control" maxlength="15"/>--%>
-                                <%--</div>--%>
-                                <%--<form:errors style="color: red" path="user.msisdn" />--%>
-                            <%--</div>--%>
-                        <%--</div>    -->--%>
                         <div class="line line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><spring:message code="label.system.parameter.description"/></label>

@@ -59,7 +59,8 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
             if (check == true) {
 //                $scope.idCallBackManage = id;
                 // check add luon, validateDL sau
-                $http.get(preUrl + "/managerVanTai/bienNhan/loadListHangHoa", {params: {id: objectBienNhan.id}})
+                
+                $http.get(preUrl + "/managerVanTai/bienNhan/loadListHangHoa", {params: {id: [objectBienNhan.id]}})
                         .then(function (response) {
                             console.log("response.data:");
                             console.log(response.data);
@@ -69,11 +70,13 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
                                 }
                                 $scope.selectedItemsHH = [];
                                 for (var i = 0; i < $scope.listHangHoa.length; i++) {
-                                    console.log("listHangHoa:" + $scope.listHangHoa[i]);
                                     $scope.selectedItemsHH.push($scope.listHangHoa[i]);
-                                    console.log("checkedHH:" + i);
                                     $scope.checkedHH[i] = true;
                                 }
+//                                $(".onChangeHHSelectBox_").prop('checked', true);
+//                                $('.onChangeHHSelectBox_').attr('checked',true);
+//                                $('.onChangeHHSelectBox_').prop("checked", "checked");
+//                                $('.onChangeHHSelectBox_').checked = true;
                             }
                         });
 
@@ -132,14 +135,35 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
         $scope.selectAll = function (checkAll) {
             $scope.selectedItems = [];
             if (checkAll) {
+                var listId = [];
                 for (var i = 0; i < $scope.listBienNhan.length; i++) {
                     $scope.selectedItems.push($scope.listBienNhan[i]);
                     $scope.checked[i] = true;
+                    listId.push($scope.listBienNhan[i].id)
                 }
+                $scope.selectedItemsHH = [];
+                $scope.listHangHoa = [];
+                $http.get(preUrl + "/managerVanTai/bienNhan/loadListHangHoa", {params: {id: listId}})
+                        .then(function (response) {
+                            console.log("response.data:");
+                            console.log(response.data);
+                            if (response.data !== "undefined" && response.data !== "[]") {
+                                for (var i = 0; i < response.data.length; i++) {
+                                    $scope.listHangHoa.push(response.data[i]);
+                                }
+                                $scope.selectedItemsHH = [];
+                                for (var i = 0; i < $scope.listHangHoa.length; i++) {
+                                    $scope.selectedItemsHH.push($scope.listHangHoa[i]);
+                                    $scope.checkedHH[i] = true;
+                                }
+                            }
+                        });
             } else {
                 for (var i = 0; i < $scope.listBienNhan.length; i++) {
                     $scope.checked[i] = false;
                 }
+                $scope.selectedItemsHH = [];
+                $scope.listHangHoa = [];
             }
         };
 

@@ -74,7 +74,8 @@
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark">STT</th>
-                                                <th class="text-center v-inherit text-dark">Số phiếu nhận</th>
+                                                <th class="text-center v-inherit text-dark">Toa Hàng</th>
+                                                <th class="text-center v-inherit text-dark">Phiếu nhận</th>
                                                 <th class="text-center v-inherit text-dark">Người gửi</th>
                                                 <th class="text-center v-inherit text-dark">Người nhận</th>
                                                 <th class="text-center v-inherit text-dark">Điện thoại</th>
@@ -94,6 +95,7 @@
                                             </tr>
                                             <tr ng-switch-default ng-repeat="item in listBienNhanDaChon.items track by $index">
                                                 <td class="text-center v-inherit" >{{$index + 1}}</td>
+                                                <td class="text-center v-inherit">{{item.maToaHang}}</td>
                                                 <td class="text-center v-inherit">{{item.receiptCode}}</td>
                                                 <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
                                                 <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>
@@ -193,7 +195,8 @@
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark" style="width: 7%;">STT</th>
-                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Số biên nhận</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Toa hàng</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu nhận</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Điện thoại</th>
@@ -213,6 +216,7 @@
                                             </tr>
                                             <tr ng-switch-default ng-repeat="item in listBienNhan track by $index">
                                                 <td class="text-center v-inherit">{{$index + 1}}</td>
+                                                <td class="text-left v-inherit">{{item.maToaHang}}</td>
                                                 <td class="text-left v-inherit">{{item.receiptCode}}</td>
                                                 <td class="text-center v-inherit">{{item.tenNguoiGui}}</td>
                                                 <td class="text-center v-inherit">{{item.tenNguoiNhan}}</td>

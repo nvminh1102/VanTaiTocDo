@@ -31,13 +31,15 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label" style="line-height: 30px">Họ tên <span style="color: red">*</span></label>
                             <div class="col-sm-10">
+                                <div class="input-group m-b col-sm-4">
                                 <div class="input-group m-b">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-envelope" style="font-size: 11px" aria-hidden="true"></i>
-                                        </span>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-envelope" style="font-size: 11px" aria-hidden="true"></i>
+                                    </span>
                                     <input name="fullName" placeholder="Họ tên" value="${item.fullName}" style="width:100%;" class="form-control"/>
                                 </div>
                                 <form:errors style="color: red" path="user.fullName" />
+                            </div>
                             </div>
                         </div>
                         <div class="line line-dashed line-lg pull-in"></div>
@@ -47,43 +49,62 @@
                         </div>
                         <%--<div class="line line-dashed line-lg pull-in"></div>--%>
                         <%--<div class="form-group">--%>
-                            <%--<label class="col-sm-2 control-label" style="line-height: 30px">Mật khẩu mới</label>--%>
-                            <%--<div class="col-sm-10">--%>
-                                <%--<div class="input-group m-b">--%>
-                                        <%--<span class="input-group-addon">--%>
-                                            <%--<i class="fa fa-lock"></i>--%>
+                        <%--<label class="col-sm-2 control-label" style="line-height: 30px">Mật khẩu mới</label>--%>
+                        <%--<div class="col-sm-10">--%>
+                        <%--<div class="input-group m-b">--%>
+                        <%--<span class="input-group-addon">--%>
+                        <%--<i class="fa fa-lock"></i>--%>
 
-                                        <%--</span>--%>
-                                    <%--<input type="password" name="newPassword" placeholder="Mật khẩu mới" maxlength="50" style="width:100%;" value=""--%>
-                                           <%--class="form-control"/>--%>
-                                <%--</div>--%>
-                                <%--<span style="color:red">${messageNewPassword}</span>--%>
-                            <%--</div>--%>
+                        <%--</span>--%>
+                        <%--<input type="password" name="newPassword" placeholder="Mật khẩu mới" maxlength="50" style="width:100%;" value=""--%>
+                        <%--class="form-control"/>--%>
+                        <%--</div>--%>
+                        <%--<span style="color:red">${messageNewPassword}</span>--%>
+                        <%--</div>--%>
                         <%--</div>--%>
                         <%--<div class="line line-dashed line-lg pull-in"></div>--%>
                         <%--<div class="form-group">--%>
-                            <%--<label class="col-sm-2 control-label">Xác nhận mật khẩu mới</label>--%>
-                            <%--<div class="col-sm-10">--%>
-                                <%--<div class="input-group m-b">--%>
-                                        <%--<span class="input-group-addon">--%>
-                                            <%--<i class="fa fa-lock"></i>--%>
-                                        <%--</span>--%>
-                                    <%--<input type="password" name="confirmPassword" maxlength="50" style="width:100%;" value="" placeholder="Xác nhận mật khẩu mới" class="form-control" />--%>
-                                <%--</div>--%>
-                                <%--<span style="color:red">${messagePassword}</span>--%>
-                            <%--</div>--%>
+                        <%--<label class="col-sm-2 control-label">Xác nhận mật khẩu mới</label>--%>
+                        <%--<div class="col-sm-10">--%>
+                        <%--<div class="input-group m-b">--%>
+                        <%--<span class="input-group-addon">--%>
+                        <%--<i class="fa fa-lock"></i>--%>
+                        <%--</span>--%>
+                        <%--<input type="password" name="confirmPassword" maxlength="50" style="width:100%;" value="" placeholder="Xác nhận mật khẩu mới" class="form-control" />--%>
                         <%--</div>--%>
+                        <%--<span style="color:red">${messagePassword}</span>--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+                        <div class="line line-dashed line-lg pull-in"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Tỉnh thành</label>
+                            <div class="col-sm-10">
+                                <div class="input-group m-b col-sm-4">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-envelope" style="font-size: 11px" aria-hidden="true"></i>
+                                    </span>
+                                    <select id="areaId" name ="areaId" style="width: 100%" class="form-control"> 
+                                        <option value="" selected >--Chọn tỉnh thành--</option>
+                                        <c:forEach items="${listArea}" var="area" varStatus="stat">
+                                            <option value="${area.id}" ${area.id==item.areaId? 'checked':''}>${area.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="line line-dashed line-lg pull-in"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Mô tả </label>
                             <div class="col-sm-10">
+                                <div class="input-group m-b col-sm-4">
                                 <div class="input-group m-b">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-pencil" aria-hidden="true" style="font-size: 10px"></i>
-                                        </span>
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-pencil" aria-hidden="true" style="font-size: 10px"></i>
+                                    </span>
                                     <input name="description" value="${item.description}" maxlength="200" cssStyle="width:100%;" placeholder="Mô tả" class="form-control" />
                                 </div>
 
+                            </div>
                             </div>
                         </div>
 

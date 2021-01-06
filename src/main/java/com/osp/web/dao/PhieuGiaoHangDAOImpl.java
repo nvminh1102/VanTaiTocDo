@@ -274,6 +274,13 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setMobileNguoiNhan(record[11] == null ? null : (String) record[11]);
                 row.setPayer(record[12] == null ? null : (String) record[12]);
                 row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
+                if( row.getPaymentType()==1){
+                    row.setSoTienPhaiThu("Trả trước");
+                }else if(row.getPaymentType()==2){
+                    row.setSoTienPhaiThu("Trả sau");
+                }else if( row.getPaymentType()==3){
+                    row.setSoTienPhaiThu("Công nợ");
+                }
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 
                 
@@ -289,6 +296,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             });
             for (VtReceiptView vtReceiptView : vtReceiptViews) {
                 soLuong = soLuong + vtReceiptView.getSoLuong();
+                /*
                 tongTien = tongTien + ((vtReceiptView.getTongTien() != null ? vtReceiptView.getTongTien().intValue() : 0) - (vtReceiptView.getTienDaTra() != null ? vtReceiptView.getTienDaTra().intValue() : 0));
                 if (vtReceiptView.getPaymentType() == 1) {
                     vtReceiptView.setSoTienPhaiThu("Đã thanh toán");
@@ -299,6 +307,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                         vtReceiptView.setSoTienPhaiThu(String.format("%,.0f", new Double(vtReceiptView.getTongTien())));
                     }
                 }
+*/
             }
             vtPhieuGiaoHang.setSoLuong(soLuong);
             vtPhieuGiaoHang.setTongTien(tongTien);

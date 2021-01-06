@@ -286,8 +286,9 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             queryAll.setParameter("id", id);
 
             VtToaHang vtToaHang = (VtToaHang) queryAll.getSingleResult();
-            String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost , d.so_hop_dong , t.payment_type, "
-                    + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu, t.tien_da_tra  "
+            String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+                    + " c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost , d.so_hop_dong , "
+                    + " t.payment_type, (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu, t.tien_da_tra  "
                     + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id  inner join vt_receipt_detail td on thd.vt_receipt_detail_id = td.id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID  left join vt_partner d on t.nguoi_thanh_toan_id = d.ID   "
                     + " where thd.toa_hang_id = :toahangid order by thd.id, t.id, td.id ";
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
@@ -301,12 +302,21 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 row.setTenNguoiGui(record[2] == null ? null : (String) record[2]);
                 row.setTenNguoiNhan(record[3] == null ? null : (String) record[3]);
                 row.setDiaChiNguoiNhan(record[4] == null ? null : (String) record[4]);
+                
                 row.setSdtNguoiNhan(record[5] == null ? null : (String) record[5]);
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
                 row.setSoHopDong(record[9] == null ? null : (String) record[9]);
+                
                 row.setPaymentType(record[10] == null ? null : Integer.valueOf(record[10].toString()));
+                if(row.getPaymentType()!=null && row.getPaymentType()==1){
+                    row.setSoTienPhaiThu("Trả trước");
+                }else if(row.getPaymentType()!=null && row.getPaymentType()==2){
+                    row.setSoTienPhaiThu("Trả sau");
+                }else if(row.getPaymentType()!=null && row.getPaymentType()==3){
+                    row.setSoTienPhaiThu("Công nợ");
+                }
                 row.setMaPhieuThu(record[11] == null ? null : (String) record[11]);
                 row.setTienDaTra(record[12] == null ? null : Integer.valueOf(record[12].toString()));
                 items.add(row);
@@ -315,6 +325,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 soLuong = soLuong + vtReceiptDetail.getNumbers();
 //                tongTien = tongTien + vtReceiptDetail.getCost();
 //                tongTien = tongTien + ((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra()  : 0));
+/*
                 if (vtReceiptDetail.getPaymentType() != null && vtReceiptDetail.getPaymentType() == 1) {
                     vtReceiptDetail.setSoTienPhaiThu("Đã thanh toán");
                 } else if (vtReceiptDetail.getPaymentType() != null && vtReceiptDetail.getPaymentType() == 3) {
@@ -325,6 +336,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                         vtReceiptDetail.setSoTienPhaiThu(String.format("%,.0f", new Double(((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra() : 0)))));
                     }
                 }
+*/
             }
             vtToaHang.setSoLuong(soLuong);
             vtToaHang.setTongTien(tongTien);

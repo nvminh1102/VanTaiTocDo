@@ -93,7 +93,7 @@
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark">STT</th>
-                                                <th class="text-center v-inherit text-dark">Số phiếu nhận</th>
+                                                <th class="text-center v-inherit text-dark">Phiếu nhận</th>
                                                 <th class="text-center v-inherit text-dark">Người gửi</th>
                                                 <th class="text-center v-inherit text-dark">Người nhận</th>
                                                 <th class="text-center v-inherit text-dark">Điện thoại</th>

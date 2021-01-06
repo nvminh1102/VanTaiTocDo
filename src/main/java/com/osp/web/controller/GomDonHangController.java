@@ -5,10 +5,12 @@ import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
+import com.osp.model.VtArea;
 import com.osp.model.VtInPhieuThu;
 import com.osp.model.VtPhieuGiaoHang;
 import com.osp.model.VtReceiptDetail;
 import com.osp.model.view.VTGoodsReceiptForm;
+import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.GomDonHangDAO;
 import com.osp.web.dao.InPhieuThuDAO;
 import com.osp.web.dao.PhieuGiaoHangDAO;
@@ -55,6 +57,9 @@ public class GomDonHangController {
     
     @Autowired
     InPhieuThuDAO inPhieuThuDAO;
+    
+    @Autowired
+    AreaDAO areaDAO;
     
 //    @Autowired
 //    LogAccessDAO logAccessDao;
@@ -157,6 +162,7 @@ public class GomDonHangController {
     public void exportPhieuThu(HttpServletResponse response, HttpServletRequest request,
                             @RequestParam(value = "idPhieuThu", required = false) Integer idPhieuThu) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        VtArea vtArea = areaDAO.getVtAreaById(user.getAreaId());
         PagingResult page = new PagingResult();
         page.setPageNumber(1);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -165,7 +171,7 @@ public class GomDonHangController {
             List<VtReceiptDetail> vtReceiptDetails = gomDonHangDAO.getPhieuNhanHang(idPhieuThu);
             VtReceiptDetail vtReceiptDetail = (vtReceiptDetails!=null ? vtReceiptDetails.get(0): new VtReceiptDetail());
             page.setItems(vtReceiptDetails);
-            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + (inPhieuThuDAO.getMaxId()+1);
+            String maPhieuThu = (vtArea!=null? vtArea.getCode()+ "-": "") + "PT-" + sdf2.format(new Date()) + "-" + (inPhieuThuDAO.getMaxId()+1);
             
             Map<String, Object> beans = new HashMap<String, Object>();
             beans.put("vtReceiptDetail", vtReceiptDetail);

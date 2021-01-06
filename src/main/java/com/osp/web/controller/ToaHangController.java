@@ -5,6 +5,7 @@ import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
+import com.osp.model.VtArea;
 import com.osp.model.VtGoodsReceipt;
 import com.osp.model.VtPartner;
 import com.osp.model.VtReceipt;
@@ -12,6 +13,7 @@ import com.osp.model.VtReceiptDetail;
 import com.osp.model.VtToaHang;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.model.view.VtGoodsReceiptBO;
+import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.PhieuNhanHangDAO;
 import com.osp.web.dao.ToaHangDAO;
 import java.io.InputStream;
@@ -53,6 +55,10 @@ public class ToaHangController {
 
     @Autowired
     ToaHangDAO toaHangDAO;
+    
+    @Autowired
+    AreaDAO areaDAO;
+    
 //    @Autowired
 //    LogAccessDAO logAccessDao;
 
@@ -100,8 +106,10 @@ public class ToaHangController {
     @GetMapping("/preAdd")
     @Secured(ConstantAuthor.TOA_HANG.add)
     public String preAdd(HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        VtArea vtArea = areaDAO.getVtAreaById(user.getAreaId());
         Integer maxId = toaHangDAO.getMaxId();
-        String toaHangCode = "TOA-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
+        String toaHangCode = (vtArea!=null? vtArea.getCode()+ "-": "") + "TOA-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
         request.setAttribute("toaHangCode", toaHangCode);
         return "toahang.add";
     }

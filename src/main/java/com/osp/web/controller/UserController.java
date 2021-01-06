@@ -8,8 +8,10 @@ import com.osp.model.Authority;
 import com.osp.model.Group;
 import com.osp.model.GroupUser;
 import com.osp.model.User;
+import com.osp.model.VtArea;
 import com.osp.model.view.AuthorityView;
 import com.osp.model.view.GroupView;
+import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.LogAccessDAO;
 import com.osp.web.dao.UserDAO;
 import com.osp.web.dao.GroupAuthorityDAO;
@@ -52,6 +54,8 @@ public class UserController {
     GroupAuthorityDAO groupService;
     @Autowired
     LogAccessDAO logAccessService;
+    @Autowired
+    AreaDAO areaDAO;
 
     @GetMapping("/list")
     @Secured(ConstantAuthor.User.view)
@@ -94,6 +98,8 @@ public class UserController {
     @GetMapping("/add")
     @Secured(ConstantAuthor.User.add)
     public String UserAddView(Model model) {
+        List<VtArea> list = areaDAO.getAllArea();
+        model.addAttribute("listArea", list);
         return "user.add";
     }
 
@@ -165,6 +171,8 @@ public class UserController {
         if (id == null || id == 0) {
             return "404";
         }
+        List<VtArea> list = areaDAO.getAllArea();
+        model.addAttribute("listArea", list);
         User user = useService.get(id).orElse(new User());
         model.addAttribute("item", user);
         return "user.edit";

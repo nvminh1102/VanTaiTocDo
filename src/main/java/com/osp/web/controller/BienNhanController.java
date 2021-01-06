@@ -7,6 +7,7 @@ import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.*;
 import com.osp.model.view.BienNhanForm;
+import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.InPhieuThuDAO;
 import com.osp.web.dao.KhachHangDAO;
@@ -58,12 +59,16 @@ public class BienNhanController {
     PhieuGiaoHangDAO phieuGiaoHangDAO;
     @Autowired
     InPhieuThuDAO inPhieuThuDAO;
+    @Autowired
+    AreaDAO areaDAO;
 
     @GetMapping("/preAdd")
     @Secured(ConstantAuthor.PHIEU_NHAN_HANG.add)
     public String list(Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        VtArea vtArea = areaDAO.getVtAreaById(user.getAreaId());
         Integer maxId = bienNhanDAO.getMaxId();
-        String receiptCode = "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
+        String receiptCode = (vtArea!=null? vtArea.getCode()+ "-": "") + "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
         model.addAttribute("receiptCode", receiptCode);
         return "bienNhan.add";
     }
@@ -491,7 +496,7 @@ public class BienNhanController {
     }
 
     @RequestMapping(value = "/loadListHangHoa", method = RequestMethod.GET)
-    public ResponseEntity<List<VtReceiptDetail>> loadListHangHoa(@RequestParam @Valid final Integer id) {
+    public ResponseEntity<List<VtReceiptDetail>> loadListHangHoa(@RequestParam @Valid final List<Integer> id) {
         List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetail(id);
         return new ResponseEntity<List<VtReceiptDetail>>(vtReceiptDetails, HttpStatus.OK);
     }
@@ -581,6 +586,7 @@ public class BienNhanController {
     public void exportPhieuThu(HttpServletResponse response, HttpServletRequest request,
             @RequestParam(value = "giaoHangId", required = false) Integer giaoHangId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        VtArea vtArea = areaDAO.getVtAreaById(user.getAreaId());
         PagingResult page = new PagingResult();
         page.setPageNumber(1);
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -590,7 +596,7 @@ public class BienNhanController {
             VtReceiptDetail vtReceiptDetail = (vtReceiptDetails != null ? vtReceiptDetails.get(0) : new VtReceiptDetail());
             page.setItems(vtReceiptDetails);
             Integer maxId = inPhieuThuDAO.getMaxId();
-            String maPhieuThu = "PT-" + sdf2.format(new Date()) + "-" + ((maxId!=null ? maxId: 0) +1);
+            String maPhieuThu = (vtArea!=null? vtArea.getCode()+ "-": "") + "PT-" + sdf2.format(new Date()) + "-" + ((maxId!=null ? maxId: 0) +1);
             Map<String, Object> beans = new HashMap<String, Object>();
             beans.put("vtReceiptDetail", vtReceiptDetail);
             beans.put("maPhieuThu", maPhieuThu);

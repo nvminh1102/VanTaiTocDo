@@ -59,17 +59,20 @@
         <a class="btn btn-link visible-xs" data-toggle="class:nav-off-screen,open" data-target="#nav,html">
             <i class="fa fa-bars"></i>
         </a>
-        <a href="<%=request.getContextPath()%>/" class="navbar-brand" data-toggle="fullscreen"><img src="<%=request.getContextPath()%>/assets/images/VanTai-VN.png" class="m-r-sm" style="max-height: 45px;"></a>
-        <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-customer">
+        <a href="<%=request.getContextPath()%>/" class="navbar-brand" data-toggle="fullscreen">
+            <img src="<%=request.getContextPath()%>/assets/images/VanTai-VN.png" style="max-height: 45px;">
+            QUẢN LÝ VẬN TẢI
+        </a>
+        <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user">
             <i class="fa fa-cog"></i>
         </a>
     </div>
 
-    <ul class="nav navbar-nav navbar-right m-n hidden-xs nav-customer">
+    <ul class="nav navbar-nav navbar-right hidden-xs nav-user">
         <li class="hidden-xs">
-            <%--<a href="#" class="dropdown-toggle dk" data-toggle="dropdown">--%>
-                <%--<spring:message code="label.button.help"></spring:message>--%>
-                <%--</a>--%>
+            <a href="#" class="dropdown-toggle dk" data-toggle="dropdown" style="background-color: unset;color: white;">
+                <spring:message code="label.button.help"></spring:message>
+                </a>
             <section class="dropdown-menu aside-xl">
                 <section class="panel bg-white">
                     <header class="panel-heading b-light bg-light">
@@ -90,7 +93,7 @@
             </section>
         </li>
 
-        <li class="dropdown" style="margin-right:14px;">
+        <li class="dropdown" id="dropdownUser"  style="margin-right:14px;">
             <a href="#" class=" dropdown-toggle "  data-toggle="dropdown" > <span class="thumb-sm avatar pull-left"> <img src="<%=request.getContextPath()%>/assets/images/user.png"> </span></span> <sec:authentication property="principal.fullName" /> <b class="caret"></b> </a>
             <ul class="dropdown-menu animated fadeInRight "><span class="arrow top"></span>
                 <li><a href="<%=request.getContextPath()%>/system/user/edit/<sec:authentication property="principal.id" />"><spring:message code="label.profile" ></spring:message></a></li>

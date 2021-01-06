@@ -192,11 +192,15 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 strWhere.append(" and t.status = :status");
             }
 
-            StringBuffer sqlBuffer = new StringBuffer("SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,t.payment_type,t.tien_da_tra,t.status,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan, t.payer,  "
+            StringBuffer sqlBuffer = new StringBuffer("SELECT t.id, t.receipt_code, t.date_receipt, t.name_Stock, t.nha_xe, "
+                    + " t.bien_so, t.employee, t.payment_type, t.tien_da_tra, t.status, "
+                    + " b.FULL_NAME as ten_nguoi_gui, b.address as dia_chi_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan, c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, "
+                    + " t.payer,  "
                     + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien, "
                     + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu,  "
-                    + " (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong , d.so_hop_dong "
+                    + " (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong , "
+                    + " d.so_hop_dong, "
+                    + " (select max(th.toa_hang_code) from vt_toa_hang th inner join vt_toa_hang_detail thd on th.id = thd.toa_hang_id where  thd.receipt_id = t.id) as ma_toa_hang "
                     + "from vt_receipt t left join vt_partner b  on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID  left join vt_partner d on t.receive_partner_id = d.ID  "
                     + " where 1=1 ");
             sqlBuffer.append(strWhere.toString());
@@ -235,21 +239,25 @@ public class BienNhanDAOImpl implements BienNhanDAO {
                 row.setDateReceipt(record[2] == null ? null : (Date) record[2]);
                 row.setNameStock(record[3] == null ? null : (String) record[3]);
                 row.setNhaXe(record[4] == null ? null : (String) record[4]);
+                
                 row.setBienSo(record[5] == null ? null : (String) record[5]);
                 row.setEmployee(record[6] == null ? null : (String) record[6]);
                 row.setPaymentType(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setTienDaTra(record[8] == null ? null : Long.valueOf(record[8].toString()));
                 row.setStatus(record[9] == null ? null : Long.valueOf(record[9].toString()));
+                
                 row.setTenNguoiGui(record[10] == null ? null : (String) record[10]);
                 row.setDiaChiNguoiGui(record[11] == null ? null : (String) record[11]);
                 row.setTenNguoiNhan(record[12] == null ? null : (String) record[12]);
                 row.setDiaChiNguoiNhan(record[13] == null ? null : (String) record[13]);
                 row.setMobileNguoiNhan(record[14] == null ? null : (String) record[14]);
+                
                 row.setPayer(record[15] == null ? null : (String) record[15]);
                 row.setTongTien(record[16] == null ? null : Long.valueOf(record[16].toString()));
                 row.setMaPhieuThu(record[17] == null ? null : (String) record[17]);
                 row.setSoLuong(record[18] == null ? null : Integer.valueOf(record[18].toString()));
                 row.setSoHopDong(record[19] == null ? null : (String) record[19]);
+                row.setMaToaHang(record[20] == null ? null : (String) record[20]);
                 list.add(row);
             });
 
@@ -300,16 +308,16 @@ public class BienNhanDAOImpl implements BienNhanDAO {
     }
 
     @Override
-    public List<VtReceiptDetail> getListVtReceiptDetail(Integer id) {
+    public List<VtReceiptDetail> getListVtReceiptDetail(List<Integer> id) {
         List<VtReceiptDetail> vtReceiptDetails = new ArrayList<>();
         try {
             // load status = 1: các phiếu nhận chưa lên toa
-            Query queryAll = entityManager.createQuery("select r from VtReceiptDetail r where r.receiptId = :receiptId and r.status = 1 ");
+            Query queryAll = entityManager.createQuery("select r from VtReceiptDetail r where r.receiptId in (:receiptId) and r.status = 1 ");
             queryAll.setParameter("receiptId", id);
             vtReceiptDetails = queryAll.getResultList();
             if (vtReceiptDetails != null && vtReceiptDetails.size() > 0) {
                 for (VtReceiptDetail vtReceiptDetail : vtReceiptDetails) {
-                    VtReceipt info = entityManager.find(VtReceipt.class, id);
+                    VtReceipt info = entityManager.find(VtReceipt.class, vtReceiptDetail.getReceiptId());
                     vtReceiptDetail.setReceiptCode(info.getReceiptCode());
                 }
 

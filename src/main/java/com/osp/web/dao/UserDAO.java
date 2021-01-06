@@ -94,9 +94,11 @@ public class UserDAO extends EntityDAOImpl{
             if (itemDB != null) {
                 itemDB.setFullName(item.getFullName().trim());
                 itemDB.setDescription(item.getDescription());
+                itemDB.setAreaId(item.getAreaId());
+                itemDB.setStatus(item.getStatus());
                 //insert log
-                logAccessDao.addLog("Sửa người dùng:" + item.getUsername(), Constants.Log.system, ipClient);
-                entityManager.merge(item);
+                logAccessDao.addLog("Sửa người dùng:" + itemDB.getUsername(), Constants.Log.system, ipClient);
+                entityManager.merge(itemDB);
                 entityManager.flush();
                 return Optional.ofNullable(true);
             } else {

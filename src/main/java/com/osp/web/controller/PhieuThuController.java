@@ -5,10 +5,12 @@ import com.osp.common.MessReponse;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.User;
+import com.osp.model.VtArea;
 import com.osp.model.VtGoodsReceipt;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.model.view.VtGoodsReceiptBO;
 import com.osp.model.view.VtPhieuThuView;
+import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.PhieuNhanHangDAO;
 import com.osp.web.dao.PhieuThuDAO;
 import java.text.SimpleDateFormat;
@@ -39,6 +41,10 @@ public class PhieuThuController {
 
     @Autowired
     PhieuThuDAO phieuThuDAO;
+    
+    @Autowired
+    AreaDAO areaDAO;
+    
 //    @Autowired
 //    LogAccessDAO logAccessDao;
 
@@ -80,8 +86,10 @@ public class PhieuThuController {
     @GetMapping("/preAdd")
     @Secured(ConstantAuthor.PHIEU_THU.add)
     public String preAdd(HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        VtArea vtArea = areaDAO.getVtAreaById(user.getAreaId());
         Integer maxId = phieuThuDAO.getMaxId();
-        String receiptCode = "PT-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
+        String receiptCode = (vtArea!=null? vtArea.getCode()+ "-": "") +  "PT-" + formatteryyyy.format(new Date()) + "-" + ((maxId!=null? maxId : 0)+ 1);
         request.setAttribute("receiptCode", receiptCode);
         return "phieuthu.add";
     }

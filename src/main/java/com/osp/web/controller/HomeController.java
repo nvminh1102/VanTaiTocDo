@@ -2,7 +2,9 @@ package com.osp.web.controller;
 
 import com.osp.common.PagingResult;
 import com.osp.model.User;
+import com.osp.model.VtArea;
 import com.osp.model.VtPartner;
+import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.KhachHangDAO;
 import com.osp.web.dao.LogAccessDAO;
 import com.osp.web.dao.UserDAO;
@@ -32,6 +34,8 @@ public class HomeController {
     UserDAO userDAO;
     @Autowired
     KhachHangDAO khachHangDAO;
+    @Autowired
+    AreaDAO areaDAO;
 
     @GetMapping("/login")
     public String login(Model model, @RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) String logout) {
@@ -86,16 +90,18 @@ public class HomeController {
         }
         return new ResponseEntity<Boolean>(true, HttpStatus.OK);
     }
-    
-    
-    
-    
+
     @GetMapping("/getListPartner")
     public ResponseEntity<List<VtPartner>> getOrgNotaryInfo(@RequestParam(value = "typePartner", required = false) Integer typePartner, HttpServletRequest request) {
         List<VtPartner> list = khachHangDAO.getListByType(typePartner);
         return new ResponseEntity<List<VtPartner>>(list, HttpStatus.OK);
     }
-    
+
+    @GetMapping("/getListArea")
+    public ResponseEntity<List<VtArea>> getListArea(HttpServletRequest request) {
+        List<VtArea> list = areaDAO.getAllArea();
+        return new ResponseEntity<List<VtArea>>(list, HttpStatus.OK);
+    }
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {

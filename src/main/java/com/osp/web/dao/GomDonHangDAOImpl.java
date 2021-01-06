@@ -278,8 +278,10 @@ public class GomDonHangDAOImpl implements GomDonHangDAO {
         List<Object[]> db = new ArrayList<>();
         List<VtReceiptDetail> items = new ArrayList<>();
         try {
-            String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui,  c.FULL_NAME as ten_nguoi_nhan, "
-                    + " c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost , td.sizes, td.weight, td.note , t.payer, b.address as diaChiGui, b.MOBILE as sdtGui, DATE_FORMAT(t.gen_date, '%d-%m-%Y') as strGenDate, t.name_Stock "
+            String sqlBuffer = " select t.id, t.receipt_code, b.FULL_NAME as ten_nguoi_gui,  c.FULL_NAME as ten_nguoi_nhan,  c.address as dia_chi_nguoi_nhan, "
+                    + " c.MOBILE as mobile_nguoi_nhan, td.name, td.numbers, td.cost , td.sizes, "
+                    + " td.weight, td.note , t.payer, b.address as diaChiGui, b.MOBILE as sdtGui, "
+                    + " DATE_FORMAT(t.gen_date, '%d-%m-%Y') as strGenDate, t.name_Stock, case when t.payment_type = 1 then 'Trả trước' when t.payment_type = 2 then 'Trả sau' when t.payment_type = 3 then 'Công nợ' else '' end as hinhthucthanhtoan "
                     + " from vt_receipt t inner join vt_receipt_detail td on t.id = td.receipt_id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID  "
                     + " where t.id = :id order by t.id, td.id ";
             Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
@@ -293,18 +295,22 @@ public class GomDonHangDAOImpl implements GomDonHangDAO {
                 row.setTenNguoiGui(record[2] == null ? null : (String) record[2]);
                 row.setTenNguoiNhan(record[3] == null ? null : (String) record[3]);
                 row.setDiaChiNguoiNhan(record[4] == null ? null : (String) record[4]);
+                
                 row.setSdtNguoiNhan(record[5] == null ? null : (String) record[5]);
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
                 row.setSizes(record[9] == null ? null : (String) record[9]);
+                
                 row.setWeight(record[10] == null ? null : (String) record[10]);
                 row.setNote(record[11] == null ? null : (String) record[11]);
                 row.setNguoiThanhToan(record[12] == null ? null : (String) record[12]);
                 row.setDiaChiNguoiGui(record[13] == null ? null : (String) record[13]);
                 row.setSdtNguoiGui(record[14] == null ? null : (String) record[14]);
+                
                 row.setStrGenDate(record[15] == null ? null : (String) record[15]);
                 row.setStockName(record[16] == null ? null : (String) record[16]);
+                row.setSoTienPhaiThu(record[17] == null ? null : (String) record[17]);
                 items.add(row);
             });
             return items;

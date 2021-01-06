@@ -103,7 +103,7 @@
                 </div>
 
 
-                <button id="btnLogin" class="btn bg-primary" style="font-size: 24px;width:350px;"><spring:message code="label.login.title"/></button>
+                <button id="btnLogin" class="btn bg-primary" style="font-size: 24px;width:100%;"><spring:message code="label.login.title"/></button>
                 <div class="line line-dashed"></div>
             </form>
         </section>

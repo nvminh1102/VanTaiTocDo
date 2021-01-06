@@ -75,14 +75,14 @@
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark">STT</th>
-                                                <th class="text-center v-inherit text-dark">Số phiếu nhận</th>
+                                                <th class="text-center v-inherit text-dark">Phiếu nhận</th>
                                                 <th class="text-center v-inherit text-dark">Người gửi</th>
                                                 <th class="text-center v-inherit text-dark">Người nhận</th>
                                                 <th class="text-center v-inherit text-dark">Điện thoại</th>
                                                 <th class="text-center v-inherit text-dark">Địa chỉ</th>
                                                 <th class="text-center v-inherit text-dark">Số thùng</th>
                                                 <th class="text-center v-inherit text-dark">Số HD</th>
-                                                <th class="text-center v-inherit text-dark">Phiếu thu số</th>
+                                                <th class="text-center v-inherit text-dark">Phiếu thu</th>
                                                 <th class="text-center v-inherit text-dark">Ghi chú</th>
                                                 <th class="text-center v-inherit text-dark">Tool</th>
                                             </tr>
@@ -197,14 +197,14 @@
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark" style="width: 7%;">STT</th>
-                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Số biên nhận</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu nhận</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Điện thoại</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 20%;">Địa chỉ</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số thùng</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số HD</th>
-                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu thu số</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu thu</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
                                                 <th class="text-center v-inherit text-dark" style="width: 5%;"><input id="select_allBN" type="checkbox" ng-model="checkAll" ng-change="selectAll(checkAll)"/></th>
                                             </tr>

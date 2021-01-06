@@ -73,14 +73,14 @@
                         <thead class="bg-gray">
                             <tr>
                                 <th class="text-center v-inherit text-dark" style="width: 7%;">STT</th>
-                                <th class="text-center v-inherit text-dark" style="width: 10%;">Số biên nhận</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu nhận</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Người gửi</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Người nhận</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Điện thoại</th>
                                 <th class="text-center v-inherit text-dark" style="width: 20%;">Địa chỉ</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số thùng</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số HD</th>
-                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu thu số</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu thu</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
                                 <th class="text-center v-inherit text-dark" style="width: 5%;"><input id="select_allBN" type="checkbox" ng-model="checkAll" ng-change="selectAll(checkAll)"/></th>
                             </tr>
@@ -118,7 +118,7 @@
                         <thead class="bg-gray">
                             <tr>
                                 <th class="text-center v-inherit text-dark" style="width: 7%;">STT</th>
-                                <th class="text-center v-inherit text-dark" style="width: 10%;">Mã phiếu nhận hàng</th>
+                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu nhận</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Tên hàng</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Đơn vị tính</th>
                                 <th class="text-center v-inherit text-dark" style="width: 10%;">Số lượng</th>
@@ -145,7 +145,7 @@
                                 <td class="text-center v-inherit">{{item2.sizes}}</td>
                                 <td class="text-center v-inherit">{{item2.cost}}</td>
                                 <td class="text-center v-inherit">{{item2.note}}</td>
-                                <td class="text-center v-inherit"><input type="checkbox" class="onChangeHHSelectBox_" ng-model="checkedHH[$index]" ng-init="checkedHH[$index] = false" ng-change="chonHH(item2, checkedHH[$index])"/></td>
+                                <td class="text-center v-inherit"><input type="checkbox" class="onChangeHHSelectBox_" ng-model="checkedHH[$index]" ng-change="chonHH(item2, checkedHH[$index])"/></td>
                             </tr>
                         </tbody>
                     </table>
