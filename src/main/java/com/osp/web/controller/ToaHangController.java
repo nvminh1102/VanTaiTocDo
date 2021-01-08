@@ -13,11 +13,14 @@ import com.osp.model.VtReceiptDetail;
 import com.osp.model.VtToaHang;
 import com.osp.model.view.VTGoodsReceiptForm;
 import com.osp.model.view.VtGoodsReceiptBO;
+import com.osp.model.view.VtReceiptView;
 import com.osp.web.dao.AreaDAO;
+import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.PhieuNhanHangDAO;
 import com.osp.web.dao.ToaHangDAO;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +61,9 @@ public class ToaHangController {
     
     @Autowired
     AreaDAO areaDAO;
+    
+    @Autowired
+    BienNhanDAO bienNhanDAO;
     
 //    @Autowired
 //    LogAccessDAO logAccessDao;
@@ -125,6 +131,17 @@ public class ToaHangController {
     @Secured(ConstantAuthor.TOA_HANG.edit)
     public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
         VTGoodsReceiptForm vTGoodsReceiptForm = toaHangDAO.getVTGoodsReceiptFormById(id);
+        List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
+        List<Integer> listId = new ArrayList<>();
+        if(vtReceiptViews!=null && vtReceiptViews.size()>0){
+            for(VtReceiptView vtReceiptView :vtReceiptViews){
+                listId.add(vtReceiptView.getId().intValue());
+            }
+        }
+        if(listId!=null && listId.size()>0){
+            List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetail(listId, VtReceipt.STATUS_LEN_TOA);
+            vTGoodsReceiptForm.setVtReceiptDetail(vtReceiptDetails);
+        }
         return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
     }
     

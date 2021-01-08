@@ -129,7 +129,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                         .setParameter("toaHangId", vtToaHang.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdatePhieuNhan.executeUpdate();
-                
+
                 Query query = entityManager.createQuery("delete from VtToaHangDetail a WHERE a.toaHangId=:toaHangId").setParameter("toaHangId", vtToaHang.getId());
                 query.executeUpdate();
                 entityManager.merge(vtToaHang);
@@ -188,7 +188,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                         .setParameter("toaHangId", id)
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdatePhieuNhan.executeUpdate();
-                
+
                 Query querydetail = entityManager.createQuery("delete from VtToaHangDetail a WHERE a.toaHangId=:toaHangId")
                         .setParameter("toaHangId", id);
                 querydetail.executeUpdate();
@@ -220,13 +220,26 @@ public class ToaHangDAOImpl implements ToaHangDAO {
 
             VtToaHang vtToaHang = (VtToaHang) queryAll.getSingleResult();
             vTGoodsReceiptForm.setVtToaHang(vtToaHang);
-            String sqlBuffer = "SELECT distinct t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien, "
-                    + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu , d.so_hop_dong "
-                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  left join vt_partner d on t.receive_partner_id = d.ID  "
-                    + " where thd.toa_hang_id = :toahangid ";
+//            String sqlBuffer = "SELECT distinct t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
+//                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien, "
+//                    + " (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu , d.so_hop_dong "
+//                    + " from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID  left join vt_partner c on t.receive_partner_id = c.ID  left join vt_partner d on t.receive_partner_id = d.ID  "
+//                    + " where thd.toa_hang_id = :toahangid ";
+            StringBuffer sqlBuffer = new StringBuffer();
 
-            Query queryDetail = entityManager.createNativeQuery(sqlBuffer);
+            sqlBuffer.append("SELECT distinct t.id, t.receipt_code, t.date_receipt, t.name_Stock, t.nha_xe, ");
+            sqlBuffer.append(" t.bien_so, t.employee, t.payment_type, t.tien_da_tra, t.status, ");
+            sqlBuffer.append(" b.FULL_NAME as ten_nguoi_gui, b.address as dia_chi_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan, c.address as dia_chi_nguoi_nhan, c.MOBILE as mobile_nguoi_nhan,");
+            sqlBuffer.append(" t.payer, ");
+            sqlBuffer.append(" (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien, ");
+            sqlBuffer.append(" (select ma_phieu_thu from vt_in_phieu_thu where id  = (select max(id) from vt_in_phieu_thu ipt where  t.id = ipt.receipt_id) ) AS ma_phieu_thu, ");
+            sqlBuffer.append(" (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong ,");
+            sqlBuffer.append(" d.so_hop_dong, ");
+            sqlBuffer.append(" (select max(th.toa_hang_code) from vt_toa_hang th inner join vt_toa_hang_detail thd on th.id = thd.toa_hang_id where  thd.receipt_id = t.id) as ma_toa_hang ");
+            sqlBuffer.append(" from vt_toa_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id  left join vt_partner b  on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID  left join vt_partner d on t.receive_partner_id = d.ID  ");
+            sqlBuffer.append(" where 1=1 and thd.toa_hang_id = :toahangid  ");
+
+            Query queryDetail = entityManager.createNativeQuery(sqlBuffer.toString());
             queryDetail.setParameter("toahangid", id);
             db = queryDetail.getResultList();
 
@@ -237,24 +250,31 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 row.setDateReceipt(record[2] == null ? null : (Date) record[2]);
                 row.setNameStock(record[3] == null ? null : (String) record[3]);
                 row.setNhaXe(record[4] == null ? null : (String) record[4]);
+
                 row.setBienSo(record[5] == null ? null : (String) record[5]);
                 row.setEmployee(record[6] == null ? null : (String) record[6]);
-                row.setTenNguoiGui(record[7] == null ? null : (String) record[7]);
-                row.setDiaChiNguoiGui(record[8] == null ? null : (String) record[8]);
-                row.setTenNguoiNhan(record[9] == null ? null : (String) record[9]);
-                row.setDiaChiNguoiNhan(record[10] == null ? null : (String) record[10]);
-                row.setMobileNguoiNhan(record[11] == null ? null : (String) record[11]);
-                row.setPayer(record[12] == null ? null : (String) record[12]);
-                row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
-                row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
-                row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
-                row.setMaPhieuThu(record[16] == null ? null : (String) record[16]);
-                row.setSoHopDong(record[17] == null ? null : (String) record[17]);
+                row.setPaymentType(record[7] == null ? null : Integer.valueOf(record[7].toString()));
+                row.setTienDaTra(record[8] == null ? null : Long.valueOf(record[8].toString()));
+                row.setStatus(record[9] == null ? null : Long.valueOf(record[9].toString()));
+
+                row.setTenNguoiGui(record[10] == null ? null : (String) record[10]);
+                row.setDiaChiNguoiGui(record[11] == null ? null : (String) record[11]);
+                row.setTenNguoiNhan(record[12] == null ? null : (String) record[12]);
+                row.setDiaChiNguoiNhan(record[13] == null ? null : (String) record[13]);
+                row.setMobileNguoiNhan(record[14] == null ? null : (String) record[14]);
+
+                row.setPayer(record[15] == null ? null : (String) record[15]);
+                row.setTongTien(record[16] == null ? null : Long.valueOf(record[16].toString()));
+                row.setMaPhieuThu(record[17] == null ? null : (String) record[17]);
+                row.setSoLuong(record[18] == null ? null : Integer.valueOf(record[18].toString()));
+                row.setSoHopDong(record[19] == null ? null : (String) record[19]);
+                row.setMaToaHang(record[20] == null ? null : (String) record[20]);
                 vtReceiptViews.add(row);
             });
 
             vTGoodsReceiptForm.setVtReceiptViews(vtReceiptViews);
-
+            // danh sách mặt hàng chuyển sang lấy bên controller
+/*
             String sqlMatHang = " select rd.id, rd.name, thd.receipt_id from vt_toa_hang_detail thd inner join vt_receipt_detail rd on thd.vt_receipt_detail_id = rd.id where thd.toa_hang_id = :toahangid ";
             Query queryMatHang = entityManager.createNativeQuery(sqlMatHang);
             queryMatHang.setParameter("toahangid", id);
@@ -267,6 +287,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 vtReceiptDetails.add(row);
             });
             vTGoodsReceiptForm.setVtReceiptDetail(vtReceiptDetails);
+            */
             return vTGoodsReceiptForm;
         } catch (Exception e) {
             e.printStackTrace();
@@ -302,19 +323,19 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                 row.setTenNguoiGui(record[2] == null ? null : (String) record[2]);
                 row.setTenNguoiNhan(record[3] == null ? null : (String) record[3]);
                 row.setDiaChiNguoiNhan(record[4] == null ? null : (String) record[4]);
-                
+
                 row.setSdtNguoiNhan(record[5] == null ? null : (String) record[5]);
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
                 row.setSoHopDong(record[9] == null ? null : (String) record[9]);
-                
+
                 row.setPaymentType(record[10] == null ? null : Integer.valueOf(record[10].toString()));
-                if(row.getPaymentType()!=null && row.getPaymentType()==1){
+                if (row.getPaymentType() != null && row.getPaymentType() == 1) {
                     row.setSoTienPhaiThu("Trả trước");
-                }else if(row.getPaymentType()!=null && row.getPaymentType()==2){
+                } else if (row.getPaymentType() != null && row.getPaymentType() == 2) {
                     row.setSoTienPhaiThu("Trả sau");
-                }else if(row.getPaymentType()!=null && row.getPaymentType()==3){
+                } else if (row.getPaymentType() != null && row.getPaymentType() == 3) {
                     row.setSoTienPhaiThu("Công nợ");
                 }
                 row.setMaPhieuThu(record[11] == null ? null : (String) record[11]);
@@ -336,7 +357,7 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                         vtReceiptDetail.setSoTienPhaiThu(String.format("%,.0f", new Double(((vtReceiptDetail.getCost() != null ? vtReceiptDetail.getCost() : 0) - (vtReceiptDetail.getTienDaTra() != null ? vtReceiptDetail.getTienDaTra() : 0)))));
                     }
                 }
-*/
+                 */
             }
             vtToaHang.setSoLuong(soLuong);
             vtToaHang.setTongTien(tongTien);

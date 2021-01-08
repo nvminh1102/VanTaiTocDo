@@ -29,6 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class VtReceipt implements Serializable {
 
+    @Transient
+    public static final Integer STATUS_NHAN_HANG = 1;
+    @Transient
+    public static final Integer STATUS_LEN_TOA = 2;
+    @Transient
+    public static final Integer STATUS_GIAO_HANG = 3;
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,6 +94,8 @@ public class VtReceipt implements Serializable {
     private Date toDeceipt;
     @Transient
     private Integer tongTien;
+    @Transient
+    private Integer toaHangId;
     
     public VtReceipt() {
     }
@@ -318,6 +327,14 @@ public class VtReceipt implements Serializable {
 
     public void setNguoiThanhToanId(Integer nguoiThanhToanId) {
         this.nguoiThanhToanId = nguoiThanhToanId;
+    }
+
+    public Integer getToaHangId() {
+        return toaHangId;
+    }
+
+    public void setToaHangId(Integer toaHangId) {
+        this.toaHangId = toaHangId;
     }
     
     

@@ -59,7 +59,7 @@
 <section id="content" class="m-t-lg wrapper-md animated fadeInUp" >
     <div class="container aside-xxl">
         <img src="<%=request.getContextPath()%>/assets/images/VanTai-VN.png" class="m-r-sm" style="display: block;margin-left: auto;margin-right: auto;width: 39%;">
-        <a class="navbar-brand block" style="color:white">VẬN TẢI TỐC ĐỘ VIỆT NAM</a>
+        <a class="navbar-brand block" style="color:white">HỆ THỐNG QUẢN LÝ VẬN TẢI</a>
         <%--<a class="navbar-brand block" href="index.html"><img src="#" class="img-rounded"></a>--%>
         <section class="panel panel-default bg-white m-t-lg">
             <header class="panel-heading text-center" style="font-size: 24px;">

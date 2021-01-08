@@ -61,7 +61,7 @@
         </a>
         <a href="<%=request.getContextPath()%>/" class="navbar-brand" data-toggle="fullscreen">
             <img src="<%=request.getContextPath()%>/assets/images/VanTai-VN.png" style="max-height: 45px;">
-            QUẢN LÝ VẬN TẢI
+            STLVIETNAM
         </a>
         <a class="btn btn-link visible-xs" data-toggle="dropdown" data-target=".nav-user">
             <i class="fa fa-cog"></i>

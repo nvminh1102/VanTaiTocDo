@@ -21,7 +21,7 @@ public interface BienNhanDAO {
 
     boolean edit(VtReceipt item);
     
-    List<VtReceiptDetail> getListVtReceiptDetail(List<Integer> receiptId);
+    List<VtReceiptDetail> getListVtReceiptDetail(List<Integer> receiptId, Integer status);
 
     Integer getMaxId();
 }

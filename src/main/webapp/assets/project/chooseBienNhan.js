@@ -3,9 +3,6 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
         $scope.listBienNhan = [];
         $scope.listHangHoa = [];
 
-        $scope.idSelected = "";
-        $scope.checkLoadData = false;
-        $scope.numberPerPage = "5";
         $scope.checked = [];
         $scope.checkedHH = [];
         $scope.checkAll = false;
@@ -73,10 +70,6 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
                                     $scope.selectedItemsHH.push($scope.listHangHoa[i]);
                                     $scope.checkedHH[i] = true;
                                 }
-//                                $(".onChangeHHSelectBox_").prop('checked', true);
-//                                $('.onChangeHHSelectBox_').attr('checked',true);
-//                                $('.onChangeHHSelectBox_').prop("checked", "checked");
-//                                $('.onChangeHHSelectBox_').checked = true;
                             }
                         });
 
@@ -192,15 +185,6 @@ app.controller('popupPhieuNhan', ['$scope', '$http', '$timeout', '$q', 'popupPhi
             }, 1000);
         };
 
-        $scope.removeIndexList = function (index, list) {
-            var list_ = [];
-            for (var i = 0; i < list.length; i++) {
-                if (i != index) {
-                    list_.push(list[i]);
-                }
-            }
-            return list_;
-        };
 
 
         $(document).ready(function () {

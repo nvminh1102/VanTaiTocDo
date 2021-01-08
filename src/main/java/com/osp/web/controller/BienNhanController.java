@@ -496,8 +496,8 @@ public class BienNhanController {
     }
 
     @RequestMapping(value = "/loadListHangHoa", method = RequestMethod.GET)
-    public ResponseEntity<List<VtReceiptDetail>> loadListHangHoa(@RequestParam @Valid final List<Integer> id) {
-        List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetail(id);
+    public ResponseEntity<List<VtReceiptDetail>> loadListHangHoa(@RequestParam @Valid final List<Integer> id, @RequestParam @Valid final Integer status) {
+        List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetail(id, status);
         return new ResponseEntity<List<VtReceiptDetail>>(vtReceiptDetails, HttpStatus.OK);
     }
 

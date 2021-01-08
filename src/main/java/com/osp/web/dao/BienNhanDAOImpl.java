@@ -308,12 +308,11 @@ public class BienNhanDAOImpl implements BienNhanDAO {
     }
 
     @Override
-    public List<VtReceiptDetail> getListVtReceiptDetail(List<Integer> id) {
+    public List<VtReceiptDetail> getListVtReceiptDetail(List<Integer> id, Integer status) {
         List<VtReceiptDetail> vtReceiptDetails = new ArrayList<>();
         try {
             // load status = 1: các phiếu nhận chưa lên toa
-            Query queryAll = entityManager.createQuery("select r from VtReceiptDetail r where r.receiptId in (:receiptId) and r.status = 1 ");
-            queryAll.setParameter("receiptId", id);
+            Query queryAll = entityManager.createQuery("select r from VtReceiptDetail r where r.receiptId in (:receiptId) and r.status = :status ").setParameter("receiptId", id).setParameter("status", status);
             vtReceiptDetails = queryAll.getResultList();
             if (vtReceiptDetails != null && vtReceiptDetails.size() > 0) {
                 for (VtReceiptDetail vtReceiptDetail : vtReceiptDetails) {

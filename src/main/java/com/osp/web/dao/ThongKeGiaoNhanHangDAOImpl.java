@@ -158,4 +158,113 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
         }
         return Optional.ofNullable(page);
     }
+
+    @Override
+    public Optional<ThongKeGiaoNhanView> thongKe(Date fromGenDate, Date toGenDate) {
+        ThongKeGiaoNhanView thongKeGiaoNhanView = new ThongKeGiaoNhanView();
+        try {
+            StringBuffer sqlBuffer = new StringBuffer();
+            sqlBuffer.append(" select count(aaa.receipt_code) as soDonNhan, ");
+            sqlBuffer.append(" sum(case when aaa.toa_hang_code is null then 0 else 1 end) as soDonVanChuyen, ");
+            sqlBuffer.append(" sum(case when aaa.ma_phieu_giao is null then 0 else 1 end) as soDonGiao, ");
+            sqlBuffer.append(" sum(case when aaa.payment_type = 1 then tong_tien else 0 end) as traTruoc, ");
+            sqlBuffer.append(" sum(case when aaa.payment_type = 2 then tong_tien else 0 end) as traSau, ");
+            sqlBuffer.append(" sum(case when aaa.payment_type = 3 then tong_tien else 0 end) as congNo, ");
+            sqlBuffer.append(" sum(aaa.tien_da_tra) as tienDaTra  ");
+            sqlBuffer.append(" from ( ");
+            sqlBuffer.append("     select r.receipt_code, toaHang.toa_hang_code , giaoHang.ma_phieu_giao, r.payment_type, r.tien_da_tra,  ");
+            sqlBuffer.append("     (select sum(cost) from vt_receipt_detail where receipt_id = r.id) as tong_tien ");
+            sqlBuffer.append("     from vt_receipt r ");
+            sqlBuffer.append("     left join ");
+            sqlBuffer.append(" ( ");
+            sqlBuffer.append(" select gdn.ma_gom_don, gdn.nha_xe, gdn.loai_xe, gdn.bien_so, gdnd.receipt_id  ");
+            sqlBuffer.append(" from vt_gom_don_nhan gdn inner join vt_gom_don_nhan_detail gdnd on gdn.id = gdnd.vt_gom_don_nhan_id ");
+            sqlBuffer.append("         where gdn.gen_date > :fromGenDate and gdn.gen_date < :toGenDate ");
+            sqlBuffer.append(" ) gomDon on r.id = gomDon.receipt_id  ");
+            sqlBuffer.append(" left join  ");
+            sqlBuffer.append(" ( ");
+            sqlBuffer.append(" select distinct th.toa_hang_code, th.nha_xe, th.loai_xe, th.bien_so, thd.receipt_id  ");
+            sqlBuffer.append("         from vt_toa_hang th inner join vt_toa_hang_detail thd on th.id = thd.toa_hang_id ");
+            sqlBuffer.append("         where th.gen_date > :fromGenDate and th.gen_date < :toGenDate ");
+            sqlBuffer.append(" ) toaHang on r.id = toaHang.receipt_id ");
+            sqlBuffer.append(" left join  ");
+            sqlBuffer.append(" ( ");
+            sqlBuffer.append(" select pgh.ma_phieu_giao, pgh.nha_xe, pgh.loai_xe, pgh.bien_so, pghd.receipt_id  ");
+            sqlBuffer.append("         from vt_phieu_giao_hang pgh inner join vt_phieu_giao_hang_detail pghd on pgh.id = pghd.phieu_giao_hang_id ");
+            sqlBuffer.append("         where pgh.gen_date > :fromGenDate and pgh.gen_date < :toGenDate ");
+            sqlBuffer.append(" ) giaoHang on r.id = giaohang.receipt_id ");
+            sqlBuffer.append("     where r.gen_date > :fromGenDate and r.gen_date < :toGenDate ");
+            sqlBuffer.append(" ) aaa ");
+            Query query = entityManager.createNativeQuery(sqlBuffer.toString()).setParameter("fromGenDate", fromGenDate).setParameter("toGenDate", toGenDate);
+            Object[] objects = (Object[]) query.getSingleResult();
+            if (objects != null && objects.length > 0) {
+                thongKeGiaoNhanView.setSoDonNhan(objects[0] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[0].toString())));
+                thongKeGiaoNhanView.setSoDonVanChuyen(objects[1] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[1].toString())));
+                thongKeGiaoNhanView.setSoDonGiao(objects[2] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[2].toString())));
+                thongKeGiaoNhanView.setTraTruoc(objects[3] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[3].toString())));
+                thongKeGiaoNhanView.setTraSau(objects[4] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[4].toString())));
+                thongKeGiaoNhanView.setCongNo(objects[5] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[5].toString())));
+                thongKeGiaoNhanView.setTienDaTra(objects[6] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[6].toString())));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(thongKeGiaoNhanView);
+    }
+
+    @Override
+    public Optional<List<ThongKeGiaoNhanView>> thongKeChiTiet(Date fromGenDate, Date toGenDate) {
+        List<ThongKeGiaoNhanView> resultList = new ArrayList<>();
+        try {
+            StringBuffer sqlBuffer = new StringBuffer();
+            sqlBuffer.append(" select r.receipt_code, r.status, toaHang.toa_hang_code, r.payment_type, r.tien_da_tra,  ");
+            sqlBuffer.append(" (select sum(cost) from vt_receipt_detail where receipt_id = r.id) as tong_tien,  ");
+            sqlBuffer.append(" CONCAT(gomDon.nha_xe, ' - ', gomDon.loai_xe, ' - ', gomDon.bien_so) as xe_nhan_hang, ");
+            sqlBuffer.append(" CONCAT(toaHang.nha_xe, ' - ', toaHang.loai_xe, ' - ', toaHang.bien_so) as xe_van_chuyen, ");
+            sqlBuffer.append(" CONCAT(giaoHang.nha_xe, ' - ', giaoHang.loai_xe, ' - ', giaoHang.bien_so) as xe_giao_hang ");
+            sqlBuffer.append(" from vt_receipt r ");
+            sqlBuffer.append(" left join ");
+            sqlBuffer.append(" ( ");
+            sqlBuffer.append(" select gdn.ma_gom_don, gdn.nha_xe, gdn.loai_xe, gdn.bien_so, gdnd.receipt_id from vt_gom_don_nhan gdn inner join vt_gom_don_nhan_detail gdnd on gdn.id = gdnd.vt_gom_don_nhan_id ");
+            sqlBuffer.append(" where gdn.gen_date > :fromGenDate and gdn.gen_date < :toGenDate  ");
+            sqlBuffer.append(" ) gomDon on r.id = gomDon.receipt_id  ");
+            sqlBuffer.append(" left join  ");
+            sqlBuffer.append(" ( ");
+            sqlBuffer.append(" select distinct th.toa_hang_code, th.nha_xe, th.loai_xe, th.bien_so, thd.receipt_id from vt_toa_hang th inner join vt_toa_hang_detail thd on th.id = thd.toa_hang_id ");
+            sqlBuffer.append(" where th.gen_date > :fromGenDate and th.gen_date < :toGenDate ");
+            sqlBuffer.append(" ) toaHang on r.id = toaHang.receipt_id ");
+            sqlBuffer.append(" left join  ");
+            sqlBuffer.append(" ( ");
+            sqlBuffer.append(" select pgh.ma_phieu_giao, pgh.nha_xe, pgh.loai_xe, pgh.bien_so, pghd.receipt_id from vt_phieu_giao_hang pgh inner join vt_phieu_giao_hang_detail pghd on pgh.id = pghd.phieu_giao_hang_id ");
+            sqlBuffer.append(" where pgh.gen_date > :fromGenDate and pgh.gen_date < :toGenDate ");
+            sqlBuffer.append(" ) giaoHang on r.id = giaohang.receipt_id ");
+            sqlBuffer.append(" where r.gen_date > :fromGenDate and r.gen_date < :toGenDate ");
+            sqlBuffer.append(" order by r.gen_date desc ");
+            Query query = entityManager.createNativeQuery(sqlBuffer.toString()).setParameter("fromGenDate", fromGenDate).setParameter("toGenDate", toGenDate);
+            List<Object[]> list = query.getResultList();
+            if (list != null && list.size() > 0) {
+                list.stream().forEach((record) -> {
+                    ThongKeGiaoNhanView row = new ThongKeGiaoNhanView();
+                    row.setReceiptCode(record[0] == null ? null : record[0].toString());
+                    row.setStatus(record[1] == null ? null : Integer.valueOf(record[1].toString()));
+                    row.setToaHang(record[2] == null ? null : (String) record[2]);
+                    row.setPaymentType(record[3] == null ? null : Integer.valueOf(record[3].toString()));
+                    row.setTienDaTra(record[4] == null ? null : String.format("%,.0f",Double.valueOf(record[4].toString())));
+                    row.setTongTien(record[5] == null ? null : String.format("%,.0f",Double.valueOf(record[5].toString())));
+                    row.setXeNhanHang(record[6] == null ? null : (String) record[6]);
+                    row.setXeVanChuyen(record[7] == null ? null : (String) record[7]);
+                    row.setXeGiaoHang(record[8] == null ? null : (String) record[8]);
+                    if(record[5]!=null && Integer.valueOf(record[5].toString())>0){
+                        row.setChuaThuTien("");
+                    }else{
+                        row.setChuaThuTien("Chưa thu tiền");
+                    }
+                    resultList.add(row);
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Optional.ofNullable(resultList);
+    }
 }
