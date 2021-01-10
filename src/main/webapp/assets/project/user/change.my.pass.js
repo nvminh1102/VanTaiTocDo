@@ -60,9 +60,10 @@ app.controller('frameworkCtrl',['$scope','$http','$timeout' ,function ($scope,$h
             $scope.messageConfirm=$("#detrong").text();
 
         }else if(!isUndefined($scope.passwordCurrent)&&!(isUndefined($scope.passwordNew))){
-            if(!mediumRegex.test($scope.passwordNew)){
-                $scope.messageNew=$("#passwordvalidate").text();
-            }else if($scope.confirmPassword!==$scope.passwordNew){
+//            if(!mediumRegex.test($scope.passwordNew)){
+//                $scope.messageNew=$("#passwordvalidate").text();
+//            }else 
+                if($scope.confirmPassword!==$scope.passwordNew){
                 $scope.messageConfirm=$("#comfirmpassword").text();
                 return false;
             }

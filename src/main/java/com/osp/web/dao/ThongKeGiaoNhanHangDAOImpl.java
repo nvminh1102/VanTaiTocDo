@@ -27,6 +27,15 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
     public Optional<PagingResult> page(PagingResult page, String bienSo, String loaiXe, String hinhThucVanChuyen, Date fromDate, Date toDate, boolean isExport) {
         List<ThongKeGiaoNhanView> resultList = new ArrayList<>();
         try {
+            if (hinhThucVanChuyen != null && !"".equals(hinhThucVanChuyen)) {
+                if(hinhThucVanChuyen.trim().equals("1")){
+                    hinhThucVanChuyen = "NHẬN HÀNG";
+                }else if(hinhThucVanChuyen.trim().equals("2")){
+                    hinhThucVanChuyen = "VẬN CHUYỂN";
+                }else if(hinhThucVanChuyen.trim().equals("3")){
+                    hinhThucVanChuyen = "GIAO HÀNG";
+                }
+            }
             int offset = 0;
             if (page.getPageNumber() > 0) {
                 offset = (page.getPageNumber() - 1) * page.getNumberPerPage();
@@ -56,7 +65,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
             sqlBuffer.append("                     INNER JOIN vt_phieu_giao_hang_detail b ON a.ID = b.phieu_giao_hang_id  ");
             sqlBuffer.append("                     INNER JOIN vt_receipt c ON c.ID = b.receipt_id  ");
             sqlBuffer.append("                     INNER JOIN vt_receipt_detail g ON g.receipt_id = c.id  ");
-            sqlBuffer.append("                     INNER JOIN vt_nha_xe d ON c.bien_so = d.bien_so  ");
+            sqlBuffer.append("                     INNER JOIN vt_nha_xe d ON a.bien_so = d.bien_so  ");
             sqlBuffer.append("                     INNER JOIN vt_partner e ON e.id = c.delivery_partner_id  ");
             sqlBuffer.append("                     INNER JOIN vt_partner f ON f.id = c.receive_partner_id  ");
             sqlBuffer.append("                     GROUP BY c.receipt_code,  a.nha_xe, a.loai_xe, a.bien_so , e.address , f.address, a.gen_date ");
@@ -65,7 +74,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
             sqlBuffer.append("                     sum(d.numbers) AS so_luong , a.noi_di AS dia_chi_nhan, a.noi_den AS dia_chi_giao, a.gen_date, DATE_FORMAT(a.gen_date, '%d-%m-%Y') as strGenDate  ");
             sqlBuffer.append("                     FROM vt_toa_hang a  ");
             sqlBuffer.append("                     INNER JOIN vt_toa_hang_detail b ON a.id = b.toa_hang_id  ");
-            sqlBuffer.append("                     INNER JOIN vt_receipt_detail d ON d.receipt_id = b.vt_receipt_detail_id ");
+            sqlBuffer.append("                     INNER JOIN vt_receipt_detail d ON d.id = b.vt_receipt_detail_id ");
             sqlBuffer.append("                     GROUP BY a.toa_hang_code, a.nha_xe, a.loai_xe, a.bien_so, a.noi_di, a.noi_den, a.gen_date ");
             sqlBuffer.append(" UNION ALL       ");
             sqlBuffer.append(" SELECT c.receipt_code  as maCode, a.nha_xe, a.loai_xe, a.bien_so, 'Nhận hàng' AS hinh_thuc_van_chuyen,  ");
@@ -74,7 +83,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
             sqlBuffer.append("                     INNER JOIN vt_gom_don_nhan_detail b ON a.ID = b.vt_gom_don_nhan_id  ");
             sqlBuffer.append("                     INNER JOIN vt_receipt c ON c.ID = b.receipt_id  ");
             sqlBuffer.append("                     INNER JOIN vt_receipt_detail g ON g.receipt_id = c.id  ");
-            sqlBuffer.append("                     INNER JOIN vt_nha_xe d ON c.bien_so = d.bien_so  ");
+            sqlBuffer.append("                     INNER JOIN vt_nha_xe d ON a.bien_so = d.bien_so  ");
             sqlBuffer.append("                     INNER JOIN vt_partner e ON e.id = c.delivery_partner_id  ");
             sqlBuffer.append("                     INNER JOIN vt_partner f ON f.id = c.receive_partner_id  ");
             sqlBuffer.append("                     GROUP BY c.receipt_code,  a.nha_xe, a.loai_xe, a.bien_so , e.address , f.address, a.gen_date ");
@@ -99,6 +108,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
                 query.setParameter("loaiXe", "%" + loaiXe.trim().toUpperCase() + "%");
             }
             if (hinhThucVanChuyen != null && !"".equals(hinhThucVanChuyen)) {
+                
                 query.setParameter("hinhThucVanChuyen", hinhThucVanChuyen.trim().toUpperCase());
             }
             if (fromDate != null) {

@@ -117,7 +117,7 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
       document.getElementById("info.fullName").focus();
       return false;
     }
-    if ($scope.info.email != "" && !validateEmail($scope.info.email)) {
+    if (typeof $scope.info.email !== "undefined" && $scope.info.email !== null && $scope.info.email !== "" && !validateEmail($scope.info.email)) {
       document.getElementById("info.email").focus();
       toastr.error("Email nhập không đúng định dạng vui lòng nhập đúng (ví dụ: email@gmail.com)!");
       return false;
