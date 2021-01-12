@@ -37,6 +37,8 @@ public class VtToaHangDetail implements Serializable {
     private Integer toaHangId;
     @Column(name = "receipt_id")
     private Integer receiptId;
+    @Column(name = "numbers")
+    private Integer numbers;
     @Column(name = "vt_receipt_detail_id")
     private Integer vtReceiptDetailId;
     @Column(name = "file_attach", length = 200)
@@ -155,5 +157,15 @@ public class VtToaHangDetail implements Serializable {
     public String toString() {
         return "com.osp.model.VtToaHangDetail[ id=" + id + " ]";
     }
+
+    public Integer getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(Integer numbers) {
+        this.numbers = numbers;
+    }
+    
+    
     
 }

@@ -72,6 +72,7 @@
                                     <thead class="bg-gray">
                                         <tr style="background-color: #ccf3cd;">
                                             <th class="text-center v-inherit text-dark" style="width: 150px;"></th>
+                                            <th class="text-center v-inherit text-dark" style="width: 150px;">Số phiếu lập</th>
                                             <th class="text-center v-inherit text-dark" style="width: 150px;">Số phiếu nhận</th>
                                             <th class="text-center v-inherit text-dark" style="width: 150px;">Số phiếu lên toa</th>
                                             <th class="text-center v-inherit text-dark" style="width: 150px;">Số phiếu giao</th>
@@ -84,6 +85,7 @@
                                     <tbody>
                                         <tr>
                                             <td class="text-left v-inherit" style="font-weight: bold">Dữ liệu trong ngày</td>
+                                            <td class="text-left v-inherit">{{thongKeGiaoNhanViewNgay.soPhieuLap}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewNgay.soDonNhan}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewNgay.soDonVanChuyen}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewNgay.soDonGiao}}</td>
@@ -94,6 +96,7 @@
                                         </tr>
                                         <tr>
                                             <td class="text-left v-inherit" style="font-weight: bold">Dữ liệu trong tháng</td>
+                                            <td class="text-left v-inherit">{{thongKeGiaoNhanViewMonth.soPhieuLap}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewMonth.soDonNhan}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewMonth.soDonVanChuyen}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewMonth.soDonGiao}}</td>
@@ -104,6 +107,7 @@
                                         </tr>
                                         <tr>
                                             <td class="text-left v-inherit" style="font-weight: bold">Dữ liệu trong năm</td>
+                                            <td class="text-left v-inherit">{{thongKeGiaoNhanViewYear.soPhieuLap}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewYear.soDonNhan}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewYear.soDonVanChuyen}}</td>
                                             <td class="text-left v-inherit">{{thongKeGiaoNhanViewYear.soDonGiao}}</td>
@@ -135,20 +139,24 @@
                                             <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
                                             <th class="text-center v-inherit text-dark" style="width: 80px;">Trạng thái</th>
                                             <th class="text-center v-inherit text-dark" style="width: 120px;">Phiếu nhận</th>
+                                            <th class="text-center v-inherit text-dark" style="width: 100px;">Ngày lập phiếu nhận</th>
                                             <th class="text-center v-inherit text-dark" style="width: 120px;">Toa hàng</th>
                                             <th class="text-center v-inherit text-dark" style="width: 100px;">Trả trước</th>
                                             <th class="text-center v-inherit text-dark" style="width: 100px;">Trả sau</th>
                                             <th class="text-center v-inherit text-dark" style="width: 100px;">Công nợ</th>
                                             <th class="text-center v-inherit text-dark" style="width: 100px;">Đã thu</th>
                                             <th class="text-center v-inherit text-dark" style="width: 220px;">Xe nhận hàng</th>
+                                            <th class="text-center v-inherit text-dark" style="width: 80px;">Ngày nhận</th>
                                             <th class="text-center v-inherit text-dark" style="width: 220px;">Xe vận chuyển</th>
+                                            <th class="text-center v-inherit text-dark" style="width: 80px;">Ngày lên toa</th>
                                             <th class="text-center v-inherit text-dark" style="width: 220px;">Xe giao hàng</th>
+                                            <th class="text-center v-inherit text-dark" style="width: 80px;">Ngày giao hàng</th>
                                             <th class="text-center v-inherit text-dark" style="width: 120px;">Cảnh báo</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr ng-switch-when="0">
-                                            <td colspan="12" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                            <td colspan="16" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
                                                 Chưa có phiếu nhận hàng nào trong ngày
                                             </td>
                                         </tr>
@@ -156,14 +164,18 @@
                                             <td class="text-center v-inherit" >{{$index + 1}}</td>
                                             <td class="text-left v-inherit">{{item.status == 1 ? "Nhận hàng" : item.status == 2 ? "Lên toa" : item.status == 3 ? "Đã giao" : ""}}</td>
                                             <td class="text-left v-inherit">{{item.receiptCode}}</td>
+                                            <td class="text-left v-inherit">{{item.strNgayLapDon}}</td>
                                             <td class="text-left v-inherit">{{item.toaHang}}</td>
                                             <td class="text-right v-inherit">{{item.paymentType == 1 ? item.tongTien : 0}}</td>
                                             <td class="text-right v-inherit">{{item.paymentType == 2 ? item.tongTien : 0}}</td>
                                             <td class="text-right v-inherit">{{item.paymentType == 3 ? item.tongTien : 0}}</td>
                                             <td class="text-right v-inherit">{{item.tienDaTra}}</td>
                                             <td class="text-left v-inherit">{{item.xeNhanHang}}</td>
+                                            <td class="text-left v-inherit">{{item.strNgayNhanHang}}</td>
                                             <td class="text-left v-inherit">{{item.xeVanChuyen}}</td>
+                                            <td class="text-left v-inherit">{{item.strNgayLenToa}}</td>
                                             <td class="text-left v-inherit">{{item.xeGiaoHang}}</td>
+                                            <td class="text-left v-inherit">{{item.strNgayGiaoHang}}</td>
                                             <td class="text-left v-inherit" style=" color: red;">{{item.chuaThuTien}}</td>
                                         </tr>
                                     </tbody>

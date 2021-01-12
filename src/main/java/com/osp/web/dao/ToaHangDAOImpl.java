@@ -119,10 +119,11 @@ public class ToaHangDAOImpl implements ToaHangDAO {
             if (vtToaHang != null && vtToaHang.getId() != null) {
                 // update trạng thái chi tiết các mặt hàng trong đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
-                        + " WHERE a.receiptId in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
+                        + " WHERE a.id in (select vtReceiptDetailId from VtToaHangDetail where toaHangId=:toaHangId) ")
                         .setParameter("toaHangId", vtToaHang.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+                
                 // update trạng thái đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
                 Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
                         + " WHERE a.id in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")

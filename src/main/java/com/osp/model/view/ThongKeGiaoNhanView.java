@@ -21,9 +21,14 @@ public class ThongKeGiaoNhanView {
     private String tienDaTra;
     private String tongTien;
     private String xeNhanHang;
+    private String strNgayLapDon;
+    private String strNgayNhanHang;
+    private String strNgayLenToa;
+    private String strNgayGiaoHang;
     private String xeVanChuyen;
     private String xeGiaoHang;
     
+    private String soPhieuLap;
     private String soDonNhan;
     private String soDonVanChuyen;
     private String soDonGiao;
@@ -239,6 +244,46 @@ public class ThongKeGiaoNhanView {
 
     public void setChuaThuTien(String chuaThuTien) {
         this.chuaThuTien = chuaThuTien;
+    }
+
+    public String getStrNgayLapDon() {
+        return strNgayLapDon;
+    }
+
+    public void setStrNgayLapDon(String strNgayLapDon) {
+        this.strNgayLapDon = strNgayLapDon;
+    }
+
+    public String getStrNgayNhanHang() {
+        return strNgayNhanHang;
+    }
+
+    public void setStrNgayNhanHang(String strNgayNhanHang) {
+        this.strNgayNhanHang = strNgayNhanHang;
+    }
+
+    public String getStrNgayLenToa() {
+        return strNgayLenToa;
+    }
+
+    public void setStrNgayLenToa(String strNgayLenToa) {
+        this.strNgayLenToa = strNgayLenToa;
+    }
+
+    public String getStrNgayGiaoHang() {
+        return strNgayGiaoHang;
+    }
+
+    public void setStrNgayGiaoHang(String strNgayGiaoHang) {
+        this.strNgayGiaoHang = strNgayGiaoHang;
+    }
+
+    public String getSoPhieuLap() {
+        return soPhieuLap;
+    }
+
+    public void setSoPhieuLap(String soPhieuLap) {
+        this.soPhieuLap = soPhieuLap;
     }
     
     

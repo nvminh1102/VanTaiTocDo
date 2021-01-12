@@ -61,7 +61,7 @@
                                 <div class="row" style="margin: 0px;">
                                     <div class="p-r-0 p-l-0 col-md-6">
                                         <label class="input-sm">Số bản ghi: </label>
-                                        <label style="color: red;">{{listBienNhanDaChon.items.length}} - {{listHangHoa.items.length}}</label>
+                                        <label style="color: red;">{{listBienNhanDaChon.length}}</label>
                                     </div>
                                     <div class="p-r-0 p-l-0 col-md-6">
                                         <sec:authorize access="hasRole('ROLE_THEM_GIAO_HANG_ADD')">
@@ -70,7 +70,7 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive bg-white" style="margin-bottom: 10px;">
-                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.items.length">
+                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listBienNhanDaChon.length">
                                         <thead class="bg-gray">
                                             <tr>
                                                 <th class="text-center v-inherit text-dark">STT</th>
@@ -89,11 +89,11 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-switch-when="0">
-                                                <td colspan="11" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                                <td colspan="12" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
                                                     Không có dữ liệu
                                                 </td>
                                             </tr>
-                                            <tr ng-switch-default ng-repeat="item in listBienNhanDaChon.items track by $index">
+                                            <tr ng-switch-default ng-repeat="item in listBienNhanDaChon track by $index">
                                                 <td class="text-center v-inherit" >{{$index + 1}}</td>
                                                 <td class="text-center v-inherit">{{item.maToaHang}}</td>
                                                 <td class="text-center v-inherit">{{item.receiptCode}}</td>
@@ -115,6 +115,57 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                
+                                <div class="row" style="margin: 0px;">
+                                    <div class="p-r-0 p-l-0 col-md-6">
+                                        <label class="input-sm">Số bản ghi: </label>
+                                        <label style="color: red;">{{listHangHoaDaChon.length}}</label>
+                                    </div>
+                                    <div class="p-r-0 p-l-0 col-md-6">
+                                    </div>
+                                </div>
+                                <div class="table-responsive bg-white" style="margin-bottom: 10px;">
+                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;" ng-switch on="listHangHoaDaChon.length">
+                                        <thead class="bg-gray">
+                                            <tr>
+                                                <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu nhận</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Tên hàng</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Đơn vị tính</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Số lượng</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Trọng lượng</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 20%;">Kích thước</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Thành tiền</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 40px;">Tool</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-switch-when="0">
+                                                <td colspan="11" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                                    Không có dữ liệu
+                                                </td>
+                                            </tr>
+                                            <tr ng-switch-default ng-repeat="item in listHangHoaDaChon track by $index">
+                                                <td class="text-center v-inherit">{{$index + 1}}</td>
+                                                <td class="text-left v-inherit">{{item.receiptCode}}</td>
+                                                <td class="text-left v-inherit">{{item.name}}</td>
+                                                <td class="text-center v-inherit">{{item.unit}}</td>
+                                                <td class="text-center v-inherit">{{item.numbers}}</td>
+                                                <td class="text-center v-inherit">{{item.weight}}</td>
+                                                <td class="text-center v-inherit">{{item.sizes}}</td>
+                                                <td class="text-center v-inherit">{{item.cost}}</td>
+                                                <td class="text-center v-inherit">{{item.note}}</td>
+                                                <td class="text-center v-inherit">
+                                                    <a  class="btn btn-success btn-sm font-bold" href="" ng-click="boChonHangHoa(item)"><i class="fa fa-edit"></i>xóa</a>
+                                                    <!--<input type="radio" name="notarySelect" ng-click="changeIdSelected(item.idNotaryInfo);">-->
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                
                                 <div class="form-group">
                                     <div class="col-md-12 text-center">
                                         <sec:authorize access="hasRole('ROLE_THEM_GIAO_HANG_ADD')">
@@ -231,6 +282,51 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <div class="row padding" style="padding-top: 0px;">
+                                    <label class="input-sm">Tổng số hàng hóa: </label>
+                                    <label style="color: red;">{{listHangHoa.length}}</label>
+                                </div>
+
+                                <div class="table-responsive bg-white"  style="overflow-x: auto">
+                                    <table class="table b-t b-light table-bordered table-hover" style="margin-bottom: 0px;table-layout: fixed;" ng-switch on="listHangHoa.length">
+                                        <thead class="bg-gray">
+                                            <tr>
+                                                <th class="text-center v-inherit text-dark" style="width: 60px;">STT</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Phiếu nhận</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Tên hàng</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Đơn vị tính</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Số lượng</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Trọng lượng</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 20%;">Kích thước</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Thành tiền</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 10%;">Ghi chú</th>
+                                                <th class="text-center v-inherit text-dark" style="width: 5%;"><input id="select_allHH" type="checkbox" ng-model="checkAllHH" ng-change="selectAllHH(checkAllHH)"/></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-switch-when="0">
+                                                <td colspan="13" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                                    Không có dữ liệu
+                                                </td>
+                                            </tr>
+                                            <tr ng-switch-default ng-repeat="item2 in listHangHoa track by $index">
+                                                <td class="text-center v-inherit">{{$index + 1}}</td>
+                                                <td class="text-left v-inherit">{{item2.receiptCode}}</td>
+                                                <td class="text-left v-inherit">{{item2.name}}</td>
+                                                <td class="text-center v-inherit">{{item2.unit}}</td>
+                                                <td class="text-center v-inherit">{{item2.numbers}}</td>
+                                                <td class="text-center v-inherit">{{item2.weight}}</td>
+                                                <td class="text-center v-inherit">{{item2.sizes}}</td>
+                                                <td class="text-center v-inherit">{{item2.cost}}</td>
+                                                <td class="text-center v-inherit">{{item2.note}}</td>
+                                                <td class="text-center v-inherit"><input type="checkbox" class="onChangeHHSelectBox_" ng-model="checkedHH[$index]" ng-change="chonHH(item2, checkedHH[$index])"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+
                             </div>
                             <div class="modal-footer text-center" style="text-align: center;">
                                 <button type="button" class="btn btn-1 btn-info btn-default" data-dismiss="modal"><i class="fa fa-check"></i>Đồng ý</button>

@@ -424,6 +424,32 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 defer.resolve();
             }, 1000);
         };
+        
+        
+        $(document).ready(function () {
+            $("#fromDeceipt").datetimepicker({
+                locale: 'vi-VN',
+                format: 'DD-MM-YYYY'
+            }).on('dp.change', function (e) {
+                if (e != null) {
+                    $scope.searchBienNhan.fromDeceipt = $(this).val();
+                    $scope.searchBienNhan.fromDeceiptStr = stringToDate($scope.searchBienNhan.fromDeceipt, "dd-MM-yyyy", "-");
+                    if ($('#fromDeceipt').val() != "")
+                        $('#toDeceipt').data("DateTimePicker").minDate(moment($('#fromDeceipt').val(), "DD-MM-YYYY").toDate());
+                }
+            });
+            $("#toDeceipt").datetimepicker({
+                locale: 'vi-VN',
+                format: 'DD-MM-YYYY'
+            }).on('dp.change', function (e) {
+                if (e != null) {
+                    $scope.searchBienNhan.toDeceipt = $(this).val();
+                    $scope.searchBienNhan.toDeceiptStr = stringToDate($scope.searchBienNhan.toDeceipt, "dd-MM-yyyy", "-");
+                    if ($('#toDeceipt').val() != "")
+                        $('#fromDeceipt').data("DateTimePicker").maxDate(moment($('#toDeceipt').val(), "DD-MM-YYYY").toDate());
+                }
+            });
+        });
 
 
     }]);

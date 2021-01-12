@@ -102,35 +102,53 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             vtPhieuGiaoHang.setUpdatedBy(user.getUsername());
             vtPhieuGiaoHang.setLastUpdate(new Date());
             if (vtPhieuGiaoHang.getId() != null) {
-                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
-                        + " WHERE a.id in (select receiptId from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId )")
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.id in (select vtReceiptDetailId from VtPhieuGiaoHangDetail where phieuGiaoHangId=:phieuGiaoHangId) ")
                         .setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+                
+                Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.id in (select receiptId from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId )")
+                        .setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId())
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdatePhieuNhan.executeUpdate();
                 Query query = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId());
                 query.executeUpdate();
-                
+
                 entityManager.merge(vtPhieuGiaoHang);
             } else {
                 vtPhieuGiaoHang.setGenDate(new Date());
                 vtPhieuGiaoHang.setCreatedBy(user.getUsername());
                 entityManager.persist(vtPhieuGiaoHang);
             }
-            List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
-            for (VtReceiptView bo : vtReceiptViews) {
+//            List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
+            List<VtReceiptDetail> vtReceiptDetails = vTGoodsReceiptForm.getVtReceiptDetail();
+            for (VtReceiptDetail bo : vtReceiptDetails) {
                 VtPhieuGiaoHangDetail vtPhieuGiaoHangDetail = new VtPhieuGiaoHangDetail();
                 vtPhieuGiaoHangDetail.setPhieuGiaoHangId(vtPhieuGiaoHang.getId());
                 vtPhieuGiaoHangDetail.setCreatedBy(vtPhieuGiaoHang.getCreatedBy());
                 vtPhieuGiaoHangDetail.setUpdatedBy(vtPhieuGiaoHang.getUpdatedBy());
                 vtPhieuGiaoHangDetail.setLastUpdate(vtPhieuGiaoHang.getLastUpdate());
                 vtPhieuGiaoHangDetail.setGenDate(vtPhieuGiaoHang.getGenDate());
-                vtPhieuGiaoHangDetail.setReceiptId(bo.getId().intValue());
-                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status =3, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:id")
-                        .setParameter("id", bo.getId().intValue())
+                vtPhieuGiaoHangDetail.setReceiptId(bo.getReceiptId());
+                vtPhieuGiaoHangDetail.setVtReceiptDetailId(bo.getId());
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 3, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:id")
+                        .setParameter("id", bo.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
                 entityManager.persist(vtPhieuGiaoHangDetail);
             }
+            
+            List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
+            for (VtReceiptView vtReceiptView : vtReceiptViews) {
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 3 ,  a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:receiptId and status = 2 "
+                        + " and id not in (select receiptId from VtReceiptDetail where status = 2 and receiptId = :receiptId )")
+                        .setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue()))
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdateHangHoa.executeUpdate();
+            }
+            
             entityManager.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -149,6 +167,12 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                         .setParameter("phieuGiaoHangId", id)
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdatePhieuNhan.executeUpdate();
+
+                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
+                        + " WHERE a.id in (select vtReceiptDetailId from VtPhieuGiaoHangDetail where phieuGiaoHangId=:phieuGiaoHangId) ")
+                        .setParameter("phieuGiaoHangId", id)
+                        .setParameter("updatedBy", user.getUsername());
+                queryUpdateHangHoa.executeUpdate();
                 
                 Query querydetail = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", id);
                 querydetail.executeUpdate();
@@ -178,8 +202,12 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             queryAll.setParameter("id", id);
 
             VtPhieuGiaoHang vtPhieuGiaoHang = (VtPhieuGiaoHang) queryAll.getSingleResult();
-            String sqlBuffer = "SELECT t.ID,t.receipt_code,t.date_receipt,t.name_Stock,t.nha_xe,t.bien_so,t.employee,b.FULL_NAME as ten_nguoi_gui,b.address as dia_chi_nguoi_gui,c.FULL_NAME as ten_nguoi_nhan,c.address as dia_chi_nguoi_nhan, "
-                    + " c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien , (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong "
+            String sqlBuffer = "SELECT distinct t.id, t.receipt_code, t.date_receipt, t.name_Stock, t.nha_xe,"
+                    + " t.bien_so, t.employee, b.FULL_NAME as ten_nguoi_gui, b.address as dia_chi_nguoi_gui, c.FULL_NAME as ten_nguoi_nhan, "
+                    + " c.address as dia_chi_nguoi_nhan,  c.MOBILE as mobile_nguoi_nhan, t.payer, t.payment_type , t.tien_da_tra , "
+                    + " (select SUM(d.cost) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS tong_tien , "
+                    + " (select SUM(d.numbers) FROM vt_receipt_detail d WHERE t.id = d.receipt_id) AS so_luong, "
+                    + " (select max(th.toa_hang_code) from vt_toa_hang th inner join vt_toa_hang_detail thd on th.id = thd.toa_hang_id where  thd.receipt_id = t.id) as ma_toa_hang  "
                     + " from vt_phieu_giao_hang_detail thd inner join vt_receipt t on thd.receipt_Id = t.id left join vt_partner b on t.delivery_partner_id = b.ID   left join vt_partner c on t.receive_partner_id = c.ID   "
                     + " where thd.phieu_giao_hang_id = :phieuGiaoHangId ";
 
@@ -206,6 +234,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
                 row.setSoLuong(record[16] == null ? null : Integer.valueOf(record[16].toString()));
+                row.setMaToaHang(record[17] == null ? null : (String)record[17]);
                 vtReceiptViews.add(row);
             });
             for (VtReceiptView vtReceiptView : vtReceiptViews) {
@@ -223,8 +252,22 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             return null;
         }
     }
-    
-    
+    @Override
+    public List<VtPhieuGiaoHangDetail> getListVtPhieuGiaoHangDetail(Integer phieuGiaoHangId) {
+        List<VtPhieuGiaoHangDetail> vtPhieuGiaoHangDetails = new ArrayList<>();
+        try {
+            Query queryAll = entityManager.createQuery("select r from VtPhieuGiaoHangDetail r where r.phieuGiaoHangId = :phieuGiaoHangId ").setParameter("phieuGiaoHangId", phieuGiaoHangId);
+
+            vtPhieuGiaoHangDetails = queryAll.getResultList();
+
+            return vtPhieuGiaoHangDetails;
+        } catch (Exception e) {
+            e.printStackTrace();
+            entityManager.getTransaction().rollback();
+            return null;
+        }
+    }
+
     @Override
     public VTGoodsReceiptForm getExportById(Integer id) {
         VTGoodsReceiptForm vTGoodsReceiptForm = new VTGoodsReceiptForm();
@@ -261,36 +304,32 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setDateReceipt(record[2] == null ? null : (Date) record[2]);
                 row.setNameStock(record[3] == null ? null : (String) record[3]);
                 row.setNhaXe(record[4] == null ? null : (String) record[4]);
-                
-                
+
                 row.setBienSo(record[5] == null ? null : (String) record[5]);
                 row.setEmployee(record[6] == null ? null : (String) record[6]);
                 row.setTenNguoiGui(record[7] == null ? null : (String) record[7]);
                 row.setDiaChiNguoiGui(record[8] == null ? null : (String) record[8]);
                 row.setTenNguoiNhan(record[9] == null ? null : (String) record[9]);
-                
-                
+
                 row.setDiaChiNguoiNhan(record[10] == null ? null : (String) record[10]);
                 row.setMobileNguoiNhan(record[11] == null ? null : (String) record[11]);
                 row.setPayer(record[12] == null ? null : (String) record[12]);
                 row.setPaymentType(record[13] == null ? null : Integer.valueOf(record[13].toString()));
-                if( row.getPaymentType()==1){
+                if (row.getPaymentType() == 1) {
                     row.setSoTienPhaiThu("Trả trước");
-                }else if(row.getPaymentType()==2){
+                } else if (row.getPaymentType() == 2) {
                     row.setSoTienPhaiThu("Trả sau");
-                }else if( row.getPaymentType()==3){
+                } else if (row.getPaymentType() == 3) {
                     row.setSoTienPhaiThu("Công nợ");
                 }
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
-                
-                
+
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
                 row.setSoLuong(record[16] == null ? null : Integer.valueOf(record[16].toString()));
-                row.setName(record[17] == null ? null : (String)record[17]);
-                row.setNote(record[18] == null ? null : (String)record[18]);
+                row.setName(record[17] == null ? null : (String) record[17]);
+                row.setNote(record[18] == null ? null : (String) record[18]);
                 row.setSoHopDong(record[19] == null ? null : (String) record[19]);
-                
-                
+
                 row.setMaPhieuThu(record[20] == null ? null : (String) record[20]);
                 vtReceiptViews.add(row);
             });
@@ -307,7 +346,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                         vtReceiptView.setSoTienPhaiThu(String.format("%,.0f", new Double(vtReceiptView.getTongTien())));
                     }
                 }
-*/
+                 */
             }
             vtPhieuGiaoHang.setSoLuong(soLuong);
             vtPhieuGiaoHang.setTongTien(tongTien);
@@ -344,8 +383,8 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
-                row.setSizes(record[9] == null ? null : (String)record[9]);
-                row.setWeight(record[10] == null ? null : (String)record[10]);
+                row.setSizes(record[9] == null ? null : (String) record[9]);
+                row.setWeight(record[10] == null ? null : (String) record[10]);
                 row.setNote(record[11] == null ? null : (String) record[11]);
                 row.setNguoiThanhToan(record[12] == null ? null : (String) record[12]);
                 row.setDiaChiNguoiGui(record[13] == null ? null : (String) record[13]);

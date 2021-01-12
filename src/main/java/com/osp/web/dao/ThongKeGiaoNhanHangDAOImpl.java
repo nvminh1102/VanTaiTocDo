@@ -28,11 +28,11 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
         List<ThongKeGiaoNhanView> resultList = new ArrayList<>();
         try {
             if (hinhThucVanChuyen != null && !"".equals(hinhThucVanChuyen)) {
-                if(hinhThucVanChuyen.trim().equals("1")){
+                if (hinhThucVanChuyen.trim().equals("1")) {
                     hinhThucVanChuyen = "NHẬN HÀNG";
-                }else if(hinhThucVanChuyen.trim().equals("2")){
+                } else if (hinhThucVanChuyen.trim().equals("2")) {
                     hinhThucVanChuyen = "VẬN CHUYỂN";
-                }else if(hinhThucVanChuyen.trim().equals("3")){
+                } else if (hinhThucVanChuyen.trim().equals("3")) {
                     hinhThucVanChuyen = "GIAO HÀNG";
                 }
             }
@@ -108,7 +108,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
                 query.setParameter("loaiXe", "%" + loaiXe.trim().toUpperCase() + "%");
             }
             if (hinhThucVanChuyen != null && !"".equals(hinhThucVanChuyen)) {
-                
+
                 query.setParameter("hinhThucVanChuyen", hinhThucVanChuyen.trim().toUpperCase());
             }
             if (fromDate != null) {
@@ -174,6 +174,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
         ThongKeGiaoNhanView thongKeGiaoNhanView = new ThongKeGiaoNhanView();
         try {
             StringBuffer sqlBuffer = new StringBuffer();
+            /*
             sqlBuffer.append(" select count(aaa.receipt_code) as soDonNhan, ");
             sqlBuffer.append(" sum(case when aaa.toa_hang_code is null then 0 else 1 end) as soDonVanChuyen, ");
             sqlBuffer.append(" sum(case when aaa.ma_phieu_giao is null then 0 else 1 end) as soDonGiao, ");
@@ -205,16 +206,33 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
             sqlBuffer.append(" ) giaoHang on r.id = giaohang.receipt_id ");
             sqlBuffer.append("     where r.gen_date > :fromGenDate and r.gen_date < :toGenDate ");
             sqlBuffer.append(" ) aaa ");
-            Query query = entityManager.createNativeQuery(sqlBuffer.toString()).setParameter("fromGenDate", fromGenDate).setParameter("toGenDate", toGenDate);
+             */
+
+            sqlBuffer.append(" select ");
+            sqlBuffer.append(" (select count(mgd.ma_gom_don) from vt_gom_don_nhan mgd ");
+            sqlBuffer.append(" where mgd.gen_date > :fromDate and mgd.gen_date < :toDate ) as soPhieuNhan, ");
+            sqlBuffer.append(" (select count(th.toa_hang_code) from vt_toa_hang th ");
+            sqlBuffer.append(" where th.gen_date > :fromDate and th.gen_date < :toDate ) as soToaHang, ");
+            sqlBuffer.append(" (select count(pgh.ma_phieu_giao) from vt_phieu_giao_hang pgh ");
+            sqlBuffer.append(" where pgh.gen_date > :fromDate and pgh.gen_date < :toDate ) as soPhieuGiao, ");
+            sqlBuffer.append(" sum(case when r.payment_type = 1 then (select sum(cost) from vt_receipt_detail where receipt_id = r.id) else 0 end) as traTruoc , ");
+            sqlBuffer.append(" sum(case when r.payment_type = 2 then (select sum(cost) from vt_receipt_detail where receipt_id = r.id) else 0 end) as traSau , ");
+            sqlBuffer.append(" sum(case when r.payment_type = 3 then (select sum(cost) from vt_receipt_detail where receipt_id = r.id) else 0 end) as CongNo , ");
+            sqlBuffer.append(" r.tien_da_tra, count(r.receipt_code) as soPhieuLap ");
+            sqlBuffer.append(" from vt_receipt r ");
+            sqlBuffer.append(" where r.gen_date > :fromDate and r.gen_date < :toDate ");
+
+            Query query = entityManager.createNativeQuery(sqlBuffer.toString()).setParameter("fromDate", fromGenDate).setParameter("toDate", toGenDate);
             Object[] objects = (Object[]) query.getSingleResult();
             if (objects != null && objects.length > 0) {
-                thongKeGiaoNhanView.setSoDonNhan(objects[0] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[0].toString())));
-                thongKeGiaoNhanView.setSoDonVanChuyen(objects[1] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[1].toString())));
-                thongKeGiaoNhanView.setSoDonGiao(objects[2] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[2].toString())));
-                thongKeGiaoNhanView.setTraTruoc(objects[3] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[3].toString())));
-                thongKeGiaoNhanView.setTraSau(objects[4] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[4].toString())));
-                thongKeGiaoNhanView.setCongNo(objects[5] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[5].toString())));
-                thongKeGiaoNhanView.setTienDaTra(objects[6] == null ? "0" : String.format("%,.0f",Double.valueOf(objects[6].toString())));
+                thongKeGiaoNhanView.setSoDonNhan(objects[0] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[0].toString())));
+                thongKeGiaoNhanView.setSoDonVanChuyen(objects[1] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[1].toString())));
+                thongKeGiaoNhanView.setSoDonGiao(objects[2] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[2].toString())));
+                thongKeGiaoNhanView.setTraTruoc(objects[3] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[3].toString())));
+                thongKeGiaoNhanView.setTraSau(objects[4] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[4].toString())));
+                thongKeGiaoNhanView.setCongNo(objects[5] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[5].toString())));
+                thongKeGiaoNhanView.setTienDaTra(objects[6] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[6].toString())));
+                thongKeGiaoNhanView.setSoPhieuLap(objects[7] == null ? "0" : String.format("%,.0f", Double.valueOf(objects[7].toString())));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -227,30 +245,36 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
         List<ThongKeGiaoNhanView> resultList = new ArrayList<>();
         try {
             StringBuffer sqlBuffer = new StringBuffer();
+            sqlBuffer.append(" select distinct tbl.receipt_code, tbl.status, tbl.toa_hang_code, tbl.payment_type, tbl.tien_da_tra, tbl.tong_tien, tbl.xe_nhan_hang, tbl.xe_van_chuyen, tbl.xe_giao_hang, ");
+            sqlBuffer.append(" DATE_FORMAT(tbl.ngayLapPhieu, '%d/%m/%Y'),DATE_FORMAT(tbl.ngayGomDon, '%d/%m/%Y'),  DATE_FORMAT(tbl.ngayLenToa, '%d/%m/%Y'), DATE_FORMAT(tbl.ngayGiaoHang, '%d/%m/%Y') from ( ");
             sqlBuffer.append(" select r.receipt_code, r.status, toaHang.toa_hang_code, r.payment_type, r.tien_da_tra,  ");
             sqlBuffer.append(" (select sum(cost) from vt_receipt_detail where receipt_id = r.id) as tong_tien,  ");
             sqlBuffer.append(" CONCAT(gomDon.nha_xe, ' - ', gomDon.loai_xe, ' - ', gomDon.bien_so) as xe_nhan_hang, ");
             sqlBuffer.append(" CONCAT(toaHang.nha_xe, ' - ', toaHang.loai_xe, ' - ', toaHang.bien_so) as xe_van_chuyen, ");
-            sqlBuffer.append(" CONCAT(giaoHang.nha_xe, ' - ', giaoHang.loai_xe, ' - ', giaoHang.bien_so) as xe_giao_hang ");
+            sqlBuffer.append(" CONCAT(giaoHang.nha_xe, ' - ', giaoHang.loai_xe, ' - ', giaoHang.bien_so) as xe_giao_hang, ");
+            sqlBuffer.append(" gomDon.gen_date as ngayGomDon, toaHang.gen_date as ngayLenToa, giaoHang.gen_date as ngayGiaoHang , r.gen_date as ngayLapPhieu ");
             sqlBuffer.append(" from vt_receipt r ");
             sqlBuffer.append(" left join ");
             sqlBuffer.append(" ( ");
-            sqlBuffer.append(" select gdn.ma_gom_don, gdn.nha_xe, gdn.loai_xe, gdn.bien_so, gdnd.receipt_id from vt_gom_don_nhan gdn inner join vt_gom_don_nhan_detail gdnd on gdn.id = gdnd.vt_gom_don_nhan_id ");
-            sqlBuffer.append(" where gdn.gen_date > :fromGenDate and gdn.gen_date < :toGenDate  ");
+            sqlBuffer.append(" select gdn.ma_gom_don, gdn.nha_xe, gdn.loai_xe, gdn.bien_so, gdnd.receipt_id, gdn.gen_date from vt_gom_don_nhan gdn inner join vt_gom_don_nhan_detail gdnd on gdn.id = gdnd.vt_gom_don_nhan_id ");
+//            sqlBuffer.append(" where gdn.gen_date > :fromGenDate and gdn.gen_date < :toGenDate  ");
             sqlBuffer.append(" ) gomDon on r.id = gomDon.receipt_id  ");
             sqlBuffer.append(" left join  ");
             sqlBuffer.append(" ( ");
-            sqlBuffer.append(" select distinct th.toa_hang_code, th.nha_xe, th.loai_xe, th.bien_so, thd.receipt_id from vt_toa_hang th inner join vt_toa_hang_detail thd on th.id = thd.toa_hang_id ");
-            sqlBuffer.append(" where th.gen_date > :fromGenDate and th.gen_date < :toGenDate ");
+            sqlBuffer.append(" select distinct th.toa_hang_code, th.nha_xe, th.loai_xe, th.bien_so, thd.receipt_id, th.gen_date from vt_toa_hang th inner join vt_toa_hang_detail thd on th.id = thd.toa_hang_id ");
+//            sqlBuffer.append(" where th.gen_date > :fromGenDate and th.gen_date < :toGenDate ");
             sqlBuffer.append(" ) toaHang on r.id = toaHang.receipt_id ");
             sqlBuffer.append(" left join  ");
             sqlBuffer.append(" ( ");
-            sqlBuffer.append(" select pgh.ma_phieu_giao, pgh.nha_xe, pgh.loai_xe, pgh.bien_so, pghd.receipt_id from vt_phieu_giao_hang pgh inner join vt_phieu_giao_hang_detail pghd on pgh.id = pghd.phieu_giao_hang_id ");
-            sqlBuffer.append(" where pgh.gen_date > :fromGenDate and pgh.gen_date < :toGenDate ");
+            sqlBuffer.append(" select pgh.ma_phieu_giao, pgh.nha_xe, pgh.loai_xe, pgh.bien_so, pghd.receipt_id, pgh.gen_date from vt_phieu_giao_hang pgh inner join vt_phieu_giao_hang_detail pghd on pgh.id = pghd.phieu_giao_hang_id ");
+//            sqlBuffer.append(" where pgh.gen_date > :fromGenDate and pgh.gen_date < :toGenDate ");
             sqlBuffer.append(" ) giaoHang on r.id = giaohang.receipt_id ");
-            sqlBuffer.append(" where r.gen_date > :fromGenDate and r.gen_date < :toGenDate ");
-            sqlBuffer.append(" order by r.gen_date desc ");
-            Query query = entityManager.createNativeQuery(sqlBuffer.toString()).setParameter("fromGenDate", fromGenDate).setParameter("toGenDate", toGenDate);
+//            sqlBuffer.append(" where r.gen_date > :fromGenDate and r.gen_date < :toGenDate ");
+            sqlBuffer.append(" ) tbl    where  (tbl.ngayGomDon is not null and tbl.ngayGomDon > :fromDate and tbl.ngayGomDon < :toDate ) or ");
+            sqlBuffer.append(" (tbl.ngayLenToa is not null and tbl.ngayLenToa > :fromDate and tbl.ngayLenToa < :toDate ) or ");
+            sqlBuffer.append(" (tbl.ngayGiaoHang is not null and tbl.ngayGiaoHang > :fromDate and tbl.ngayGiaoHang < :toDate ) ");
+            sqlBuffer.append("  order by tbl.ngayGiaoHang desc, tbl.ngayLenToa desc, tbl.ngayGomDon desc , tbl.ngayLapPhieu desc ");
+            Query query = entityManager.createNativeQuery(sqlBuffer.toString()).setParameter("fromDate", fromGenDate).setParameter("toDate", toGenDate);
             List<Object[]> list = query.getResultList();
             if (list != null && list.size() > 0) {
                 list.stream().forEach((record) -> {
@@ -259,14 +283,18 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
                     row.setStatus(record[1] == null ? null : Integer.valueOf(record[1].toString()));
                     row.setToaHang(record[2] == null ? null : (String) record[2]);
                     row.setPaymentType(record[3] == null ? null : Integer.valueOf(record[3].toString()));
-                    row.setTienDaTra(record[4] == null ? null : String.format("%,.0f",Double.valueOf(record[4].toString())));
-                    row.setTongTien(record[5] == null ? null : String.format("%,.0f",Double.valueOf(record[5].toString())));
+                    row.setTienDaTra(record[4] == null ? null : String.format("%,.0f", Double.valueOf(record[4].toString())));
+                    row.setTongTien(record[5] == null ? null : String.format("%,.0f", Double.valueOf(record[5].toString())));
                     row.setXeNhanHang(record[6] == null ? null : (String) record[6]);
                     row.setXeVanChuyen(record[7] == null ? null : (String) record[7]);
                     row.setXeGiaoHang(record[8] == null ? null : (String) record[8]);
-                    if(record[5]!=null && Integer.valueOf(record[5].toString())>0){
+                    row.setStrNgayLapDon(record[9] == null ? null : (String) record[9]);
+                    row.setStrNgayNhanHang(record[10] == null ? null : (String) record[10]);
+                    row.setStrNgayLenToa(record[11] == null ? null : (String) record[11]);
+                    row.setStrNgayGiaoHang(record[12] == null ? null : (String) record[12]);
+                    if (record[5] != null && Integer.valueOf(record[5].toString()) > 0) {
                         row.setChuaThuTien("");
-                    }else{
+                    } else {
                         row.setChuaThuTien("Chưa thu tiền");
                     }
                     resultList.add(row);

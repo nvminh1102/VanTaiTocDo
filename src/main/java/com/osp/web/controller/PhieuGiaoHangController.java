@@ -8,13 +8,18 @@ import com.osp.model.User;
 import com.osp.model.VtArea;
 import com.osp.model.VtInPhieuThu;
 import com.osp.model.VtPhieuGiaoHang;
+import com.osp.model.VtPhieuGiaoHangDetail;
+import com.osp.model.VtReceipt;
 import com.osp.model.VtReceiptDetail;
 import com.osp.model.view.VTGoodsReceiptForm;
+import com.osp.model.view.VtReceiptView;
 import com.osp.web.dao.AreaDAO;
+import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.InPhieuThuDAO;
 import com.osp.web.dao.PhieuGiaoHangDAO;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -58,6 +63,9 @@ public class PhieuGiaoHangController {
     InPhieuThuDAO inPhieuThuDAO;
     @Autowired
     AreaDAO areaDAO;
+    
+    @Autowired
+    BienNhanDAO bienNhanDAO;
     
 //    @Autowired
 //    LogAccessDAO logAccessDao;
@@ -119,6 +127,18 @@ public class PhieuGiaoHangController {
     @Secured(ConstantAuthor.GIAO_HANG.edit)
     public ResponseEntity<VTGoodsReceiptForm> loadDataEdit(@RequestParam @Valid final Integer id) {
         VTGoodsReceiptForm vTGoodsReceiptForm = phieuGiaoHangDAO.getVTGoodsReceiptFormById(id);
+        
+        List<VtPhieuGiaoHangDetail> vtPhieuGiaoHangDetails = phieuGiaoHangDAO.getListVtPhieuGiaoHangDetail(id);
+        List<Integer> listId = new ArrayList<>();
+        if(vtPhieuGiaoHangDetails!=null && vtPhieuGiaoHangDetails.size()>0){
+            for(VtPhieuGiaoHangDetail vtPhieuGiaoHangDetail :vtPhieuGiaoHangDetails){
+                listId.add(vtPhieuGiaoHangDetail.getVtReceiptDetailId());
+            }
+        }
+        if(listId!=null && listId.size()>0){
+            List<VtReceiptDetail> vtReceiptDetails = bienNhanDAO.getListVtReceiptDetailByListId(listId, VtReceipt.STATUS_GIAO_HANG);
+            vTGoodsReceiptForm.setVtReceiptDetail(vtReceiptDetails);
+        }
         return new ResponseEntity<VTGoodsReceiptForm>(vTGoodsReceiptForm, HttpStatus.OK);
     }
     

@@ -37,6 +37,10 @@ public class VtPhieuGiaoHangDetail implements Serializable {
     private Integer phieuGiaoHangId;
     @Column(name = "receipt_id")
     private Integer receiptId;
+    @Column(name = "numbers")
+    private Integer numbers;
+    @Column(name = "vt_receipt_detail_id")
+    private Integer vtReceiptDetailId;
     @Column(name = "gen_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date genDate;
@@ -135,5 +139,22 @@ public class VtPhieuGiaoHangDetail implements Serializable {
     public String toString() {
         return "com.osp.model.VtPhieuGiaoHangDetail[ id=" + id + " ]";
     }
+
+    public Integer getNumbers() {
+        return numbers;
+    }
+
+    public void setNumbers(Integer numbers) {
+        this.numbers = numbers;
+    }
+
+    public Integer getVtReceiptDetailId() {
+        return vtReceiptDetailId;
+    }
+
+    public void setVtReceiptDetailId(Integer vtReceiptDetailId) {
+        this.vtReceiptDetailId = vtReceiptDetailId;
+    }
     
+
 }
