@@ -209,7 +209,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
              */
 
             sqlBuffer.append(" select ");
-            sqlBuffer.append(" (select count(mgd.ma_gom_don) from vt_gom_don_nhan mgd ");
+            sqlBuffer.append(" (select count(1) from vt_gom_don_nhan mgd ");
             sqlBuffer.append(" where mgd.gen_date > :fromDate and mgd.gen_date < :toDate ) as soPhieuNhan, ");
             sqlBuffer.append(" (select count(th.toa_hang_code) from vt_toa_hang th ");
             sqlBuffer.append(" where th.gen_date > :fromDate and th.gen_date < :toDate ) as soToaHang, ");
@@ -218,7 +218,7 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
             sqlBuffer.append(" sum(case when r.payment_type = 1 then (select sum(cost) from vt_receipt_detail where receipt_id = r.id) else 0 end) as traTruoc , ");
             sqlBuffer.append(" sum(case when r.payment_type = 2 then (select sum(cost) from vt_receipt_detail where receipt_id = r.id) else 0 end) as traSau , ");
             sqlBuffer.append(" sum(case when r.payment_type = 3 then (select sum(cost) from vt_receipt_detail where receipt_id = r.id) else 0 end) as CongNo , ");
-            sqlBuffer.append(" r.tien_da_tra, count(r.receipt_code) as soPhieuLap ");
+            sqlBuffer.append(" sum(r.tien_da_tra), count(r.receipt_code) as soPhieuLap ");
             sqlBuffer.append(" from vt_receipt r ");
             sqlBuffer.append(" where r.gen_date > :fromDate and r.gen_date < :toDate ");
 
