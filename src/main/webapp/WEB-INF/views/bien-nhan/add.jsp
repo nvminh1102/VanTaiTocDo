@@ -439,6 +439,12 @@
             format: 'DD/MM/YYYY',
             sideBySide: true
         }).data('autoclose', true);
+
+        if(localStorage.getItem("addSuccess"))
+        {
+            toastr.success(localStorage.getItem("addSuccess"));
+            localStorage.clear();
+        }
     });
 
     $("input[data-type='currency']").on({

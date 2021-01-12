@@ -159,11 +159,13 @@ app.controller('frameworkCtrl', ['$scope', '$http', 'fileUpload', function ($sco
                         switch (Number(response.data)) {
                             case 1:
                                 document.getElementById("btnSaveAuctionInfo").disabled = false;
-                                toastr.success("Thêm mới phiếu nhận hàng thành công!");
+                                // toastr.success("Thêm mới phiếu nhận hàng thành công!");
+                                localStorage.setItem("addSuccess","Thêm mới phiếu nhận hàng thành công!");
                                 $scope.info = {};
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 2000);
+                                location.reload();
+                                // setTimeout(function () {
+                                //     location.reload();
+                                // }, 2000);
                                 break;
                             case 0:
                                 toastr.error("Có lỗi xảy ra vui lòng thử lại sau!");
