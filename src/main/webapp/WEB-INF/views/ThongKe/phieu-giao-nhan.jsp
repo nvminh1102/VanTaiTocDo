@@ -138,7 +138,7 @@
                                 </thead>
                                 <tbody>
                                 <tr ng-switch-when="0">
-                                    <td colspan="8" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
+                                    <td colspan="10" style="height: 100%;background-color: #ececec; line-height: 3.429;text-align: center; font-style: italic;">
                                         Không có dữ liệu
                                     </td>
                                 </tr>
