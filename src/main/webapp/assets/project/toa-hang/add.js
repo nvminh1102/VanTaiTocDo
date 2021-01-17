@@ -63,6 +63,15 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
             }
             $scope.listHangHoaDaChon = list2_;
 
+            var list3_ = [];
+            if (typeof $scope.listHangHoa !== "undefined" && $scope.listHangHoa.length > 0)
+                for (var i = 0; i < $scope.listHangHoa.length; i++) {
+                    if ($scope.listHangHoa[i].receiptId != idRemove) {
+                        list3_.push($scope.listHangHoa[i]);
+                    }
+                }
+            $scope.listHangHoa = list3_;
+
             if (typeof $scope.listBienNhan !== "undefined" && $scope.listBienNhan.length > 0) {
                 console.log("$scope.listBienNhan.length:" + $scope.listBienNhan.length);
                 for (var i = 0; i < $scope.listBienNhan.length; i++) {
@@ -83,6 +92,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
 
             if (typeof $scope.listHangHoa !== "undefined" && $scope.listHangHoa.length > 0) {
                 console.log("$scope.listHangHoa.length:" + $scope.listHangHoa.length);
+
                 for (var i = 0; i < $scope.listHangHoa.length; i++) {
                     var boolenCheck = true;
                     for (var j = 0; j < $scope.listHangHoaDaChon.length; j++) {
@@ -319,7 +329,7 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 var idRemove = objectBienNhan.id;
                 var list_ = [];
                 for (var i = 0; i < $scope.listBienNhanDaChon.length; i++) {
-                    if ($scope.listBienNhanDaChon[i].id != idRemove) {
+                    if ($scope.listBienNhanDaChon[i].id !== idRemove) {
                         list_.push($scope.listBienNhanDaChon[i]);
                     }
                 }
@@ -327,11 +337,21 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
 
                 var list2_ = [];
                 for (var i = 0; i < $scope.listHangHoa.length; i++) {
-                    if ($scope.listHangHoa[i].receiptId != idRemove) {
+                    if ($scope.listHangHoa[i].receiptId !== idRemove) {
                         list2_.push($scope.listHangHoa[i]);
                     }
                 }
                 $scope.listHangHoa = list2_;
+
+                var list3_ = [];
+                for (var i = 0; i < $scope.listHangHoaDaChon.length; i++) {
+                    if ($scope.listHangHoaDaChon[i].receiptId !== idRemove) {
+                        list3_.push($scope.listHangHoaDaChon[i]);
+                    }
+                }
+                $scope.listHangHoaDaChon = list3_;
+
+
             }
             if ($('.onChangeBNSelectBox_:checked').length == $('.onChangeBNSelectBox_').length) {
                 $scope.checkAll = true;
@@ -424,8 +444,8 @@ app.controller('vantai', ['$scope', '$http', '$timeout', '$q', function ($scope,
                 defer.resolve();
             }, 1000);
         };
-        
-        
+
+
         $(document).ready(function () {
             $("#fromDeceipt").datetimepicker({
                 locale: 'vi-VN',

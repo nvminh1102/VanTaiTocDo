@@ -132,7 +132,9 @@ public class PhieuGiaoHangController {
         List<Integer> listId = new ArrayList<>();
         if(vtPhieuGiaoHangDetails!=null && vtPhieuGiaoHangDetails.size()>0){
             for(VtPhieuGiaoHangDetail vtPhieuGiaoHangDetail :vtPhieuGiaoHangDetails){
-                listId.add(vtPhieuGiaoHangDetail.getVtReceiptDetailId());
+                if(vtPhieuGiaoHangDetail.getVtReceiptDetailId()!=null && vtPhieuGiaoHangDetail.getVtReceiptDetailId().intValue()>0){
+                    listId.add(vtPhieuGiaoHangDetail.getVtReceiptDetailId());
+                }
             }
         }
         if(listId!=null && listId.size()>0){

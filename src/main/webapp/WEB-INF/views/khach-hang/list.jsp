@@ -261,7 +261,7 @@
                         </div>
                         <label class="col-sm-2 control-label" style="line-height: 30px">Số điện thoại</label>
                         <div class="col-sm-4">
-                            <input name="info.mobile" id="info.mobile" ng-value="info.mobile" ng-model="info.mobile" maxlength="50" class="form-control"/>
+                            <input name="info.mobile" id="info.mobile" ng-value="info.mobile" ng-model="info.mobile" maxlength="20" class="form-control"/>
                         </div>
                     </div>
 

@@ -272,7 +272,8 @@ public class ThongKeGiaoNhanHangDAOImpl implements ThongKeGiaoNhanHangDAO {
 //            sqlBuffer.append(" where r.gen_date > :fromGenDate and r.gen_date < :toGenDate ");
             sqlBuffer.append(" ) tbl    where  (tbl.ngayGomDon is not null and tbl.ngayGomDon > :fromDate and tbl.ngayGomDon < :toDate ) or ");
             sqlBuffer.append(" (tbl.ngayLenToa is not null and tbl.ngayLenToa > :fromDate and tbl.ngayLenToa < :toDate ) or ");
-            sqlBuffer.append(" (tbl.ngayGiaoHang is not null and tbl.ngayGiaoHang > :fromDate and tbl.ngayGiaoHang < :toDate ) ");
+            sqlBuffer.append(" (tbl.ngayGiaoHang is not null and tbl.ngayGiaoHang > :fromDate and tbl.ngayGiaoHang < :toDate ) or ");
+            sqlBuffer.append(" (tbl.ngayLapPhieu is not null and tbl.ngayLapPhieu > :fromDate and tbl.ngayLapPhieu < :toDate ) ");
             sqlBuffer.append("  order by tbl.ngayGiaoHang desc, tbl.ngayLenToa desc, tbl.ngayGomDon desc , tbl.ngayLapPhieu desc ");
             Query query = entityManager.createNativeQuery(sqlBuffer.toString()).setParameter("fromDate", fromGenDate).setParameter("toDate", toGenDate);
             List<Object[]> list = query.getResultList();

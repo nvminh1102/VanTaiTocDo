@@ -174,7 +174,7 @@
                                             </div>
                                         </td>
                                         <!--<td class="text-left v-inherit">{{item.maPhieuGiao}}</td>-->
-                                        <td class="text-center v-inherit">{{item.genDate|date:'dd/MM/yyyy'}}</td>
+                                        <td class="text-center v-inherit">{{item.genDate | date:"dd/MM/yyyy"}}</td>
                                         <td class="text-left v-inherit">{{item.nhaXe}}</td>
                                         <td class="text-left v-inherit">{{item.loaiXe}}</td>
                                         <td class="text-left v-inherit">{{item.bienSo}}</td>
