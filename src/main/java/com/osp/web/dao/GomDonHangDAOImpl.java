@@ -1,8 +1,11 @@
 package com.osp.web.dao;
 
+import com.osp.common.Constants;
 import com.osp.common.DateUtils;
 import com.osp.common.PagingResult;
+import com.osp.model.AdmLogData;
 import com.osp.model.User;
+import com.osp.model.VtArea;
 import com.osp.model.VtGomDonNhan;
 import com.osp.model.VtGomDonNhanDetail;
 import com.osp.model.VtReceiptDetail;
@@ -15,6 +18,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,19 +87,38 @@ public class GomDonHangDAOImpl implements GomDonHangDAO {
     }
 
     @Override
-    public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user) {
+    public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user, HttpServletRequest request) {
         try {
             VtGomDonNhan vtGomDonNhan = vTGoodsReceiptForm.getVtGomDonNhan();
             vtGomDonNhan.setUpdatedBy(user.getUsername());
             vtGomDonNhan.setLastUpdate(new Date());
             if (vtGomDonNhan.getId() != null) {
+                List<VtGomDonNhanDetail> vtGomDonNhanDetail = new ArrayList<>();
+
+                Query queryDetail = entityManager.createQuery("SELECT a from VtGomDonNhanDetail a where a.vtGomDonNhanId=:vtGomDonNhanId ").setParameter("vtGomDonNhanId", vtGomDonNhan.getId());
+                vtGomDonNhanDetail = queryDetail.getResultList();
+
+                Query queryAll = entityManager.createQuery("select r from VtGomDonNhan r where r.id = :id ").setParameter("id", vtGomDonNhan.getId());
+                VtGomDonNhan oldData = (VtGomDonNhan) queryAll.getSingleResult();
+
                 Query query = entityManager.createQuery("delete from VtGomDonNhanDetail a WHERE a.vtGomDonNhanId=:vtGomDonNhanId").setParameter("vtGomDonNhanId", vtGomDonNhan.getId());
                 query.executeUpdate();
                 entityManager.merge(vtGomDonNhan);
+
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(vtGomDonNhanDetail, null, user.getUsername(), request, "/managerVanTai/gom-don-hang/add", Constants.action.DELETE);
+                entityManager.persist(admLogData);
+                // insert log data
+                AdmLogData admLogData2 = new AdmLogData(oldData, vtGomDonNhan, user.getUsername(), request, "/managerVanTai/gom-don-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogData2);
+
             } else {
                 vtGomDonNhan.setGenDate(new Date());
                 vtGomDonNhan.setCreatedBy(user.getUsername());
                 entityManager.persist(vtGomDonNhan);
+                // insert log data
+                AdmLogData admLogData2 = new AdmLogData(null, vtGomDonNhan, user.getUsername(), request, "/managerVanTai/gom-don-hang/add", Constants.action.INSERT);
+                entityManager.persist(admLogData2);
             }
             List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             for (VtReceiptView bo : vtReceiptViews) {
@@ -109,6 +132,9 @@ public class GomDonHangDAOImpl implements GomDonHangDAO {
 //                Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status =3 WHERE a.id=:id").setParameter("id", bo.getId().intValue());
 //                queryUpdateHangHoa.executeUpdate();
                 entityManager.persist(vtGomDonNhanDetail);
+                // insert log data
+                AdmLogData admLogData2 = new AdmLogData(null, vtGomDonNhanDetail, user.getUsername(), request, "/managerVanTai/gom-don-hang/add", Constants.action.INSERT);
+                entityManager.persist(admLogData2);
             }
             entityManager.flush();
         } catch (Exception e) {
@@ -120,14 +146,29 @@ public class GomDonHangDAOImpl implements GomDonHangDAO {
     }
 
     @Override
-    public Boolean delete(Integer id, User user, String ip) {
+    public Boolean delete(Integer id, User user, String ip, HttpServletRequest request) {
         try {
             if (id != null) {
+                List<VtGomDonNhanDetail> vtGomDonNhanDetail = new ArrayList<>();
+
+                Query queryDetail = entityManager.createQuery("SELECT a from VtGomDonNhanDetail a where a.vtGomDonNhanId=:vtGomDonNhanId ").setParameter("vtGomDonNhanId", id);
+                vtGomDonNhanDetail = queryDetail.getResultList();
+                
+                Query queryAll = entityManager.createQuery("select r from VtGomDonNhan r where r.id = :id ").setParameter("id", id);
+                VtGomDonNhan oldData = (VtGomDonNhan) queryAll.getSingleResult();
+                
                 Query querydetail = entityManager.createQuery("delete from VtGomDonNhanDetail a WHERE a.vtGomDonNhanId=:vtGomDonNhanId").setParameter("vtGomDonNhanId", id);
                 querydetail.executeUpdate();
                 Query query = entityManager.createQuery("delete from VtGomDonNhan a WHERE a.id=:id").setParameter("id", id);
                 query.executeUpdate();
                 entityManager.flush();
+                // insert log data
+                AdmLogData admLogData2 = new AdmLogData(null, vtGomDonNhanDetail, user.getUsername(), request, "/managerVanTai/gom-don-hang/add", Constants.action.DELETE);
+                entityManager.persist(admLogData2);
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(null, oldData, user.getUsername(), request, "/managerVanTai/gom-don-hang/add", Constants.action.DELETE);
+                entityManager.persist(admLogData);
+                
             } else {
                 return false;
             }
@@ -295,19 +336,19 @@ public class GomDonHangDAOImpl implements GomDonHangDAO {
                 row.setTenNguoiGui(record[2] == null ? null : (String) record[2]);
                 row.setTenNguoiNhan(record[3] == null ? null : (String) record[3]);
                 row.setDiaChiNguoiNhan(record[4] == null ? null : (String) record[4]);
-                
+
                 row.setSdtNguoiNhan(record[5] == null ? null : (String) record[5]);
                 row.setName(record[6] == null ? null : (String) record[6]);
                 row.setNumbers(record[7] == null ? null : Integer.valueOf(record[7].toString()));
                 row.setCost(record[8] == null ? null : Integer.valueOf(record[8].toString()));
                 row.setSizes(record[9] == null ? null : (String) record[9]);
-                
+
                 row.setWeight(record[10] == null ? null : (String) record[10]);
                 row.setNote(record[11] == null ? null : (String) record[11]);
                 row.setNguoiThanhToan(record[12] == null ? null : (String) record[12]);
                 row.setDiaChiNguoiGui(record[13] == null ? null : (String) record[13]);
                 row.setSdtNguoiGui(record[14] == null ? null : (String) record[14]);
-                
+
                 row.setStrGenDate(record[15] == null ? null : (String) record[15]);
                 row.setStockName(record[16] == null ? null : (String) record[16]);
                 row.setSoTienPhaiThu(record[17] == null ? null : (String) record[17]);

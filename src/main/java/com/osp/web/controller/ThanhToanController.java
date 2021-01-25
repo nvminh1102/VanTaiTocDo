@@ -2,11 +2,13 @@ package com.osp.web.controller;
 
 import com.osp.common.ConstantAuthor;
 import com.osp.common.ConstantAuthor.THANH_TOAN;
+import com.osp.common.Constants;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.*;
 import com.osp.model.view.BienNhanForm;
 import com.osp.model.view.VtReceiptView;
+import com.osp.web.dao.AdmLogDataDAO;
 import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.MatHangDAO;
@@ -46,15 +48,18 @@ public class ThanhToanController {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     @Autowired
     ThanhToanDAO thanhToanDAO;
-    
+
     @Autowired
     BienNhanDAO bienNhanDAO;
-    
+
     @Autowired
     MatHangDAO matHangDAO;
 
     @Autowired
     AreaDAO areaDAO;
+
+    @Autowired
+    AdmLogDataDAO admLogDataDAO;
 
     private final String templateThanhToan = "/fileTemplate/templateCongNo.xlsx";
 
@@ -98,10 +103,17 @@ public class ThanhToanController {
     @PostMapping(value = "/update-tien-da-tra")
     @Secured(ConstantAuthor.THANH_TOAN.edit)
     public ResponseEntity<String> updateTienDaTra(@RequestBody BienNhanForm item, HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             VtReceipt phieuNhanHang = bienNhanDAO.getById(item.getBienNhan().getId());
+            VtReceipt oldData = bienNhanDAO.getById(item.getBienNhan().getId());
             phieuNhanHang.setTienDaTra((phieuNhanHang.getTienDaTra() != null ? phieuNhanHang.getTienDaTra() : 0) + item.getBienNhan().getTienDaTra());
             bienNhanDAO.edit(phieuNhanHang);
+            
+            // insert log data
+            AdmLogData admLogData = new AdmLogData(oldData, phieuNhanHang, user.getUsername(), request, "/managerVanTai/thanh-toan/update-tien-da-tra", Constants.action.UPDATE);
+            admLogDataDAO.add(admLogData);
+            
             return new ResponseEntity<String>("1", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,7 +169,7 @@ public class ThanhToanController {
                 toDate = sdf2.parse(strTdate);
             }
             Integer maxId = thanhToanDAO.getMaxId();
-            String congNoCode = (vtArea!=null? vtArea.getCode()+ "-": "") + "CN-" + yyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
+            String congNoCode = (vtArea != null ? vtArea.getCode() + "-" : "") + "CN-" + yyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
             // Thêm mới công nợ
             VtCongNo congNo = new VtCongNo();
             congNo.setCongNoCode(congNoCode);

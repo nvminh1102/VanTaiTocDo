@@ -150,7 +150,7 @@ public class ToaHangController {
     public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
-        boolean check = toaHangDAO.add(vTGoodsReceiptForm, user);
+        boolean check = toaHangDAO.add(vTGoodsReceiptForm, user, request);
         if (check) {
             reponse = new MessReponse(true, 200, "Lưu thành công!");
         } else {
@@ -165,7 +165,7 @@ public class ToaHangController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             String ipClient = Utils.getIpClient(request);
-            boolean check = toaHangDAO.delete(vtToaHang.getId(), user, ipClient);
+            boolean check = toaHangDAO.delete(vtToaHang.getId(), user, ipClient, request);
             if (check) {
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {

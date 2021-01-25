@@ -130,7 +130,7 @@ public class GomDonHangController {
     public ResponseEntity<MessReponse> addAppoint(@RequestBody @Valid final VTGoodsReceiptForm vTGoodsReceiptForm, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         MessReponse reponse = new MessReponse();
-        boolean check = gomDonHangDAO.add(vTGoodsReceiptForm, user);
+        boolean check = gomDonHangDAO.add(vTGoodsReceiptForm, user, request);
         if (check) {
             reponse = new MessReponse(true, 200, "Lưu thành công!");
         } else {
@@ -145,7 +145,7 @@ public class GomDonHangController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             String ipClient = Utils.getIpClient(request);
-            boolean check = gomDonHangDAO.delete(vtPhieuGiaoHang.getId(), user, ipClient);
+            boolean check = gomDonHangDAO.delete(vtPhieuGiaoHang.getId(), user, ipClient, request);
             if (check) {
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {

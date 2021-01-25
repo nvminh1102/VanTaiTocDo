@@ -1,10 +1,13 @@
 package com.osp.web.controller;
 
 import com.osp.common.ConstantAuthor;
+import com.osp.common.Constants;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
+import com.osp.model.AdmLogData;
 import com.osp.model.User;
 import com.osp.model.VtPartner;
+import com.osp.web.dao.AdmLogDataDAO;
 import com.osp.web.dao.KhachHangDAO;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +29,9 @@ public class KhachHangController {
 
     @Autowired
     KhachHangDAO khachHangDAO;
+
+    @Autowired
+    AdmLogDataDAO admLogDataDAO;
 
     @GetMapping("/list")
     @Secured(ConstantAuthor.KHACH_HANG.view)
@@ -57,11 +63,17 @@ public class KhachHangController {
     @PostMapping(value = "/delete")
     @Secured(ConstantAuthor.KHACH_HANG.delete)
     public ResponseEntity<String> delete(@RequestBody VtPartner vtPartner, HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             if (vtPartner.getId() == null) {
                 return new ResponseEntity<String>("1", HttpStatus.OK);
             }
+            VtPartner oldData = khachHangDAO.getById(vtPartner.getId());
             boolean isDelete = khachHangDAO.delete(vtPartner.getId());
+            // insert log data
+            AdmLogData admLogData = new AdmLogData(oldData, null, user.getUsername(), request, "/managerVanTai/khach-hang/delete", Constants.action.DELETE);
+            admLogDataDAO.add(admLogData);
+
             if (isDelete) {
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {
@@ -90,6 +102,8 @@ public class KhachHangController {
             }
             if (vtPartner.getId() != null) {
                 if (objDb != null) {
+                    VtPartner oldData = khachHangDAO.getById(vtPartner.getId());
+
                     objDb.setFullName(vtPartner.getFullName().trim());
                     objDb.setTaxCode(vtPartner.getTaxCode().trim());
                     if (vtPartner.getMobile() != null && !"".equals(vtPartner.getMobile())) {
@@ -109,6 +123,10 @@ public class KhachHangController {
                     objDb.setSoHopDong(vtPartner.getSoHopDong());
                     objDb.setUpdatedBy(user.getUsername());
                     khachHangDAO.edit(objDb);
+                    // insert log data
+                    AdmLogData admLogData = new AdmLogData(oldData, objDb, user.getUsername(), request, "/managerVanTai/khach-hang/them-moi-khach-hang", Constants.action.UPDATE);
+                    admLogDataDAO.add(admLogData);
+
                 }
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {
@@ -133,6 +151,10 @@ public class KhachHangController {
                 saveObj.setSoHopDong(vtPartner.getSoHopDong());
                 saveObj.setCreatedBy(user.getUsername());
                 khachHangDAO.add(saveObj);
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(null, saveObj, user.getUsername(), request, "/managerVanTai/khach-hang/them-moi-khach-hang", Constants.action.INSERT);
+                admLogDataDAO.add(admLogData);
+
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             }
         } catch (Exception e) {

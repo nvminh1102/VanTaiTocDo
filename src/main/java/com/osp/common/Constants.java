@@ -1,5 +1,9 @@
 package com.osp.common;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.temporal.ChronoUnit;
+
 /**
  * Created by Admin on 1/4/2018.
  */
@@ -35,5 +39,20 @@ public class Constants {
         public static final Long HIEU_LUC=0L;
         public static final Long HET_HIEU_LUC=1L;
     }
+    
+    public static class action{
+        public static final String INSERT = "INSERT";
+        public static final String UPDATE = "UPDATE";
+        public static final String DELETE = "DELETE";
+    }
    // public static final String path="http://localhost:9200";
+    
+    public static void main(String[] args) {
+        //24-May-2017, change this to your desired Start Date
+	LocalDate dateBefore = LocalDate.of(2016, Month.APRIL, 1);
+        //29-July-2017, change this to your desired End Date
+	LocalDate dateAfter = LocalDate.of(2021, Month.JUNE, 20);
+	long noOfDaysBetween = ChronoUnit.DAYS.between(dateBefore, dateAfter);
+	System.out.println(noOfDaysBetween);
+    }
 }

@@ -8,12 +8,13 @@ import com.osp.model.VtReceiptDetail;
 import com.osp.model.view.VTGoodsReceiptForm;
 import java.util.List;
 import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 
 public interface PhieuGiaoHangDAO {
 
     Optional<PagingResult> search(VtPhieuGiaoHang vtPhieuGiaoHang, PagingResult page);
 
-    Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user);
+    Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user, HttpServletRequest request);
 
     Boolean delete(Integer id, User user, String ip);
 

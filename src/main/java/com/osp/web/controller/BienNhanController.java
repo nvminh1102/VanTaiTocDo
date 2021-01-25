@@ -3,10 +3,12 @@ package com.osp.web.controller;
 import com.osp.common.ConstantAuthor;
 import com.osp.common.ConstantAuthor.NHA_XE;
 import com.osp.common.ConstantAuthor.PHIEU_NHAN_HANG;
+import com.osp.common.Constants;
 import com.osp.common.PagingResult;
 import com.osp.common.Utils;
 import com.osp.model.*;
 import com.osp.model.view.BienNhanForm;
+import com.osp.web.dao.AdmLogDataDAO;
 import com.osp.web.dao.AreaDAO;
 import com.osp.web.dao.BienNhanDAO;
 import com.osp.web.dao.InPhieuThuDAO;
@@ -62,13 +64,16 @@ public class BienNhanController {
     @Autowired
     AreaDAO areaDAO;
 
+    @Autowired
+    AdmLogDataDAO admLogDataDAO;
+
     @GetMapping("/preAdd")
     @Secured(ConstantAuthor.PHIEU_NHAN_HANG.add)
     public String list(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         VtArea vtArea = areaDAO.getVtAreaById(user.getAreaId());
         Integer maxId = bienNhanDAO.getMaxId();
-        String receiptCode = (vtArea!=null? vtArea.getCode()+ "-": "") + "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
+        String receiptCode = (vtArea != null ? vtArea.getCode() + "-" : "") + "NH-" + formatteryyyy.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
         model.addAttribute("receiptCode", receiptCode);
         return "bienNhan.add";
     }
@@ -87,13 +92,13 @@ public class BienNhanController {
                 VtPartner nguoiGui = new VtPartner();
                 nguoiGui.setTaxCode(item.getNguoiGui().getTaxCode().trim());
                 nguoiGui.setFullName(item.getNguoiGui().getFullName().trim());
-                if(item.getNguoiGui().getMobile()!=null){
+                if (item.getNguoiGui().getMobile() != null) {
                     nguoiGui.setMobile(item.getNguoiGui().getMobile().trim());
                 }
-                if(item.getNguoiGui().getAddress()!=null){
+                if (item.getNguoiGui().getAddress() != null) {
                     nguoiGui.setAddress(item.getNguoiGui().getAddress().trim());
                 }
-                if(item.getNguoiGui().getSoHopDong()!=null){
+                if (item.getNguoiGui().getSoHopDong() != null) {
                     nguoiGui.setSoHopDong(item.getNguoiGui().getSoHopDong().trim());
                 }
                 nguoiGui.setCreatedBy(user.getUsername());
@@ -103,6 +108,9 @@ public class BienNhanController {
                 //type 1 khách hàng, 2 người gửi, 3 người nhận
                 nguoiGui.setTypePartner(2);
                 rsNguoiGui = khachHangDAO.add(nguoiGui);
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(null, nguoiGui, user.getUsername(), request, "/managerVanTai/bienNhan/them-moi-bien-nhan", Constants.action.INSERT);
+                admLogDataDAO.add(admLogData);
             }
 
             // insert người nhận
@@ -110,13 +118,13 @@ public class BienNhanController {
                 VtPartner nguoiNhan = new VtPartner();
                 nguoiNhan.setTaxCode(item.getNguoiNhan().getTaxCode().trim());
                 nguoiNhan.setFullName(item.getNguoiNhan().getFullName().trim());
-                if(item.getNguoiNhan().getMobile()!=null){
+                if (item.getNguoiNhan().getMobile() != null) {
                     nguoiNhan.setMobile(item.getNguoiNhan().getMobile().trim());
                 }
-                if(item.getNguoiNhan().getAddress()!=null){
+                if (item.getNguoiNhan().getAddress() != null) {
                     nguoiNhan.setAddress(item.getNguoiNhan().getAddress().trim());
                 }
-                if(item.getNguoiNhan().getSoHopDong()!=null){
+                if (item.getNguoiNhan().getSoHopDong() != null) {
                     nguoiNhan.setSoHopDong(item.getNguoiNhan().getSoHopDong().trim());
                 }
                 nguoiNhan.setCreatedBy(user.getUsername());
@@ -126,6 +134,9 @@ public class BienNhanController {
                 //type 1 khách hàng, 2 người gửi, 3 người nhận
                 nguoiNhan.setTypePartner(3);
                 rsNguoiNhan = khachHangDAO.add(nguoiNhan);
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(null, nguoiNhan, user.getUsername(), request, "/managerVanTai/bienNhan/them-moi-bien-nhan" , Constants.action.INSERT);
+                admLogDataDAO.add(admLogData);
             }
 
             //insert biên nhận
@@ -146,12 +157,12 @@ public class BienNhanController {
             bienNhan.setDatepushStock(new Date());
             // 1 trả trước, 2 trả sau, 3 công nợ
             bienNhan.setPaymentType(item.getBienNhan().getPaymentType());
-            if(item.getBienNhan().getNguoiThanhToanId()!=null){
-                if(item.getBienNhan().getNguoiThanhToanId()== -2){
-                    bienNhan.setNguoiThanhToanId(nguoiGuiDb.getId()==null ? rsNguoiGui.getId(): nguoiGuiDb.getId());
-                }else if(item.getBienNhan().getNguoiThanhToanId()== -3){
-                    bienNhan.setNguoiThanhToanId(nguoiNhanDb.getId()==null ? rsNguoiNhan.getId(): nguoiNhanDb.getId());
-                }else{
+            if (item.getBienNhan().getNguoiThanhToanId() != null) {
+                if (item.getBienNhan().getNguoiThanhToanId() == -2) {
+                    bienNhan.setNguoiThanhToanId(nguoiGuiDb.getId() == null ? rsNguoiGui.getId() : nguoiGuiDb.getId());
+                } else if (item.getBienNhan().getNguoiThanhToanId() == -3) {
+                    bienNhan.setNguoiThanhToanId(nguoiNhanDb.getId() == null ? rsNguoiNhan.getId() : nguoiNhanDb.getId());
+                } else {
                     bienNhan.setNguoiThanhToanId(item.getBienNhan().getNguoiThanhToanId());
                 }
             }
@@ -170,12 +181,15 @@ public class BienNhanController {
             bienNhan.setCreatedBy(user.getUsername());
             bienNhan.setUpdatedBy(user.getUsername());
             VtReceipt rsBienNhanAdd = bienNhanDAO.add(bienNhan);
+            // insert log data
+            AdmLogData admLogData = new AdmLogData(null, bienNhan, user.getUsername(), request, "/managerVanTai/bienNhan/them-moi-bien-nhan", Constants.action.INSERT);
+            admLogDataDAO.add(admLogData);
 
             List<VtReceiptDetail> dsMatHang = item.getMatHang();
             for (VtReceiptDetail matHang : dsMatHang) {
                 matHang.setCreatedBy(user.getUsername());
                 matHang.setUpdatedBy(user.getUsername());
-                handleMatHang(matHang, rsBienNhanAdd.getId());
+                handleMatHang(matHang, rsBienNhanAdd.getId(), request);
             }
 
             return new ResponseEntity<String>("1", HttpStatus.OK);
@@ -185,7 +199,7 @@ public class BienNhanController {
         }
     }
 
-    private void handleMatHang(VtReceiptDetail item, Integer bienNhanId) {
+    private void handleMatHang(VtReceiptDetail item, Integer bienNhanId, HttpServletRequest request) {
         VtReceiptDetail info = new VtReceiptDetail();
         info.setCost(item.getCost());
         info.setCreatedBy(item.getCreatedBy());
@@ -204,6 +218,9 @@ public class BienNhanController {
         info.setUpdatedBy(item.getUpdatedBy());
         info.setWeight(item.getWeight());
         matHangDAO.add(info);
+        // insert log data
+        AdmLogData admLogData = new AdmLogData(null, info, item.getCreatedBy(), request, "/managerVanTai/bienNhan/them-moi-bien-nhan" , Constants.action.INSERT);
+        admLogDataDAO.add(admLogData);
     }
 
     @GetMapping("/ThongTinNguoiGui")
@@ -283,11 +300,16 @@ public class BienNhanController {
     @PostMapping(value = "/delete")
     @Secured(ConstantAuthor.PHIEU_NHAN_HANG.delete)
     public ResponseEntity<String> delete(@RequestBody VtReceipt vtReceipt, HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             if (vtReceipt.getId() == null) {
                 return new ResponseEntity<String>("1", HttpStatus.OK);
             }
+            VtReceipt receipt = bienNhanDAO.getById(vtReceipt.getId());
             boolean isDelete = bienNhanDAO.delete(vtReceipt.getId());
+            // insert log data
+            AdmLogData admLogData = new AdmLogData(receipt, null, user.getUsername(), request, "/managerVanTai/bienNhan/delete" , Constants.action.DELETE);
+            admLogDataDAO.add(admLogData);
             if (isDelete) {
                 return new ResponseEntity<String>("0", HttpStatus.OK);
             } else {
@@ -344,9 +366,14 @@ public class BienNhanController {
     public ResponseEntity<String> deleteProperty(
             @RequestParam(value = "arrIdDelete", required = true) int[] arrIdDelete,
             HttpServletRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             for (int propertyID : arrIdDelete) {
+                VtReceiptDetail vtReceiptDetail = matHangDAO.getById(propertyID);
                 matHangDAO.delete(propertyID);
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(vtReceiptDetail, null, user.getUsername(), request, "/managerVanTai/bienNhan/deleteProperty" , Constants.action.DELETE);
+                admLogDataDAO.add(admLogData);
             }
             return new ResponseEntity<String>("1", HttpStatus.OK);
         } catch (Exception e) {
@@ -360,6 +387,7 @@ public class BienNhanController {
     public ResponseEntity<String> editAuctionInfo(@RequestBody BienNhanForm item, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         VtReceipt bienNhanCu = bienNhanDAO.getById(item.getBienNhan().getId());
+        VtReceipt oldDataBNC = bienNhanDAO.getById(item.getBienNhan().getId());
         List<VtReceiptDetail> propertyList = item.getMatHang();
         try {
             VtPartner nguoiGui = new VtPartner();
@@ -376,11 +404,12 @@ public class BienNhanController {
             if (item.getNguoiGui().getAddress() != null && !"".equals(item.getNguoiGui().getAddress())) {
                 nguoiGui.setAddress(item.getNguoiGui().getAddress().trim());
             }
-            if (item.getNguoiGui().getSoHopDong()!= null && !"".equals(item.getNguoiGui().getSoHopDong())) {
+            if (item.getNguoiGui().getSoHopDong() != null && !"".equals(item.getNguoiGui().getSoHopDong())) {
                 nguoiGui.setSoHopDong(item.getNguoiGui().getSoHopDong().trim());
             }
             // update người gửi
             VtPartner nguoiGuiCu = khachHangDAO.getById(bienNhanCu.getDeliveryPartnerId());
+            VtPartner oldDataNG = khachHangDAO.getById(bienNhanCu.getDeliveryPartnerId());
             if (nguoiGuiCu != null) {
                 nguoiGui.setId(nguoiGuiCu.getId());
                 if (!Objects.equals(nguoiGui.getFullName(), nguoiGuiCu.getFullName()) || !Objects.equals(nguoiGui.getTaxCode(), nguoiGuiCu.getTaxCode())
@@ -393,6 +422,10 @@ public class BienNhanController {
                     nguoiGuiCu.setUpdatedBy(user.getUsername());
                     nguoiGuiCu.setLastUpdate(new Date());
                     boolean blUpdate = khachHangDAO.edit(nguoiGuiCu);
+
+                    // insert log data
+                    AdmLogData admLogData = new AdmLogData(oldDataNG, nguoiGuiCu, user.getUsername(), request, "/managerVanTai/bienNhan/chinh-sua-bien-nhan", Constants.action.UPDATE);
+                    admLogDataDAO.add(admLogData);
 
                 }
             }
@@ -409,12 +442,13 @@ public class BienNhanController {
             if (item.getNguoiNhan().getAddress() != null && !"".equals(item.getNguoiNhan().getAddress())) {
                 nguoiNhan.setAddress(item.getNguoiNhan().getAddress().trim());
             }
-            if (item.getNguoiNhan().getSoHopDong()!= null && !"".equals(item.getNguoiNhan().getSoHopDong())) {
+            if (item.getNguoiNhan().getSoHopDong() != null && !"".equals(item.getNguoiNhan().getSoHopDong())) {
                 nguoiNhan.setSoHopDong(item.getNguoiNhan().getSoHopDong().trim());
             }
 
             // update người nhận
             VtPartner nguoiNhanCu = khachHangDAO.getById(bienNhanCu.getReceivePartnerId());
+            VtPartner oldDataNN = khachHangDAO.getById(bienNhanCu.getReceivePartnerId());
             if (nguoiNhanCu != null) {
                 nguoiNhanCu.setId(nguoiNhanCu.getId());
                 if (!Objects.equals(nguoiNhanCu.getFullName(), nguoiNhan.getFullName()) || !Objects.equals(nguoiNhanCu.getTaxCode(), nguoiNhan.getTaxCode())
@@ -427,6 +461,9 @@ public class BienNhanController {
                     nguoiGuiCu.setUpdatedBy(user.getUsername());
                     nguoiGuiCu.setLastUpdate(new Date());
                     boolean blUpdate = khachHangDAO.edit(nguoiNhanCu);
+                    // insert log data
+                    AdmLogData admLogData = new AdmLogData(oldDataNN, nguoiNhanCu, user.getUsername(), request, "/managerVanTai/bienNhan/chinh-sua-bien-nhan", Constants.action.UPDATE);
+                    admLogDataDAO.add(admLogData);
                 }
             }
 
@@ -443,15 +480,18 @@ public class BienNhanController {
             bienNhanCu.setLoaiXe(item.getBienNhan().getLoaiXe());
             bienNhanCu.setEmployee(item.getBienNhan().getEmployee());
             bienNhanCu.setUpdatedBy(user.getUsername());
-            if(item.getBienNhan().getNguoiThanhToanId()!=null){
-                    bienNhanCu.setNguoiThanhToanId(item.getBienNhan().getNguoiThanhToanId());
+            if (item.getBienNhan().getNguoiThanhToanId() != null) {
+                bienNhanCu.setNguoiThanhToanId(item.getBienNhan().getNguoiThanhToanId());
             }
-            
+
             boolean blUpdate = bienNhanDAO.edit(bienNhanCu);
+            // insert log data
+            AdmLogData admLogData = new AdmLogData(oldDataBNC, bienNhanCu, user.getUsername(), request, "/managerVanTai/bienNhan/chinh-sua-bien-nhan", Constants.action.UPDATE);
+            admLogDataDAO.add(admLogData);
 
             if (blUpdate) {
                 for (VtReceiptDetail property : propertyList) {
-                    handleProperty(property, bienNhanCu.getId());
+                    handleProperty(property, bienNhanCu.getId(), request);
                 }
             }
             return new ResponseEntity<String>("1", HttpStatus.OK);
@@ -461,10 +501,11 @@ public class BienNhanController {
         }
     }
 
-    private void handleProperty(VtReceiptDetail item, Integer bienNhanId) {
+    private void handleProperty(VtReceiptDetail item, Integer bienNhanId, HttpServletRequest request) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (item.getId() != null) {
             VtReceiptDetail info = matHangDAO.getById(item.getId());
+            VtReceiptDetail oldData = matHangDAO.getById(item.getId());
             info.setLastUpdate(new Date());
             info.setUpdatedBy(user.getUsername());
             info.setName(item.getName().trim());
@@ -475,6 +516,10 @@ public class BienNhanController {
             info.setCost(item.getCost());
             info.setNote(item.getNote());
             matHangDAO.edit(info);
+            // insert log data
+            AdmLogData admLogData = new AdmLogData(oldData, info, user.getUsername(), request, "/managerVanTai/bienNhan/chinh-sua-bien-nhan", Constants.action.UPDATE);
+            admLogDataDAO.add(admLogData);
+            
         } else {
             VtReceiptDetail info = new VtReceiptDetail();
             info.setName(item.getName().trim());
@@ -492,6 +537,9 @@ public class BienNhanController {
             //1 nhận hàng, 2 nhập kho, 3 đang giao, 4 đã giao
             info.setStatus(1);
             matHangDAO.add(info);
+            // insert log data
+            AdmLogData admLogData = new AdmLogData(null, info, user.getUsername(), request, "/managerVanTai/bienNhan/chinh-sua-bien-nhan", Constants.action.INSERT);
+            admLogDataDAO.add(admLogData);
         }
     }
 
@@ -506,6 +554,7 @@ public class BienNhanController {
     public ResponseEntity<List> danhSachNhaXe() {
         return new ResponseEntity<>(nhaXeDAO.danhSachNhaXe(), HttpStatus.OK);
     }
+
     @GetMapping("/danhSachKhachHang")
 //    @Secured(ConstantAuthor.NHA_XE.view)
     public ResponseEntity<List> danhSachKhachHang() {
@@ -596,13 +645,13 @@ public class BienNhanController {
             VtReceiptDetail vtReceiptDetail = (vtReceiptDetails != null ? vtReceiptDetails.get(0) : new VtReceiptDetail());
             page.setItems(vtReceiptDetails);
             Integer maxId = inPhieuThuDAO.getMaxId();
-            String maPhieuThu = (vtArea!=null? vtArea.getCode()+ "-": "") + "PT-" + sdf2.format(new Date()) + "-" + ((maxId!=null ? maxId: 0) +1);
+            String maPhieuThu = (vtArea != null ? vtArea.getCode() + "-" : "") + "PT-" + sdf2.format(new Date()) + "-" + ((maxId != null ? maxId : 0) + 1);
             Map<String, Object> beans = new HashMap<String, Object>();
             beans.put("vtReceiptDetail", vtReceiptDetail);
             beans.put("maPhieuThu", maPhieuThu);
             beans.put("ngayLap", sdf.format(new Date()));
             beans.put("page", page);
-            if(vtReceiptDetails!=null && vtReceiptDetails.size()>0){
+            if (vtReceiptDetails != null && vtReceiptDetails.size() > 0) {
                 VtInPhieuThu vtInPhieuThu = new VtInPhieuThu();
                 vtInPhieuThu.setMaPhieuThu(maPhieuThu);
                 vtInPhieuThu.setReceiptId(vtReceiptDetails.get(0).getId());

@@ -1,5 +1,6 @@
 package com.osp.web.dao;
 
+import com.osp.common.Constants;
 import com.osp.common.DateUtils;
 import com.osp.common.PagingResult;
 import com.osp.model.User;
@@ -10,6 +11,7 @@ import com.osp.model.VtReceiptDetail;
 import com.osp.model.VtToaHang;
 import com.osp.model.VtToaHangDetail;
 import com.osp.model.view.VTGoodsReceiptForm;
+import com.osp.model.AdmLogData;
 import com.osp.model.view.VtReceiptView;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,31 +99,90 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
     }
 
     @Override
-    public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user) {
+    public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user, HttpServletRequest request) {
         try {
             VtPhieuGiaoHang vtPhieuGiaoHang = vTGoodsReceiptForm.getVtPhieuGiaoHang();
             vtPhieuGiaoHang.setUpdatedBy(user.getUsername());
             vtPhieuGiaoHang.setLastUpdate(new Date());
             if (vtPhieuGiaoHang.getId() != null) {
+                VtPhieuGiaoHang oldVtPhieuGiaoHang = new VtPhieuGiaoHang();
+                Query queryOldVtPhieuGiaoHang = entityManager.createQuery("select a from VtPhieuGiaoHang a  WHERE a.id = :id ").setParameter("id", vtPhieuGiaoHang.getId());
+                oldVtPhieuGiaoHang = (VtPhieuGiaoHang) queryOldVtPhieuGiaoHang.getSingleResult();
+                List<VtPhieuGiaoHangDetail> oldDataPhieuGiaoHangDetail = new ArrayList<>();
+                Query queryOldVtPhieuGiaoHangDetail = entityManager.createQuery("select a from VtPhieuGiaoHangDetail a  WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId());
+                oldDataPhieuGiaoHangDetail = queryOldVtPhieuGiaoHangDetail.getResultList();
+
+                List<VtReceiptDetail> oldData = new ArrayList<>();
+                List<VtReceiptDetail> newData = new ArrayList<>();
+                Query queryHangHoa = entityManager.createQuery("select a from VtReceiptDetail a  "
+                        + " WHERE a.id in (select vtReceiptDetailId from VtPhieuGiaoHangDetail where phieuGiaoHangId=:phieuGiaoHangId) ")
+                        .setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId());
+                oldData = queryHangHoa.getResultList();
+                
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
                         + " WHERE a.id in (select vtReceiptDetailId from VtPhieuGiaoHangDetail where phieuGiaoHangId=:phieuGiaoHangId) ")
                         .setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
-                
+
+                List<VtReceipt> oldDataVtReceipt = new ArrayList<>();
+                List<VtReceipt> newDataVtReceipt = new ArrayList<>();
+                Query queryPhieuNhan = entityManager.createQuery("select a VtReceipt a "
+                        + " WHERE a.id in (select receiptId from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId )")
+                        .setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId());
+                oldDataVtReceipt = queryPhieuNhan.getResultList();
+
                 Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 2, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
                         + " WHERE a.id in (select receiptId from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId )")
                         .setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdatePhieuNhan.executeUpdate();
+                
+                
+                
                 Query query = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", vtPhieuGiaoHang.getId());
                 query.executeUpdate();
 
+                if (oldData != null && oldData.size() > 0) {
+                    for (VtReceiptDetail vtReceiptDetail : oldData) {
+                        vtReceiptDetail.setStatus(2);
+                        vtReceiptDetail.setUpdatedBy(user.getUsername());
+                        vtReceiptDetail.setLastUpdate(new Date());
+                        newData.add(vtReceiptDetail);
+                    }
+                }
+                if (oldDataVtReceipt != null && oldDataVtReceipt.size() > 0) {
+                    for (VtReceipt vtReceipt : oldDataVtReceipt) {
+                        vtReceipt.setStatus(2);
+                        vtReceipt.setUpdatedBy(user.getUsername());
+                        vtReceipt.setLastUpdate(new Date());
+                        newDataVtReceipt.add(vtReceipt);
+                    }
+                }
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(oldData, newData, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogData);
+
+                // insert log data
+                AdmLogData admLogDataVtReceipt = new AdmLogData(oldDataVtReceipt, newDataVtReceipt, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogDataVtReceipt);
+
                 entityManager.merge(vtPhieuGiaoHang);
+                // insert log data
+                AdmLogData admLogData1 = new AdmLogData(oldVtPhieuGiaoHang, vtPhieuGiaoHang, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogData1);
+                
+                // insert log data
+                AdmLogData admLogData1Detail = new AdmLogData(oldDataPhieuGiaoHangDetail, null, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.DELETE);
+                entityManager.persist(admLogData1Detail);
+                
             } else {
                 vtPhieuGiaoHang.setGenDate(new Date());
                 vtPhieuGiaoHang.setCreatedBy(user.getUsername());
                 entityManager.persist(vtPhieuGiaoHang);
+                // insert log data
+                AdmLogData admLogData1 = new AdmLogData(null, vtPhieuGiaoHang, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.INSERT);
+                entityManager.persist(admLogData1);
             }
 //            List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             List<VtReceiptDetail> vtReceiptDetails = vTGoodsReceiptForm.getVtReceiptDetail();
@@ -133,22 +195,64 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 vtPhieuGiaoHangDetail.setGenDate(vtPhieuGiaoHang.getGenDate());
                 vtPhieuGiaoHangDetail.setReceiptId(bo.getReceiptId());
                 vtPhieuGiaoHangDetail.setVtReceiptDetailId(bo.getId());
+
+                List<VtReceiptDetail> oldData = new ArrayList<>();
+                List<VtReceiptDetail> newData = new ArrayList<>();
+                Query query = entityManager.createQuery("select a from VtReceiptDetail a WHERE a.id=:id ").setParameter("id", bo.getId());
+                oldData = query.getResultList();
+                if (oldData != null && oldData.size() > 0) {
+                    for (VtReceiptDetail vtReceiptDetail : oldData) {
+                        vtReceiptDetail.setStatus(3);
+                        vtReceiptDetail.setUpdatedBy(user.getUsername());
+                        vtReceiptDetail.setLastUpdate(new Date());
+                        newData.add(vtReceiptDetail);
+                    }
+                }
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 3, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:id")
                         .setParameter("id", bo.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+
+                // insert log data
+                AdmLogData admLogDataVtReceipt = new AdmLogData(oldData, newData, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogDataVtReceipt);
+
                 entityManager.persist(vtPhieuGiaoHangDetail);
+
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(null, vtPhieuGiaoHangDetail, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.INSERT);
+                entityManager.persist(admLogData);
+
             }
-            
+
             List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             for (VtReceiptView vtReceiptView : vtReceiptViews) {
+                List<VtReceipt> oldData = new ArrayList<>();
+                List<VtReceipt> newData = new ArrayList<>();
+                Query query = entityManager.createQuery("select a from VtReceipt a WHERE a.id=:receiptId and status = 2 "
+                        + " and id not in (select receiptId from VtReceiptDetail where status = 2 and receiptId = :receiptId )")
+                        .setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue()));
+                oldData = query.getResultList();
+                if (oldData != null && oldData.size() > 0) {
+                    for (VtReceipt vtReceipt : oldData) {
+                        vtReceipt.setStatus(3);
+                        vtReceipt.setUpdatedBy(user.getUsername());
+                        vtReceipt.setLastUpdate(new Date());
+                        newData.add(vtReceipt);
+                    }
+                }
+
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 3 ,  a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:receiptId and status = 2 "
                         + " and id not in (select receiptId from VtReceiptDetail where status = 2 and receiptId = :receiptId )")
                         .setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue()))
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(oldData, newData, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogData);
             }
-            
+
             entityManager.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,7 +277,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                         .setParameter("phieuGiaoHangId", id)
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
-                
+
                 Query querydetail = entityManager.createQuery("delete from VtPhieuGiaoHangDetail a WHERE a.phieuGiaoHangId=:phieuGiaoHangId").setParameter("phieuGiaoHangId", id);
                 querydetail.executeUpdate();
                 Query query = entityManager.createQuery("delete from VtPhieuGiaoHang a WHERE a.id=:id").setParameter("id", id);
@@ -234,7 +338,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
                 row.setTienDaTra(record[14] == null ? null : Long.valueOf(record[14].toString()));
                 row.setTongTien(record[15] == null ? null : Long.valueOf(record[15].toString()));
                 row.setSoLuong(record[16] == null ? null : Integer.valueOf(record[16].toString()));
-                row.setMaToaHang(record[17] == null ? null : (String)record[17]);
+                row.setMaToaHang(record[17] == null ? null : (String) record[17]);
                 vtReceiptViews.add(row);
             });
             for (VtReceiptView vtReceiptView : vtReceiptViews) {
@@ -252,6 +356,7 @@ public class PhieuGiaoHangDAOImpl implements PhieuGiaoHangDAO {
             return null;
         }
     }
+
     @Override
     public List<VtPhieuGiaoHangDetail> getListVtPhieuGiaoHangDetail(Integer phieuGiaoHangId) {
         List<VtPhieuGiaoHangDetail> vtPhieuGiaoHangDetails = new ArrayList<>();

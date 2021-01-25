@@ -1,8 +1,11 @@
 package com.osp.web.dao;
 
+import com.osp.common.Constants;
 import com.osp.common.DateUtils;
 import com.osp.common.PagingResult;
+import com.osp.model.AdmLogData;
 import com.osp.model.User;
+import com.osp.model.VtReceipt;
 import com.osp.model.VtReceiptDetail;
 import com.osp.model.VtToaHang;
 import com.osp.model.VtToaHangDetail;
@@ -16,6 +19,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,18 +115,52 @@ public class ToaHangDAOImpl implements ToaHangDAO {
     }
 
     @Override
-    public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user) {
+    public Boolean add(VTGoodsReceiptForm vTGoodsReceiptForm, User user, HttpServletRequest request) {
         try {
             VtToaHang vtToaHang = vTGoodsReceiptForm.getVtToaHang();
             vtToaHang.setUpdatedBy(user.getUsername());
             vtToaHang.setLastUpdate(new Date());
             if (vtToaHang != null && vtToaHang.getId() != null) {
+                VtToaHang oldDataToaHang = new VtToaHang();
+                Query queryOldToaHang = entityManager.createQuery("select a from VtToaHang a  WHERE a.id = :id ").setParameter("id", vtToaHang.getId());
+                oldDataToaHang = (VtToaHang) queryOldToaHang.getSingleResult();
+                List<VtToaHangDetail> oldDataToaHangDetail = new ArrayList<>();
+                Query queryOldToaHangDetail = entityManager.createQuery("select a from VtToaHangDetail a  WHERE a.toaHangId=:toaHangId").setParameter("toaHangId", vtToaHang.getId());
+                oldDataToaHangDetail = queryOldToaHangDetail.getResultList();
+                
+                
+                List<VtReceiptDetail> oldData = new ArrayList<>();
+                List<VtReceiptDetail> newData = new ArrayList<>();
+                Query queryHangHoa = entityManager.createQuery("select a from VtReceiptDetail a "
+                        + " WHERE a.id in (select vtReceiptDetailId from VtToaHangDetail where toaHangId=:toaHangId) ").setParameter("toaHangId", vtToaHang.getId());
+                oldData = queryHangHoa.getResultList();
+                
                 // update trạng thái chi tiết các mặt hàng trong đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
                         + " WHERE a.id in (select vtReceiptDetailId from VtToaHangDetail where toaHangId=:toaHangId) ")
                         .setParameter("toaHangId", vtToaHang.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+                
+                if (oldData != null && oldData.size() > 0) {
+                    for (VtReceiptDetail vtReceiptDetail : oldData) {
+                        vtReceiptDetail.setStatus(1);
+                        vtReceiptDetail.setUpdatedBy(user.getUsername());
+                        vtReceiptDetail.setLastUpdate(new Date());
+                        newData.add(vtReceiptDetail);
+                    }
+                }
+                // insert log data
+                AdmLogData admLogData = new AdmLogData(oldData, newData, user.getUsername(), request, "/managerVanTai/toa-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogData);
+                
+                
+                List<VtReceipt> oldDataVtReceipt = new ArrayList<>();
+                List<VtReceipt> newDataVtReceipt = new ArrayList<>();
+                Query queryPhieuNhan = entityManager.createQuery("select a from  VtReceipt a "
+                        + " WHERE a.id in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
+                        .setParameter("phieuGiaoHangId", vtToaHang.getId());
+                oldDataVtReceipt = queryPhieuNhan.getResultList();
                 
                 // update trạng thái đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
                 Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
@@ -131,16 +169,47 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdatePhieuNhan.executeUpdate();
 
+                if (oldDataVtReceipt != null && oldDataVtReceipt.size() > 0) {
+                    for (VtReceipt vtReceipt : oldDataVtReceipt) {
+                        vtReceipt.setStatus(2);
+                        vtReceipt.setUpdatedBy(user.getUsername());
+                        vtReceipt.setLastUpdate(new Date());
+                        newDataVtReceipt.add(vtReceipt);
+                    }
+                }
+                // insert log data
+                AdmLogData admLogDataVtReceipt = new AdmLogData(oldDataVtReceipt, newDataVtReceipt, user.getUsername(), request, "/managerVanTai/phieu-giao-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogDataVtReceipt);
+                
                 Query query = entityManager.createQuery("delete from VtToaHangDetail a WHERE a.toaHangId=:toaHangId").setParameter("toaHangId", vtToaHang.getId());
                 query.executeUpdate();
+                
+                // insert log data
+                AdmLogData admLogDataToaHangDetail = new AdmLogData(oldDataToaHangDetail, null, user.getUsername(), request, "/managerVanTai/toa-hang/add", Constants.action.DELETE);
+                entityManager.persist(admLogDataToaHangDetail);
+                
                 entityManager.merge(vtToaHang);
+                
+                // insert log data
+                AdmLogData admLogDataToaHang = new AdmLogData(oldDataToaHang, vtToaHang, user.getUsername(), request, "/managerVanTai/toa-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogDataToaHang);
+                
             } else {
                 vtToaHang.setGenDate(new Date());
                 vtToaHang.setCreatedBy(user.getUsername());
                 entityManager.persist(vtToaHang);
+                // insert log data
+                AdmLogData admLogDataToaHang = new AdmLogData(null, vtToaHang, user.getUsername(), request, "/managerVanTai/toa-hang/add", Constants.action.INSERT);
+                entityManager.persist(admLogDataToaHang);
             }
             List<VtReceiptDetail> vtReceiptDetails = vTGoodsReceiptForm.getVtReceiptDetail();
             for (VtReceiptDetail bo : vtReceiptDetails) {
+                VtReceiptDetail vtReceiptDetailOld = new VtReceiptDetail();
+                VtReceiptDetail vtReceiptDetailNew = new VtReceiptDetail();
+                Query queryOldData = entityManager.createQuery("select a from VtReceiptDetail a WHERE a.id=:id").setParameter("id", bo.getId());
+                vtReceiptDetailOld = (VtReceiptDetail)queryOldData.getSingleResult();
+                vtReceiptDetailNew = (VtReceiptDetail)queryOldData.getSingleResult();
+                
                 VtToaHangDetail vtToaHangDetail = new VtToaHangDetail();
                 vtToaHangDetail.setToaHangId(vtToaHang.getId());
                 vtToaHangDetail.setCreatedBy(vtToaHang.getCreatedBy());
@@ -153,16 +222,49 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                         .setParameter("id", bo.getId())
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+                
+                vtReceiptDetailNew.setStatus(2);
+                vtReceiptDetailNew.setUpdatedBy(user.getUsername());
+                vtReceiptDetailNew.setLastUpdate(new Date());
+                
+                // insert log data
+                AdmLogData admLogReceipt = new AdmLogData(vtReceiptDetailOld, vtReceiptDetailNew, user.getUsername(), request, "/managerVanTai/toa-hang/add", Constants.action.UPDATE);
+                entityManager.persist(admLogReceipt);
+                
                 entityManager.persist(vtToaHangDetail);
+                
+                // insert log data
+                AdmLogData admLogDataToaHangDetail = new AdmLogData(null, vtToaHangDetail, user.getUsername(), request, "/managerVanTai/toa-hang/add", Constants.action.INSERT);
+                entityManager.persist(admLogDataToaHangDetail);
+                
             }
             List<VtReceiptView> vtReceiptViews = vTGoodsReceiptForm.getVtReceiptViews();
             for (VtReceiptView vtReceiptView : vtReceiptViews) {
+                List<VtReceipt> oldData = new ArrayList<>();
+                List<VtReceipt> newData = new ArrayList<>();
+                Query queryUpdateVtReceipt = entityManager.createQuery("select a from  VtReceipt a WHERE a.id=:receiptId and status = 1 and id not in (select receiptId from VtReceiptDetail where status = 1 and receiptId = :receiptId )")
+                        .setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue()));
+                oldData = queryUpdateVtReceipt.getResultList();
+                
                 // update các bản ghi VtReceipt trạng thái =2 với DK: status = 1 và ko có bản ghi VtReceiptDetail nào có trạng thái =1
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceipt a set a.status = 2 ,  a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() WHERE a.id=:receiptId and status = 1 "
                         + " and id not in (select receiptId from VtReceiptDetail where status = 1 and receiptId = :receiptId )")
                         .setParameter("receiptId", Integer.valueOf(vtReceiptView.getId().intValue()))
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+                
+                if (oldData != null && oldData.size() > 0) {
+                    for (VtReceipt vtReceipt : oldData) {
+                        vtReceipt.setStatus(2);
+                        vtReceipt.setUpdatedBy(user.getUsername());
+                        vtReceipt.setLastUpdate(new Date());
+                        newData.add(vtReceipt);
+                    }
+                }
+                // insert log data
+                AdmLogData admLogDataToaHangDetail = new AdmLogData(oldData, newData, user.getUsername(), request, "/managerVanTai/toa-hang/add", Constants.action.INSERT);
+                entityManager.persist(admLogDataToaHangDetail);
+            
             }
             entityManager.flush();
         } catch (Exception e) {
@@ -174,15 +276,38 @@ public class ToaHangDAOImpl implements ToaHangDAO {
     }
 
     @Override
-    public Boolean delete(Integer id, User user, String ip) {
+    public Boolean delete(Integer id, User user, String ip, HttpServletRequest request) {
         try {
             if (id != null) {
+                List<VtReceiptDetail> vtReceiptDetailsOld = new ArrayList<>();
+                List<VtReceiptDetail> vtReceiptDetailsNew = new ArrayList<>();
+                Query queryOldData = entityManager.createQuery("select a from  VtReceiptDetail a  "
+                        + " WHERE a.receiptId in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ").setParameter("toaHangId", id);
+                vtReceiptDetailsOld = queryOldData.getResultList();
+                
                 // update trạng thái chi tiết các mặt hàng trong đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
                 Query queryUpdateHangHoa = entityManager.createQuery("update VtReceiptDetail a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
                         + " WHERE a.receiptId in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
                         .setParameter("toaHangId", id)
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdateHangHoa.executeUpdate();
+                
+                for(VtReceiptDetail vtReceiptDetail: vtReceiptDetailsOld){
+                    vtReceiptDetail.setStatus(1);
+                    vtReceiptDetail.setUpdatedBy(user.getUsername());
+                    vtReceiptDetail.setLastUpdate(new Date());
+                    vtReceiptDetailsNew.add(vtReceiptDetail);
+                }
+                
+                // insert log data
+                AdmLogData admLogReceiptDetail = new AdmLogData(vtReceiptDetailsOld, vtReceiptDetailsNew, user.getUsername(), request, "/managerVanTai/toa-hang/delete", Constants.action.UPDATE);
+                entityManager.persist(admLogReceiptDetail);
+                
+                List<VtReceipt> vtReceiptOld = new ArrayList<>();
+                List<VtReceipt> vtReceiptNew = new ArrayList<>();
+                Query queryDataReceipt = entityManager.createQuery("select a from  VtReceipt a "
+                        + " WHERE a.id in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ").setParameter("toaHangId", id);
+                vtReceiptOld = queryDataReceipt.getResultList();
                 // update trạng thái đơn hàng đã chọn lên toa về trạng thái nhận hàng: status = 1
                 Query queryUpdatePhieuNhan = entityManager.createQuery("update VtReceipt a set a.status = 1, a.updatedBy = :updatedBy ,  a.lastUpdate = CURRENT_TIMESTAMP() "
                         + " WHERE a.id in (select receiptId from VtToaHangDetail where toaHangId=:toaHangId) ")
@@ -190,12 +315,44 @@ public class ToaHangDAOImpl implements ToaHangDAO {
                         .setParameter("updatedBy", user.getUsername());
                 queryUpdatePhieuNhan.executeUpdate();
 
+                for(VtReceipt vtReceipt: vtReceiptOld){
+                    vtReceipt.setStatus(1);
+                    vtReceipt.setUpdatedBy(user.getUsername());
+                    vtReceipt.setLastUpdate(new Date());
+                    vtReceiptNew.add(vtReceipt);
+                }
+                
+                // insert log data
+                AdmLogData admLogReceipt = new AdmLogData(vtReceiptOld, vtReceiptNew, user.getUsername(), request, "/managerVanTai/toa-hang/delete", Constants.action.UPDATE);
+                entityManager.persist(admLogReceipt);
+                
+                List<VtToaHangDetail> vtToaHangDetailsOld = new ArrayList<>();
+                Query querydetailData = entityManager.createQuery("select a from VtToaHangDetail a WHERE a.toaHangId=:toaHangId")
+                        .setParameter("toaHangId", id);
+                vtToaHangDetailsOld = querydetailData.getResultList();
+                
+                
                 Query querydetail = entityManager.createQuery("delete from VtToaHangDetail a WHERE a.toaHangId=:toaHangId")
                         .setParameter("toaHangId", id);
                 querydetail.executeUpdate();
+                
+                // insert log data
+                AdmLogData admLogDetail = new AdmLogData(vtToaHangDetailsOld, null, user.getUsername(), request, "/managerVanTai/toa-hang/delete", Constants.action.DELETE);
+                entityManager.persist(admLogDetail);
+                
+                List<VtToaHang> vtToaHangsOld = new ArrayList<>();
+                Query queryData = entityManager.createQuery("select a from VtToaHangDetail a WHERE a.toaHangId=:toaHangId")
+                        .setParameter("toaHangId", id);
+                vtToaHangsOld = queryData.getResultList();
+                
                 Query query = entityManager.createQuery("delete from VtToaHang a WHERE a.id=:id")
                         .setParameter("id", id);
                 query.executeUpdate();
+                
+                // insert log data
+                AdmLogData admLog = new AdmLogData(vtToaHangsOld, null, user.getUsername(), request, "/managerVanTai/toa-hang/delete", Constants.action.DELETE);
+                entityManager.persist(admLog);
+                
                 entityManager.flush();
             } else {
                 return false;
